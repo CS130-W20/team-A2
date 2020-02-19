@@ -6,30 +6,52 @@ import { Image,
 	 TextInput,
 	 TouchableOpacity,
 	 View } from 'react-native';
+import SpurTextInput from '../components/SpurTextInput'
+import SpurText from '../components/SpurText'
+import SpurButton from '../components/SpurButton'
+
+function inputField(props) {
+	// for name, username, password fields
+	return(
+		<View style={{flexDirection: 'row', justifyContent: 'flex-start', padding: 10}}>	
+		<SpurText>{props.text}: </SpurText>
+		<SpurTextInput onChangeText={props.onChangeText} />
+		</View>
+	);
+}
 
 export default class UserLoginScreen extends Component<Props>
 {
 
+    handleName(text) {this.state.name = text};
+    handleUsername(text) {this.state.username = text};
+    handlePassword(text) {this.state.password = text};
+
     render() {
 	return (
 		<View style={styles.container}>
-		<Text>Create Event</Text>
+		
+		{/* Title */}
+		<SpurText styles = {{textAlign: 'center',}}>Sign Up for SPUR!</SpurText>
+		
+		<View style={{}}>
+		{inputField({text:"Name", onChangeText: this.handleName})}
+		{inputField({text:"Username", onChangeText: this.handleUsername})}
+		{inputField({text:"Password", onChangeText: this.handlePassword})}
+		</View>
+
 		</View>
   	);
     }
 }
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
-    borderRadius: 4,
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
+    flex: 1,
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 19,
     fontWeight: 'bold',
   },
-  activeTitle: {
-    color: 'red',
-  },
-});
+};
