@@ -6,21 +6,44 @@ import { Image,
 	 Text,
 	 TextInput,
 	 TouchableOpacity,
-	 View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+	 View,
+     ScrollView,
+	 SafeAreaView
+	} from 'react-native';
+
 import * as WebBrowser from 'expo-web-browser';
 
 import { MonoText } from '../components/StyledText';
+import {KeyboardAvoidingView} from 'react-native';
 
 export default class CreateScreen extends Component<Props> {
     state = {
-	name: ''
+	name: '',
+	cost: '',
+	party: '',
+	desc: ''
     };
     handleNameChange = e => {
 	this.setState({
 	    name: e.nativeEvent.text
 	});
     };
+	handleCostChange = e => {
+	this.setState({
+	    cost: e.nativeEvent.text
+	});
+    };
+	handleCostChange = e => {
+	this.setState({
+	    party: e.nativeEvent.text
+	});
+    };
+	handleDescChange = e => {
+	this.setState({
+	    desc: e.nativeEvent.text
+	});
+    };
+	
     render() {
 	return (
     <View style={styles.container}>
@@ -35,12 +58,32 @@ export default class CreateScreen extends Component<Props> {
           }} 
 		>
         </MapView>
-        <View style={styles.textContainer}>
+		
+		<View style={{flex: 1}}>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+		<View style={styles.textContainer}>
 		<Text style={styles.formText}>Event Name</Text>
-		<View style={styles.inputContainer}>
+		<View style={styles.inputContainer} behavior="padding">
 		<TextInput style={styles.input} onChange={this.handleNameChange} defaultValue={'Name'} clearTextOnFocus={true}/>
 		</View>
-	    </View>
+		</View>
+		
+		<View style={styles.textContainer}>
+		<Text style={styles.formText}>Cost</Text>
+		<TextInput style={styles.input} onChange={this.handleCostChange} defaultValue={'0'} clearTextOnFocus={true}/>
+		</View>
+		
+		<View style={styles.textContainer}>
+		<Text style={styles.formText}>Party Size</Text>
+		<TextInput style={styles.input} onChange={this.handlePartyChange} defaultValue={'0'} clearTextOnFocus={true}/>
+		</View>
+		
+		<View style={styles.textContainer}>
+		<TextInput style={styles.input} onChange={this.handleDescChange} defaultValue={'Description'} clearTextOnFocus={true}/>
+		</View>
+	    </ScrollView>
+		</View>
+
     </View>
   );
     }
@@ -97,7 +140,7 @@ const styles = StyleSheet.create({
   inputContainer: {
 	borderWidth: 1,
 	borderColor: 'lightgrey',
-    height: 50	
+    height: 50,
   },
   input: {
 	height: 50,
@@ -126,7 +169,7 @@ const styles = StyleSheet.create({
     marginLeft: -10,
   },
   textContainer: {
-	flex: 1,
+	flexGrow: 1,
     justifyContent: 'space-evenly',
 	flexDirection: 'row',
   },
