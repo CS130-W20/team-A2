@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import { Image,
 	 Platform,
 	 StyleSheet,
@@ -11,7 +12,7 @@ import * as WebBrowser from 'expo-web-browser';
 
 import { MonoText } from '../components/StyledText';
 
-export default class HomeScreen extends Component<Props> {
+export default class CreateScreen extends Component<Props> {
     state = {
 	name: ''
     };
@@ -22,19 +23,29 @@ export default class HomeScreen extends Component<Props> {
     };
     render() {
 	return (
-		<View style={styles.container}>
-		
-		<View style={styles.getStartedContainer}>
+    <View style={styles.container}>
+		<MapView
+		  provider={PROVIDER_GOOGLE}
+		  style={styles.map}
+          initialRegion={{
+          latitude: 37.78825,
+          longitude: -122.4324,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+          }} 
+		>
+        </MapView>
+        <View style={styles.getStartedContainer}>
 		<Text>Create Event</Text>
 		<TextInput onChange={this.handleNameChange} defaultValue={'Name'} clearTextOnFocus={true}/>
 		<Text>{this.state.name}</Text>
-	        </View>
-		</View>
+	    </View>
+    </View>
   );
     }
 }
 
-HomeScreen.navigationOptions = {
+CreateScreen.navigationOptions = {
   header: null,
 };
 
@@ -75,6 +86,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  map: {
+	height: 400,
+    width: 400,
+    justifyContent: 'flex-end',
+    alignItems: 'center',	
   },
   developmentModeText: {
     marginBottom: 20,
