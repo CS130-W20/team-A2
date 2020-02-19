@@ -22,6 +22,7 @@ export default function BottomTabNavigator({ navigation, route }) {
 			   headerTintColor: '#fff',
 			   headerTitleStyle: {
 			   	fontWeight: 'bold',
+				fontSize: 40,
 		  	   },
 			   headerTitleAlign: 'center',
 			});
