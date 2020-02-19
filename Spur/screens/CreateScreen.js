@@ -35,10 +35,11 @@ export default class CreateScreen extends Component<Props> {
           }} 
 		>
         </MapView>
-        <View style={styles.getStartedContainer}>
-		<Text>Create Event</Text>
-		<TextInput onChange={this.handleNameChange} defaultValue={'Name'} clearTextOnFocus={true}/>
-		<Text>{this.state.name}</Text>
+        <View style={styles.textContainer}>
+		<Text style={styles.formText}>Event Name</Text>
+		<View style={styles.inputContainer}>
+		<TextInput style={styles.input} onChange={this.handleNameChange} defaultValue={'Name'} clearTextOnFocus={true}/>
+		</View>
 	    </View>
     </View>
   );
@@ -93,11 +94,20 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',	
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
+  inputContainer: {
+	borderWidth: 1,
+	borderColor: 'lightgrey',
+    height: 50	
+  },
+  input: {
+	height: 50,
+    backgroundColor: 'lightgrey',
+    paddingLeft: 15,
+    paddingRight: 15	
+  },
+  formText: {
+    color: 'black',
+    fontSize: 20,
     textAlign: 'center',
   },
   contentContainer: {
@@ -115,9 +125,10 @@ const styles = StyleSheet.create({
     marginTop: 3,
     marginLeft: -10,
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
+  textContainer: {
+	flex: 1,
+    justifyContent: 'space-evenly',
+	flexDirection: 'row',
   },
   homeScreenFilename: {
     marginVertical: 7,
