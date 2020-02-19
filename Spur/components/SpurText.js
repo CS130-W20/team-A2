@@ -11,22 +11,16 @@ export default class SpurText extends Component<Props>
 {
 
     render() {
+	// copy over style parameters passed down from a parent
+	const styleDict = Object.assign({}, styles, this.props.styles);
 	return (
-		<Text></Text>
+		<Text style={styleDict}>{this.props.children}</Text>
   	);
     }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  title: {
-    fontSize: 19,
-    fontWeight: 'bold',
-  },
-});
+const styles = {
+	fontSize: 28,
+	fontWeight: 'bold',
+	color: '#859a80',
+};
