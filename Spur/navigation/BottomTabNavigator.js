@@ -15,7 +15,16 @@ export default function BottomTabNavigator({ navigation, route }) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   //navigation.setOptions({ headerTitle: getHeaderTitle(route) });
-  navigation.setOptions({ headerTitle: 'Spur' });
+  navigation.setOptions({ headerTitle: 'SPUR', 
+			  headerStyle: {
+				backgroundColor: '#96ca92',
+			   },
+			   headerTintColor: '#fff',
+			   headerTitleStyle: {
+			   	fontWeight: 'bold',
+		  	   },
+			   headerTitleAlign: 'center',
+			});
 
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
