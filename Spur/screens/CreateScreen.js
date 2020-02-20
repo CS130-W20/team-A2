@@ -1,86 +1,114 @@
 import React, {Component} from 'react';
+//import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import { Image,
 	 Platform,
 	 StyleSheet,
 	 Text,
 	 TextInput,
 	 TouchableOpacity,
-	 View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+	 View,
+     ScrollView,
+	 SafeAreaView
+	} from 'react-native';
+
 import * as WebBrowser from 'expo-web-browser';
 
 import { MonoText } from '../components/StyledText';
+import {KeyboardAvoidingView} from 'react-native';
 
-export default class HomeScreen extends Component<Props> {
+export default class CreateScreen extends Component<Props> {
     state = {
-	name: ''
+	name: '',
+	cost: '',
+	party: '',
+	desc: ''
     };
     handleNameChange = e => {
 	this.setState({
 	    name: e.nativeEvent.text
 	});
     };
+	handleCostChange = e => {
+	this.setState({
+	    cost: e.nativeEvent.text
+	});
+    };
+	handlePartyChange = e => {
+	this.setState({
+	    party: e.nativeEvent.text
+	});
+    };
+	handleDescChange = e => {
+	this.setState({
+	    desc: e.nativeEvent.text
+	});
+    };
+	
     render() {
 	return (
-		<View style={styles.container}>
+    <View style={styles.container}>
 		
-		<View style={styles.getStartedContainer}>
-		<Text>Create Event</Text>
-		<TextInput onChange={this.handleNameChange} defaultValue={'Name'} clearTextOnFocus={true}/>
-		<Text>{this.state.name}</Text>
-	        </View>
+		
+		<View style={{flex: 1}}>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+		<View style={styles.textContainer}>
+		<Text style={styles.formText}>Event Name</Text>
+		<View style={styles.inputContainer} behavior="padding">
+		<TextInput style={styles.input} onChange={this.handleNameChange} defaultValue={'Name'} clearTextOnFocus={true}/>
 		</View>
+		</View>
+		
+		<View style={styles.textContainer}>
+		<Text style={styles.formText}>Cost</Text>
+		<TextInput style={styles.input} onChange={this.handleCostChange} defaultValue={'0'} clearTextOnFocus={true}/>
+		</View>
+		
+		<View style={styles.textContainer}>
+		<Text style={styles.formText}>Party Size</Text>
+		<TextInput style={styles.input} onChange={this.handlePartyChange} defaultValue={'0'} clearTextOnFocus={true}/>
+		</View>
+		
+		<View style={styles.textContainer}>
+		<TextInput style={styles.input} onChange={this.handleDescChange} defaultValue={'Description'} clearTextOnFocus={true}/>
+		</View>
+	    </ScrollView>
+		</View>
+
+    </View>
   );
     }
 }
 
-HomeScreen.navigationOptions = {
+CreateScreen.navigationOptions = {
   header: null,
 };
 
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use useful development
-        tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/workflow/development-mode/');
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/get-started/create-a-new-app/#making-your-first-change'
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
   },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
+  map: {
+	height: 400,
+    width: 400,
+    justifyContent: 'flex-end',
+    alignItems: 'center',	
+  },
+  inputContainer: {
+	borderWidth: 1,
+	borderColor: 'lightgrey',
+    height: 50,
+  },
+  input: {
+	height: 50,
+    backgroundColor: 'lightgrey',
+    paddingLeft: 15,
+    paddingRight: 15	
+  },
+  formText: {
+    color: 'black',
+    fontSize: 20,
     textAlign: 'center',
   },
   contentContainer: {
@@ -98,9 +126,10 @@ const styles = StyleSheet.create({
     marginTop: 3,
     marginLeft: -10,
   },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
+  textContainer: {
+	flexGrow: 1,
+    justifyContent: 'space-evenly',
+	flexDirection: 'row',
   },
   homeScreenFilename: {
     marginVertical: 7,
