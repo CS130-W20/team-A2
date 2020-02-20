@@ -10,7 +10,7 @@ import { Button,
 import { ScrollView } from 'react-native-gesture-handler';
 import * as WebBrowser from 'expo-web-browser';
 
-import SearchDetails from '../classes/SearchDetails';
+import SearchDetails, { SEARCH_DETAILS_DEFAULTS } from '../classes/SearchDetails';
 import SearchManager from '../classes/SearchManager';
 import { MonoText } from '../components/StyledText';
 
@@ -32,10 +32,19 @@ export default class BrowseScreen extends Component<Props> {
     });
   }
 
+  handleCostChange = e => {
+    this.setState({
+      cost: e.nativeEvent.text
+    });
+  }
+
   refineSearch = e => {
     // Construct a SearchDetails object and pass it to the searchmanager
-    var details = new SearchDetails("start", "end", "location", "cost", this.state.partySize, "categories");
-    details.print();
+    var cost = (this.state.cost.length == 0) ? SEARCH_DETAILS_DEFAULTS.cost : this.state.cost;
+    var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
+
+    var details = new SearchDetails("start", "end", "location", cost, partySize, "categories");
+    console.log(details);
 
     this.searchManager.filter(details);
   }
@@ -48,7 +57,15 @@ export default class BrowseScreen extends Component<Props> {
             <View style={styles.textContainer}>
               <Text style={styles.formText}>Party Size</Text>
               <View style={styles.inputContainer} behavior="padding">
-                <TextInput onChange={this.handlePartySizeChange} defaultValue={'1'} clearTextOnFocus={true}/>
+                <TextInput onChange={this.handlePartySizeChange} defaultValue={''} clearTextOnFocus={true}/>
+              </View>
+            </View>
+          </View>
+          <View style={styles.container}>
+            <View style={styles.textContainer}>
+              <Text style={styles.formText}>Cost</Text>
+              <View style={styles.inputContainer} behavior="padding">
+                <TextInput onChange={this.handleCostChange} defaultValue={''} clearTextOnFocus={true}/>
               </View>
             </View>
           </View>
@@ -56,6 +73,7 @@ export default class BrowseScreen extends Component<Props> {
             <Text style={styles.formText}>Current Criteria:</Text>
             <View>
               <Text>Party Size: {this.state.partySize}</Text>
+              <Text>Cost: {this.state.cost}</Text>
             </View>
           </View>
           <Button

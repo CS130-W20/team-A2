@@ -1,5 +1,6 @@
 import Event from './Event'
 import EventDetails from './EventDetails'
+import { SEARCH_DETAILS_DEFAULTS } from './SearchDetails'
 
 class SearchManager {
   /*
@@ -29,6 +30,24 @@ class SearchManager {
     return newList;
   }
 
+  /*
+   * Returns the events in eventList that cost at most the provided cost
+   */
+  filterCost(eventList, cost) {
+    var newList = [];
+    for (var i = 0; i < eventList.length; i++) {
+      if (eventList[i].details.cost <= cost) {
+        newList.push(eventList[i]);
+      }
+    }
+    return newList;
+  }
+
+  /*
+   * Filters all events from the database based on the searchDetails provided
+   * If any of the searchDetails values matches the default value provided in 
+   *     SEARCH_DETAILS_DEFAULTS, no filtering is done on that particular entry
+   */
   filter(searchDetails) {
     // Eventually replace this with a call to the DatabaseManager
     // For now, create 10 default events with party size 0-
@@ -37,11 +56,19 @@ class SearchManager {
       var details = new EventDetails("title" + i, "description" + i, 
                                      "startTime" + i, "endTime" + i, 
                                      "host" + i, "location" + i,
-                                     "cost" + i, i, "categories" + i);
+                                     i, i, "categories" + i);
       var event = new Event(details, "attendees" + i, "chat" + i, "checked_in" + i);
       eventList.push(event);
     }
-    eventList = this.filterPartySize(eventList, searchDetails.partySize);
+
+    if (searchDetails.partySize != SEARCH_DETAILS_DEFAULTS.partySize) {
+      eventList = this.filterPartySize(eventList, parseInt(searchDetails.partySize, 10));
+    }
+    if (searchDetails.cost != SEARCH_DETAILS_DEFAULTS.cost) {
+      eventList = this.filterCost(eventList, parseInt(searchDetails.cost));
+    }
+
+    console.log(eventList);
   }
 
   sort(searchDetails, eventList) {
