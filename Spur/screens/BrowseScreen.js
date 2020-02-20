@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { Image,
+import { Button,
+     Image,
      Platform,
      StyleSheet,
      Text,
@@ -9,14 +10,19 @@ import { Image,
 import { ScrollView } from 'react-native-gesture-handler';
 import * as WebBrowser from 'expo-web-browser';
 
+import SearchDetails from '../classes/SearchDetails';
+import SearchManager from '../classes/SearchManager';
 import { MonoText } from '../components/StyledText';
 
 export default class BrowseScreen extends Component<Props> {
   constructor(props) {
     super(props);
 
+    this.searchManager = new SearchManager();
+
     this.state = {
-      partySize: ''
+      partySize: '',
+      cost: ''
     };
   }
 
@@ -24,6 +30,14 @@ export default class BrowseScreen extends Component<Props> {
     this.setState({
       partySize: e.nativeEvent.text
     });
+  }
+
+  refineSearch = e => {
+    // Construct a SearchDetails object and pass it to the searchmanager
+    var details = new SearchDetails("start", "end", "location", "cost", this.state.partySize, "categories");
+    details.print();
+
+    this.searchManager.filter(details);
   }
 
   render() {
@@ -44,6 +58,10 @@ export default class BrowseScreen extends Component<Props> {
               <Text>Party Size: {this.state.partySize}</Text>
             </View>
           </View>
+          <Button
+            title="Refine Search"
+            onPress={this.refineSearch}
+          />
         </ScrollView>
       </View>
     );
