@@ -1,5 +1,5 @@
-# Sample Project Title
-Briefly describe your project here.
+# Spur
+A mobile application that allows you to organize, find, and join events on the spur of the moment.
 
 ## Directory Structure
 Explain how the code is organized
