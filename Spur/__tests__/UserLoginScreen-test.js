@@ -11,14 +11,10 @@ describe("State Change Tester", () =>  {
         const instance = userLogin.getInstance();
 
         // Create an event that represents user inputting a name
-        const name = 'Mihir'
-
-        
+        const name = 'Mihir';        
 
         // Mock the event handler
         instance.handleName(name);
-
-        console.log(instance.state);
 
         // Check that the name is updated
         expect(instance.state.name).toBe('Mihir');
@@ -39,7 +35,7 @@ describe("State Change Tester", () =>  {
         const username = 'MihirMathur1'
         const password = 'ILoveUML<3'
 
-        // Mock all event handler
+        // Mock all event handlers
         instance.handleName(name);
         instance.handleUsername(username);
         instance.handlePassword(password);
