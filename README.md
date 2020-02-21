@@ -34,8 +34,6 @@ UserLoginScreen-test.js<br/>
 
 
 ## Relevant Links 
-- Documentation link
-- Working URL (if any)
-- anything else
+- Documentation link: https://cs130-w20.github.io/team-A2/
 
 
