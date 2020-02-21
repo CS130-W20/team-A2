@@ -7,9 +7,10 @@ import { Image,
 	 TouchableOpacity,
 	 View } from 'react-native';
 
+/** A text input field class with nice styling **/
 export default class SpurTextInput extends Component<Props>
 {
-
+    /** React render function **/
     render() {
 	// copy over style parameters passed down from a parent
 	const styleDict = Object.assign({}, styles, this.props.styles);

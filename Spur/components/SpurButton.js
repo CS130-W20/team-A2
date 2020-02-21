@@ -8,9 +8,10 @@ import { Image,
 	 Button,
 	 View } from 'react-native';
 
+/** A button class with nice styling **/
 export default class SpurButton extends Component<Props>
 {
-
+    /** React render function **/
     render() {
 	return (
 		<View style={{alignSelf: 'center'}}>

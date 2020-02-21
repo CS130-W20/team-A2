@@ -6,10 +6,10 @@ import { Image,
 	 TextInput,
 	 TouchableOpacity,
 	 View } from 'react-native';
-
+/** Text component with nice styling **/
 export default class SpurText extends Component<Props>
 {
-
+    /** React render function **/
     render() {
 	// copy over style parameters passed down from a parent
 	const styleDict = Object.assign({}, styles, this.props.styles);
