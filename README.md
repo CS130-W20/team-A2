@@ -12,7 +12,7 @@ then enter Spur root directory and run<br/>
 `npm start`
 
 ## Tests
-Tests can be found in the tests branch, located within the branch at Spur/__tests__<br/>
+Tests can be found in the tests branch, located within the branch at Spur/\_\_tests\_\_<br/>
 The specific tests are:<br/>
 BrowseScreen-test.js<br/>
 |__ State Change Tester<br/>
