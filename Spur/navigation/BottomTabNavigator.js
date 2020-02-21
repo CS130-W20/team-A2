@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import CreateScreen from '../screens/CreateScreen';
 import LinksScreen from '../screens/LinksScreen';
 import UserLoginScreen from '../screens/UserLoginScreen';
+import BrowseScreen from '../screens/BrowseScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Create';
@@ -45,17 +46,14 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
+      <BottomTab.Screen
+        name="Browse"
+        component={BrowseScreen}
+        options={{
+          title: 'Browse',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
+        }}
+      />
     </BottomTab.Navigator>
   );
 }
-
-/*function getHeaderTitle(route) {
-  const routeName = route.state?.routes[route.state.index]?.name ?? INITIAL_ROUTE_NAME;
-
-  switch (routeName) {
-    case 'Home':
-      return 'How to get started';
-    case 'Links':
-      return 'Links to learn more';
-  }
-}*/
