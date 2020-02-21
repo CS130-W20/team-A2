@@ -20,21 +20,21 @@ describe("State Change Tester", () =>  {
         // Check that no other state is changed
         expect(instance.state.cost).toBe('');
         expect(instance.state.distance).toBe('');
-        expect(instance.state.categories).toBe([]);
-        expect(instance.state.eventList).toBe([]);
+        expect(instance.state.categories).toStrictEqual([]);
+        expect(instance.state.eventList).toStrictEqual([]);
 
     });
 
     test("Successfully updates all state", () => {
 
-        const createScreen = renderer.create(<CreateScreen />);
-        const instance = createScreen.getInstance();
+        const browseScreen = renderer.create(<BrowseScreen />);
+        const instance = browseScreen.getInstance();
 
         // Create an event that represents the user inputting information
         const party = {nativeEvent:{text:'5'}}
         const cost = {nativeEvent:{text:'10'}}
         const dist = {nativeEvent:{text:'20'}}
-        const categories = ['fun', 'sports']
+        const categories = [];
 
         // Mock all event handlers
         instance.handlePartySizeChange(party);
@@ -46,8 +46,14 @@ describe("State Change Tester", () =>  {
         expect(instance.state.partySize).toBe('5');
         expect(instance.state.cost).toBe('10');
         expect(instance.state.distance).toBe('20');
-        expect(instance.state.categories).toBe(['fun', 'sports']);
-        expect(instance.state.eventList).toBe([]);
+        expect(instance.state.categories).toStrictEqual([]);
+        expect(instance.state.eventList).toStrictEqual([]);
+
+    });
+});
+
+describe('Refine Search Tester', () => {
+    test('filter', () => {
 
     });
 });
