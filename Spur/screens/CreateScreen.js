@@ -116,8 +116,8 @@ export default class CreateScreen extends Component<Props> {
 	handleSubmit(event) {
 		var datePattern = /[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9]/;
 		var timePattern = /[0-9][0-9]:[0-9][0-9]/;
-		var partyPattern = /[0-9]*/;
-		var costPattern = /[0-9]*/;
+		var partyPattern = /[0-9]+/;
+		var costPattern = /[0-9]+/;
 		if (!timePattern.test(this.state.startTime) | !timePattern.test(this.state.endTime)) {
 		  Alert.alert("Invalid Start or End Time");
 		}
