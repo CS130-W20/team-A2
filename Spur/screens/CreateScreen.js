@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-//import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import { Image,
 	 Platform,
 	 StyleSheet,
@@ -8,7 +7,8 @@ import { Image,
 	 TouchableOpacity,
 	 View,
      ScrollView,
-	 SafeAreaView
+	 SafeAreaView,
+	 Button
 	} from 'react-native';
 
 import * as WebBrowser from 'expo-web-browser';
@@ -21,11 +21,29 @@ export default class CreateScreen extends Component<Props> {
 	name: '',
 	cost: '',
 	party: '',
-	desc: ''
+	desc: '',
+	startTime: '',
+	endTime: '',
+	category: ''
     };
     handleNameChange = e => {
 	this.setState({
 	    name: e.nativeEvent.text
+	});
+    };
+	handleStartTimeChange = e => {
+	this.setState({
+	    startTime: e.nativeEvent.text
+	});
+    };
+	handleEndTimeChange = e => {
+	this.setState({
+	    endTime: e.nativeEvent.text
+	});
+    };
+	handleCategoryChange = e => {
+	this.setState({
+	    category: e.nativeEvent.text
 	});
     };
 	handleCostChange = e => {
@@ -48,29 +66,42 @@ export default class CreateScreen extends Component<Props> {
 	return (
     <View style={styles.container}>
 		
-		
 		<View style={{flex: 1}}>
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
 		<View style={styles.textContainer}>
 		<Text style={styles.formText}>Event Name</Text>
-		<View style={styles.inputContainer} behavior="padding">
-		<TextInput style={styles.input} onChange={this.handleNameChange} defaultValue={'Name'} clearTextOnFocus={true}/>
+		<TextInput style={styles.nameText} onChange={this.handleNameChange} clearTextOnFocus={true}/>
 		</View>
+		
+		
+		<View style={styles.textContainer}>
+		<Text style={styles.formText}>Start Time</Text>
+		<TextInput style={styles.input} onChange={this.handleStartTimeChange} clearTextOnFocus={true}/>
+		<Text style={styles.formText}>End Time</Text>
+		<TextInput style={styles.input} onChange={this.handleEndTimeChange} clearTextOnFocus={true}/>
 		</View>
 		
 		<View style={styles.textContainer}>
 		<Text style={styles.formText}>Cost</Text>
-		<TextInput style={styles.input} onChange={this.handleCostChange} defaultValue={'0'} clearTextOnFocus={true}/>
+		<TextInput style={styles.input} onChange={this.handleCostChange} clearTextOnFocus={true}/>
 		</View>
 		
 		<View style={styles.textContainer}>
 		<Text style={styles.formText}>Party Size</Text>
-		<TextInput style={styles.input} onChange={this.handlePartyChange} defaultValue={'0'} clearTextOnFocus={true}/>
+		<TextInput style={styles.input} onChange={this.handlePartyChange} clearTextOnFocus={true}/>
 		</View>
 		
 		<View style={styles.textContainer}>
-		<TextInput style={styles.input} onChange={this.handleDescChange} defaultValue={'Description'} clearTextOnFocus={true}/>
+		<Text style={styles.formText}>Category</Text>
+		<TextInput style={styles.input} onChange={this.handleCategoryChange} defaultValue={'Fun'} clearTextOnFocus={true}/>
 		</View>
+		
+		<Text style={styles.formText}>Description</Text>
+		<View style={styles.textContainer}>
+		<TextInput style={styles.descriptionText} onChange={this.handleDescChange} defaultValue={'Description'} clearTextOnFocus={true}/>
+		</View>
+		
+		<Button title="Submit" />
 	    </ScrollView>
 		</View>
 
@@ -82,7 +113,6 @@ export default class CreateScreen extends Component<Props> {
 CreateScreen.navigationOptions = {
   header: null,
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -101,18 +131,33 @@ const styles = StyleSheet.create({
     height: 50,
   },
   input: {
-	height: 50,
+	height: 30,
     backgroundColor: 'lightgrey',
     paddingLeft: 15,
-    paddingRight: 15	
+    paddingRight: 15,	
+  },
+  nameText: {
+	height: 30,
+	width: 100,
+    backgroundColor: 'lightgrey',
+    paddingLeft: 15,
+    paddingRight: 15,	
   },
   formText: {
     color: 'black',
     fontSize: 20,
     textAlign: 'center',
+	margin: 5,
   },
   contentContainer: {
     paddingTop: 30,
+  },
+  descriptionText: {
+	height: 100,
+	width: 300,
+    backgroundColor: 'lightgrey',
+    paddingLeft: 15,
+    paddingRight: 15  
   },
   welcomeContainer: {
     alignItems: 'center',
@@ -128,8 +173,9 @@ const styles = StyleSheet.create({
   },
   textContainer: {
 	flexGrow: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'center',
 	flexDirection: 'row',
+	padding: 5,
   },
   homeScreenFilename: {
     marginVertical: 7,

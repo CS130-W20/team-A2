@@ -12,7 +12,7 @@ export default function BottomTabNavigator({ navigation, route }) {
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
   //navigation.setOptions({ headerTitle: getHeaderTitle(route) });
-  navigation.setOptions({ headerTitle: 'Spur' });
+  //navigation.setOptions({ headerTitle: 'Spur' });
 
   return (
     <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
