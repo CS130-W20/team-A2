@@ -4,6 +4,7 @@ import {
 	 Text,
 	 View } from 'react-native';
 
+/** Profile Screen */
 export default class ProfileScreen extends Component<Props>
 {
     render() {
@@ -14,7 +15,6 @@ export default class ProfileScreen extends Component<Props>
 		);
     }
 }
-
 
 const styles = StyleSheet.create({
 	container: {
