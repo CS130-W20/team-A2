@@ -6,6 +6,8 @@ import TabBarIcon from '../components/TabBarIcon';
 import CreateScreen from '../screens/CreateScreen';
 import LinksScreen from '../screens/LinksScreen';
 import UserLoginScreen from '../screens/UserLoginScreen';
+import ProfileScreen from '../screens/ProfileScreen'; 
+import BrowseScreen from '../screens/BrowseScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Create';
@@ -42,6 +44,22 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={UserLoginScreen}
         options={{
           title: 'Login',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Browse"
+        component={BrowseScreen}
+        options={{
+          title: 'Browse',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
