@@ -11,26 +11,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import * as WebBrowser from 'expo-web-browser';
 
+import { CATEGORIES } from '../constants/categories';
 import SearchDetails, { SEARCH_DETAILS_DEFAULTS } from '../classes/SearchDetails';
 import SearchManager from '../classes/SearchManager';
 import { MonoText } from '../components/StyledText';
-
-const categories = [
-  {
-    name: "Academic",
-    id: 0,
-    children: [
-      {
-        name: "Computer Science",
-        id: 10
-      },
-      {
-        name: "Mathematics",
-        id: 11
-      }
-    ]
-  }
-];
 
 export default class BrowseScreen extends Component<Props> {
   constructor(props) {
@@ -102,7 +86,7 @@ export default class BrowseScreen extends Component<Props> {
             <View style={styles.textContainer}>
               <Text style={styles.formText}>Categories</Text>
               <SectionedMultiSelect
-                items={categories}
+                items={CATEGORIES}
                 uniqueKey="id"
                 subKey="children"
                 readOnlyHeadings={true}
