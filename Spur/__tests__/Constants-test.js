@@ -6,7 +6,7 @@ import Layout from '../constants/Layout';
 import { Dimensions } from 'react-native';
 
 
-describe('Constants Test', () => {
+describe('Constants Tester', () => {
     test('Layout correct', () => {
         const width = Dimensions.get('window').width;
         const height = Dimensions.get('window').height;
