@@ -46,6 +46,10 @@ export default class UserLoginScreen extends Component<Props>
         this.username= "";
        	this.password= "";
 
+	// mock user database 
+	const makeUser = function(n, u, p){return {name: n, username:u, password:p}};
+	this.users = [makeUser("Pravin Visakan", "pvisakan", "hola_spur"), makeUser("Greg Lee", "glee", "gregiscool")];
+
 	this.state = {
 		login: false,
 		success: false,
@@ -78,18 +82,15 @@ export default class UserLoginScreen extends Component<Props>
      *	Handler for the submit button
     **/
     handleSubmit() {
-	// mock user database 
-	const makeUser = function(n, u, p){return {name: n, username:u, password:p}};
-	const users = [makeUser("Pravin Visakan", "pvisakan", "hola_spur"), makeUser("Greg Lee", "glee", "gregiscool")];
 
 	// functions to verify entered data
 	const verifySignUp = function(user){
 		const reducer2 = (accum, cur) => {return accum || (JSON.stringify(cur) == JSON.stringify(user))};
-		const result = !users.reduce(reducer2, false);
+		const result = !this.users.reduce(reducer2, false);
 
 		if(result)
 		{
-			users.push(user);
+			this.users.push(user);
 		}
 
 		return result;
@@ -98,14 +99,14 @@ export default class UserLoginScreen extends Component<Props>
 	const verifyLogIn = function(user){
 
 		const reducer2 = (accum, cur) => {return accum || (JSON.stringify(cur) == JSON.stringify(user))};
-		const result = users.reduce(reducer2, false);
+		const result = this.users.reduce(reducer2, false);
 
 		return result;
 	}
 
 	// verify data based on login flag
 	//console.log(this);
-	const verify = (this.state.login)?verifyLogIn:verifySignUp;
+	const verify = (this.state.login)?verifyLogIn.bind(this):verifySignUp.bind(this);
 
 	if(verify({name:this.name, username:this.username, password:this.password}))
 	{
@@ -117,8 +118,13 @@ export default class UserLoginScreen extends Component<Props>
 	}
     }
 
+    /**
+      * Sign-up / Login toggle function
+    **/
+
+
     /** 
-     *	react render function
+     *	React render function
     **/
     render() {
 	return (
@@ -129,11 +135,14 @@ export default class UserLoginScreen extends Component<Props>
 			visible={this.state.success}
 		>
 			<SpurText>Success!</SpurText>
+			<SpurButton onPress={()=>this.setState({success:false})} title="Close"/>
 		</Modal>
 		<Modal
 			visible={this.state.failure}
+			color="#DC6C7B"
 		>
 			<SpurText>Failure!</SpurText>
+			<SpurButton onPress={()=>this.setState({failure:false})} title="Close"/>
 		</Modal>
 		
 		{/* Title */}
@@ -141,13 +150,13 @@ export default class UserLoginScreen extends Component<Props>
 	
 		{/* Text Fields */}	
 		<View style={{}}>
-		{inputField({text:"Name", onChangeText: this.handleName})}
-		{inputField({text:"Username", onChangeText: this.handleUsername})}
-		{inputField({text:"Password", onChangeText: this.handlePassword, security:true})}
+		{inputField({text:"Name", onChangeText: this.handleName.bind(this)})}
+		{inputField({text:"Username", onChangeText: this.handleUsername.bind(this)})}
+		{inputField({text:"Password", onChangeText: this.handlePassword.bind(this), security:true})}
 		</View>
 
 		{/*Submit Button*/}
-		<SpurButton onPress={this.handleSubmit} title="Submit"/>
+		<SpurButton onPress={this.handleSubmit.bind(this)} title="Submit"/>
 
 		</View>
   	);
