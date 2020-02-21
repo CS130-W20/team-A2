@@ -15,17 +15,23 @@ function inputField(props) {
 	return(
 		<View style={{flexDirection: 'row', justifyContent: 'flex-start', padding: 10}}>	
 		<SpurText>{props.text}: </SpurText>
-		<SpurTextInput onChangeText={props.onChangeText} />
+		<SpurTextInput secureTextEntry={props.security} onChangeText={props.onChangeText} />
 		</View>
 	);
 }
 
 export default class UserLoginScreen extends Component<Props>
 {
+    constructor(props) {
+	super(props);
+	this.name= "";
+        this.username= "";
+       	this.password= "";
+    }
 
-    handleName(text) {this.state.name = text};
-    handleUsername(text) {this.state.username = text};
-    handlePassword(text) {this.state.password = text};
+    handleName(text) {this.name = text};
+    handleUsername(text) {this.username = text};
+    handlePassword(text) {this.password = text};
 
     render() {
 	return (
@@ -33,13 +39,16 @@ export default class UserLoginScreen extends Component<Props>
 		
 		{/* Title */}
 		<SpurText styles = {{textAlign: 'center',}}>Sign Up for SPUR!</SpurText>
-		
+	
+		{/* Text Fields */}	
 		<View style={{}}>
 		{inputField({text:"Name", onChangeText: this.handleName})}
 		{inputField({text:"Username", onChangeText: this.handleUsername})}
-		{inputField({text:"Password", onChangeText: this.handlePassword})}
+		{inputField({text:"Password", onChangeText: this.handlePassword, security:true})}
 		</View>
 
+		{/*Submit Button*/}
+		<SpurButton title="Submit"/>
 		</View>
   	);
     }
@@ -49,6 +58,7 @@ const styles = {
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    justifyContent: "space-evenly",
   },
   title: {
     fontSize: 19,

@@ -5,6 +5,7 @@ import { Image,
 	 Text,
 	 TextInput,
 	 TouchableOpacity,
+	 Button,
 	 View } from 'react-native';
 
 export default class SpurButton extends Component<Props>
@@ -12,21 +13,18 @@ export default class SpurButton extends Component<Props>
 
     render() {
 	return (
-		<TextInput>Create Event</TextInput>
+		<View style={{alignSelf: 'center'}}>
+			<View style={styles}>
+				<Button onPress={this.props.onPress} title={this.props.title} color="#96CA92" />
+			</View>
+		</View>
   	);
     }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  title: {
-    fontSize: 19,
-    fontWeight: 'bold',
-  },
-});
+const styles = {
+	//backgroundColor: "#96CA92",
+	flex: 0.2,
+	flexDirection: 'row',
+	alignItems: 'center',
+};
