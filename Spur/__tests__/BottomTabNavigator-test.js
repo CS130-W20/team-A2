@@ -14,7 +14,7 @@ describe("State Change Tester", () =>  {
               <Stack.Screen name="Root" component={BottomTabNavigator} />
             </Stack.Navigator>
           </NavigationContainer>);*/
-
+        /*
         const containerRef = React.useRef();
         const [initialNavigationState, setInitialNavigationState] = React.useState();
         //const initialNavigationState = {b: 'hello'};
@@ -22,7 +22,7 @@ describe("State Change Tester", () =>  {
         <Stack.Navigator>
           <Stack.Screen name="Root" component={BottomTabNavigator} />
         </Stack.Navigator>
-      </NavigationContainer>);
+      </NavigationContainer>);*/
 
         
 

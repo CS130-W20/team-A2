@@ -8,100 +8,182 @@ import { Image,
 	 View,
      ScrollView,
 	 SafeAreaView,
-	 Button
+	 Button,
+	 Alert
 	} from 'react-native';
 
-import * as WebBrowser from 'expo-web-browser';
-
-import { MonoText } from '../components/StyledText';
-import {KeyboardAvoidingView} from 'react-native';
-
 export default class CreateScreen extends Component<Props> {
-    state = {
-	name: '',
-	cost: '',
-	party: '',
-	desc: '',
-	startTime: '',
-	endTime: '',
-	category: ''
-    };
+    constructor(props) {
+		super(props);
+		this.state = {
+		name: '',
+		cost: '',
+		party: '',
+		desc: '',
+		startTime: '',
+		endTime: '',
+		category: '',
+		date: '',
+		region: {
+		  latitude: 37.78825,
+		  longitude: -122.4324,
+		},
+		};
+	
+		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleNameChange = this.handleNameChange.bind(this);
+		this.handleDateChange = this.handleDateChange.bind(this);
+		this.handleStartTimeChange = this.handleStartTimeChange.bind(this);
+		this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
+		this.handleCategoryChange = this.handleCategoryChange.bind(this);
+		this.handleCostChange = this.handleCostChange.bind(this);
+		this.handlePartyChange = this.handlePartyChange.bind(this);
+		this.handleDescChange = this.handleDescChange.bind(this);
+	};
+	/** Updates name state variable when input is detected.
+	* @param {string} Event Name
+	*/
     handleNameChange = e => {
 	this.setState({
-	    name: e.nativeEvent.text
+	    name: e
 	});
     };
+	/** Updates date state variable when input is detected.
+	* @param {string} Date
+	*/
+	handleDateChange = e => {
+	this.setState({
+	    date: e
+	});
+    };
+	/** Updates start time state variable when input is detected.
+	* @param {string} Start Time
+	*/
 	handleStartTimeChange = e => {
 	this.setState({
-	    startTime: e.nativeEvent.text
+	    startTime: e
 	});
     };
+	/** Updates end time state variable when input is detected.
+	* @param {string} End Time
+	*/
 	handleEndTimeChange = e => {
 	this.setState({
-	    endTime: e.nativeEvent.text
+	    endTime: e
 	});
     };
+	/** Updates category state variable when input is detected.
+	* @param {string} Category
+	*/
 	handleCategoryChange = e => {
 	this.setState({
-	    category: e.nativeEvent.text
+	    category: e
 	});
     };
+	/** Updates cost state variable when input is detected.
+	* @param {string} Cost
+	*/
 	handleCostChange = e => {
 	this.setState({
-	    cost: e.nativeEvent.text
+	    cost: e
 	});
     };
+	/** Updates party state variable when input is detected.
+	* @param {string} Party Size
+	*/
 	handlePartyChange = e => {
 	this.setState({
-	    party: e.nativeEvent.text
+	    party: e
 	});
     };
+	/** Updates description state variable when input is detected.
+	* @param {string} Description
+	*/
 	handleDescChange = e => {
 	this.setState({
-	    desc: e.nativeEvent.text
+	    desc: e
 	});
     };
-	
+	/** Validates event details
+	* @param {event} React Native Event
+	*/
+	handleSubmit(event) {
+		var datePattern = /[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9]/;
+		var timePattern = /[0-9][0-9]:[0-9][0-9]/;
+		var partyPattern = /[0-9]+/;
+		var costPattern = /[0-9]+/;
+		if (!timePattern.test(this.state.startTime) | !timePattern.test(this.state.endTime)) {
+		  Alert.alert("Invalid Start or End Time");
+		}
+		else if (!datePattern.test(this.state.date)) {
+		  Alert.alert("Invalid Date");
+		}
+		else if (!partyPattern.test(this.state.party)) {
+		  Alert.alert("Invalid Party Size");
+		}
+		else if (!costPattern.test(this.state.cost)) {
+		  Alert.alert("Invalid Cost");
+		}
+		else if (this.state.name == '') {
+		  Alert.alert("Invalid Event Name");
+		}
+		else if (this.state.category == '') {
+		  Alert.alert("Invalid Category");
+		}
+		else if (this.state.desc == '') {
+		  Alert.alert("Invalid Event Description");
+		}
+		else {
+		  Alert.alert("Success");
+		}
+	};
+	/** Renders the UI shown to the user.
+	*/
     render() {
 	return (
     <View style={styles.container}>
+		
 		
 		<View style={{flex: 1}}>
         <ScrollView contentContainerStyle={{flexGrow: 1}}>
 		<View style={styles.textContainer}>
 		<Text style={styles.formText}>Event Name</Text>
-		<TextInput style={styles.nameText} onChange={this.handleNameChange} clearTextOnFocus={true}/>
+		<TextInput style={styles.nameText} onChangeText={this.handleNameChange} clearTextOnFocus={true}/>
 		</View>
 		
+		<View style={styles.textContainer}>
+		<Text style={styles.formText}>Event Date</Text>
+		<TextInput style={styles.nameText} onChangeText={this.handleDateChange} clearTextOnFocus={true}/>
+		</View>
 		
 		<View style={styles.textContainer}>
 		<Text style={styles.formText}>Start Time</Text>
-		<TextInput style={styles.input} onChange={this.handleStartTimeChange} clearTextOnFocus={true}/>
+		<TextInput style={styles.input} onChangeText={this.handleStartTimeChange} clearTextOnFocus={true}/>
 		<Text style={styles.formText}>End Time</Text>
-		<TextInput style={styles.input} onChange={this.handleEndTimeChange} clearTextOnFocus={true}/>
+		<TextInput style={styles.input} onChangeText={this.handleEndTimeChange} clearTextOnFocus={true}/>
 		</View>
 		
 		<View style={styles.textContainer}>
 		<Text style={styles.formText}>Cost</Text>
-		<TextInput style={styles.input} onChange={this.handleCostChange} clearTextOnFocus={true}/>
+		<TextInput style={styles.input} onChangeText={this.handleCostChange} clearTextOnFocus={true}/>
 		</View>
 		
 		<View style={styles.textContainer}>
 		<Text style={styles.formText}>Party Size</Text>
-		<TextInput style={styles.input} onChange={this.handlePartyChange} clearTextOnFocus={true}/>
+		<TextInput style={styles.input} onChangeText={this.handlePartyChange} clearTextOnFocus={true}/>
 		</View>
 		
 		<View style={styles.textContainer}>
 		<Text style={styles.formText}>Category</Text>
-		<TextInput style={styles.input} onChange={this.handleCategoryChange} defaultValue={'Fun'} clearTextOnFocus={true}/>
+		<TextInput style={styles.input} onChangeText={this.handleCategoryChange} clearTextOnFocus={true}/>
 		</View>
 		
 		<Text style={styles.formText}>Description</Text>
 		<View style={styles.textContainer}>
-		<TextInput style={styles.descriptionText} onChange={this.handleDescChange} defaultValue={'Description'} clearTextOnFocus={true}/>
+		<TextInput style={styles.descriptionText} onChangeText={this.handleDescChange} clearTextOnFocus={true}/>
 		</View>
 		
-		<Button title="Submit" />
+		<Button title="Submit" onPress={this.handleSubmit}/>
 	    </ScrollView>
 		</View>
 
@@ -159,78 +241,10 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15  
   },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
   textContainer: {
 	flexGrow: 1,
     justifyContent: 'center',
 	flexDirection: 'row',
 	padding: 5,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
   },
 });
