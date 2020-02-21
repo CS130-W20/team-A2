@@ -44,7 +44,7 @@ describe("State Change Tester", () =>  {
         const endTime = '2pm';
         const category = 'Fun';
 
-        // Mock all event handler
+        // Mock all event handlers
         instance.handleNameChange(name);
         instance.handleCostChange(cost);
         instance.handlePartyChange(party);
