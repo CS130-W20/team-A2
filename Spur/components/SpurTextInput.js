@@ -14,7 +14,7 @@ export default class SpurTextInput extends Component<Props>
 	// copy over style parameters passed down from a parent
 	const styleDict = Object.assign({}, styles, this.props.styles);
 	return (
-		<TextInput style={styleDict} onChangeText = {this.props.onChangeText}>{this.props.children}</TextInput>
+		<TextInput secureTextEntry={this.props.secureTextEntry} style={styleDict} onChangeText = {this.props.onChangeText}>{this.props.children}</TextInput>
   	);
     }
 }
