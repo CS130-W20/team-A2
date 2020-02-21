@@ -19,6 +19,8 @@ import { MonoText } from '../components/StyledText';
 import {KeyboardAvoidingView} from 'react-native';
 
 export default class CreateScreen extends Component<Props> {
+    /** Automatically called constructor that does initial setup.
+    */
     constructor(props) {
 		super(props);
 		this.state = {
