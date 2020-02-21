@@ -68,7 +68,7 @@ export default class UserLoginScreen extends Component<Props>
      * 	@param {string} text - new text input
     **/
     handleUsername(text) {
-	console.log(this);
+	//console.log(this);
 	this.username = text
     };
 
@@ -146,17 +146,22 @@ export default class UserLoginScreen extends Component<Props>
 		</Modal>
 		
 		{/* Title */}
-		<SpurText styles = {{textAlign: 'center',}}>Sign Up for SPUR!</SpurText>
+		{this.state.login?<SpurText styles = {{textAlign: 'center',}}>Log In to SPUR!</SpurText>:<SpurText styles = {{textAlign: 'center',}}>Sign Up for SPUR!</SpurText>}
 	
 		{/* Text Fields */}	
 		<View style={{}}>
-		{inputField({text:"Name", onChangeText: this.handleName.bind(this)})}
+		{!this.state.login && inputField({text:"Name", onChangeText: this.handleName.bind(this)})}
 		{inputField({text:"Username", onChangeText: this.handleUsername.bind(this)})}
 		{inputField({text:"Password", onChangeText: this.handlePassword.bind(this), security:true})}
 		</View>
 
 		{/*Submit Button*/}
 		<SpurButton onPress={this.handleSubmit.bind(this)} title="Submit"/>
+
+		{/*Switch Between Sign Up and Log In*/}
+		{ this.state.login?(<SpurText styles = {{textAlign: 'center',}}>No account yet?</SpurText>):(<SpurText styles = {{textAlign: 'center',}}>Have an account?</SpurText>)}
+		
+		{ this.state.login?(<SpurButton onPress={()=>this.setState({login:false})} title="Sign Up"/>):(<SpurButton onPress={()=>this.setState({login:true})} title="Log In"/>)}
 
 		</View>
   	);
