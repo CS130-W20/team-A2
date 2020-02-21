@@ -8,9 +8,15 @@ const SEARCH_DETAILS_DEFAULTS = {
 }
 
 class SearchDetails {
-    constructor(startTime, endTime, distance, cost, partySize, categories) {
-        this.startTime = startTime;
-        this.endTime = endTime;
+    /**
+     * Creates a SearchDetails object
+     * @constructor
+     * @param {number} distance - Maximum desired distance
+     * @param {number} cost - Maximum desired cost
+     * @param {number} partySize - Exact number of people for the event
+     * @param {Array} categories - All desired categories
+     */
+    constructor(distance, cost, partySize, categories) {
         this.distance = distance;
         this.cost = cost;
         this.partySize = partySize;
