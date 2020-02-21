@@ -1,11 +1,15 @@
-# Sample Project Title
-Briefly describe your project here.
+# Spur
+An easy way to find small events close to you.
 
 ## Directory Structure
-Explain how the code is organized
+Spur/navigation: contains react navigation components
+Spur/screens: contains the screens shown to the users
 
 ## Installation/Run instructions
-Explain how to run your application
+[https://facebook.github.io/react-native/docs/getting-started](https://facebook.github.io/react-native/docs/getting-started)
+`npm install -g expo-cli`
+then enter Spur root directory and run
+`npm start`
 
 ## Relevant Links 
 - Documentation link
