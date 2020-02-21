@@ -25,6 +25,7 @@ export default class BrowseScreen extends Component<Props> {
     this.state = {
       partySize: '',
       cost: '',
+      distance: '',
       categories: [],
       eventList: []
     };
@@ -42,6 +43,12 @@ export default class BrowseScreen extends Component<Props> {
     });
   }
 
+  handleDistanceChange = e => {
+    this.setState({
+      distance: e.nativeEvent.text
+    });
+  }
+
   handleSelectedCategoriesChange = e => {
     this.setState({
       categories: e
@@ -50,12 +57,12 @@ export default class BrowseScreen extends Component<Props> {
 
   refineSearch = e => {
     // Construct a SearchDetails object and pass it to the searchmanager
+    var distance = (this.state.distance.length == 0) ? SEARCH_DETAILS_DEFAULTS.distance : this.state.distance;
     var cost = (this.state.cost.length == 0) ? SEARCH_DETAILS_DEFAULTS.cost : this.state.cost;
     var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
     var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
 
-    var details = new SearchDetails("start", "end", "location", cost, partySize, categories);
-    console.log(details);
+    var details = new SearchDetails("start", "end", distance, cost, partySize, categories);
 
     this.setState({
       eventList: this.searchManager.filter(details)
@@ -76,9 +83,17 @@ export default class BrowseScreen extends Component<Props> {
           </View>
           <View style={styles.container}>
             <View style={styles.textContainer}>
-              <Text style={styles.formText}>Cost</Text>
+              <Text style={styles.formText}>Maximum Cost</Text>
               <View style={styles.inputContainer} behavior="padding">
                 <TextInput onChange={this.handleCostChange} defaultValue={''} clearTextOnFocus={true}/>
+              </View>
+            </View>
+          </View>
+          <View style={styles.container}>
+            <View style={styles.textContainer}>
+              <Text style={styles.formText}>Maximum Distance</Text>
+              <View style={styles.inputContainer} behavior="padding">
+                <TextInput onChange={this.handleDistanceChange} defaultValue={''} clearTextOnFocus={true}/>
               </View>
             </View>
           </View>
@@ -90,26 +105,25 @@ export default class BrowseScreen extends Component<Props> {
                 uniqueKey="id"
                 subKey="children"
                 readOnlyHeadings={true}
+                expandDropDowns={true}
                 onSelectedItemsChange={this.handleSelectedCategoriesChange}
                 selectedItems={this.state.categories}
               />
             </View>
           </View>
           <Button
-            title="Refine Search"
+            title="Find Events"
             onPress={this.refineSearch}
           />
-          <View style={styles.container}>
-            <Text style={styles.formText}>Current Criteria:</Text>
-            <View>
-              <Text>Party Size: {this.state.partySize}</Text>
-              <Text>Cost: {this.state.cost}</Text>
-              <Text>Categories: {JSON.stringify(this.state.categories)}</Text>
+          {this.state.eventList.map(event => (
+            <View style={styles.container} key={event.details.title}>
+              <Text>Event Name: {event.details.title}</Text>
+              <Text>Event Time: {event.details.startTime} - {event.details.endTime}</Text>
+              <Text>Distance: {event.details.location}</Text>
+              <Text>Event Cost: ${event.details.cost}</Text>
+              <Text></Text>
             </View>
-          </View>
-          <View style={styles.container}>
-            <Text>Events: {JSON.stringify(this.state.eventList)}</Text>
-          </View>
+            ))}
         </ScrollView>
       </View>
     );

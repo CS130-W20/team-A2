@@ -12,6 +12,20 @@ const CATEGORIES = [
         id: 6
       }
     ]
+  },
+  {
+    name: "Food",
+    id: 1,
+    children: [
+      {
+        name: "Coffee",
+        id: 2
+      },
+      {
+        name: "Boba",
+        id: 3
+      }
+    ]
   }
 ];
 
