@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import CreateScreen from '../screens/CreateScreen';
 import LinksScreen from '../screens/LinksScreen';
+import ProfileScreen from '../screens/ProfileScreen'; 
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Create';
