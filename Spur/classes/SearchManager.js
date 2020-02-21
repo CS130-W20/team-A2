@@ -3,7 +3,7 @@ import EventDetails from './EventDetails'
 import { SEARCH_DETAILS_DEFAULTS } from './SearchDetails'
 
 class SearchManager {
-  /*
+  /**
    * Singleton SearchManager
    */
   constructor() {
@@ -17,7 +17,7 @@ class SearchManager {
     return this;
   }
 
-  /*
+  /**
    * Returns the events in eventList with a party size of exactly partySize people
    */
   filterPartySize(eventList, partySize) {
@@ -30,7 +30,7 @@ class SearchManager {
     return newList;
   }
 
-  /*
+  /**
    * Returns the events in eventList that cost at most the provided cost
    */
   filterCost(eventList, cost) {
@@ -43,7 +43,7 @@ class SearchManager {
     return newList;
   }
 
-  /*
+  /**
    * Filters all events from the database based on the searchDetails provided
    * If any of the searchDetails values matches the default value provided in 
    *     SEARCH_DETAILS_DEFAULTS, no filtering is done on that particular entry
@@ -67,8 +67,7 @@ class SearchManager {
     if (searchDetails.cost != SEARCH_DETAILS_DEFAULTS.cost) {
       eventList = this.filterCost(eventList, parseInt(searchDetails.cost));
     }
-
-    console.log(eventList);
+    return eventList;
   }
 
   sort(searchDetails, eventList) {

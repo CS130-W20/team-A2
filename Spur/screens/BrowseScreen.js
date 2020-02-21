@@ -8,11 +8,29 @@ import { Button,
      TouchableOpacity,
      View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import * as WebBrowser from 'expo-web-browser';
 
 import SearchDetails, { SEARCH_DETAILS_DEFAULTS } from '../classes/SearchDetails';
 import SearchManager from '../classes/SearchManager';
 import { MonoText } from '../components/StyledText';
+
+const categories = [
+  {
+    name: "Academic",
+    id: 0,
+    children: [
+      {
+        name: "Computer Science",
+        id: 10
+      },
+      {
+        name: "Mathematics",
+        id: 11
+      }
+    ]
+  }
+];
 
 export default class BrowseScreen extends Component<Props> {
   constructor(props) {
@@ -22,7 +40,9 @@ export default class BrowseScreen extends Component<Props> {
 
     this.state = {
       partySize: '',
-      cost: ''
+      cost: '',
+      categories: [],
+      eventList: []
     };
   }
 
@@ -38,15 +58,24 @@ export default class BrowseScreen extends Component<Props> {
     });
   }
 
+  handleSelectedCategoriesChange = e => {
+    this.setState({
+      categories: e
+    });
+  }
+
   refineSearch = e => {
     // Construct a SearchDetails object and pass it to the searchmanager
     var cost = (this.state.cost.length == 0) ? SEARCH_DETAILS_DEFAULTS.cost : this.state.cost;
     var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
+    var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
 
-    var details = new SearchDetails("start", "end", "location", cost, partySize, "categories");
+    var details = new SearchDetails("start", "end", "location", cost, partySize, categories);
     console.log(details);
 
-    this.searchManager.filter(details);
+    this.setState({
+      eventList: this.searchManager.filter(details)
+    });
   }
 
   render() {
@@ -70,16 +99,33 @@ export default class BrowseScreen extends Component<Props> {
             </View>
           </View>
           <View style={styles.container}>
-            <Text style={styles.formText}>Current Criteria:</Text>
-            <View>
-              <Text>Party Size: {this.state.partySize}</Text>
-              <Text>Cost: {this.state.cost}</Text>
+            <View style={styles.textContainer}>
+              <Text style={styles.formText}>Categories</Text>
+              <SectionedMultiSelect
+                items={categories}
+                uniqueKey="id"
+                subKey="children"
+                readOnlyHeadings={true}
+                onSelectedItemsChange={this.handleSelectedCategoriesChange}
+                selectedItems={this.state.categories}
+              />
             </View>
           </View>
           <Button
             title="Refine Search"
             onPress={this.refineSearch}
           />
+          <View style={styles.container}>
+            <Text style={styles.formText}>Current Criteria:</Text>
+            <View>
+              <Text>Party Size: {this.state.partySize}</Text>
+              <Text>Cost: {this.state.cost}</Text>
+              <Text>Categories: {JSON.stringify(this.state.categories)}</Text>
+            </View>
+          </View>
+          <View style={styles.container}>
+            <Text>Events: {JSON.stringify(this.state.eventList)}</Text>
+          </View>
         </ScrollView>
       </View>
     );
