@@ -31,44 +31,66 @@ export default class BrowseScreen extends Component<Props> {
     };
   }
 
+  /**
+   * Updates partySize state variable when input change detected
+   * @param {event} e - Event containing input change
+   */
   handlePartySizeChange = e => {
     this.setState({
       partySize: e.nativeEvent.text
     });
   }
 
+  /**
+   * Updates cost state variable when input change detected
+   * @param {event} e - Event containing input change
+   */
   handleCostChange = e => {
     this.setState({
       cost: e.nativeEvent.text
     });
   }
 
+  /**
+   * Updates distance state variable when input change detected
+   * @param {event} e - Event containing input change
+   */
   handleDistanceChange = e => {
     this.setState({
       distance: e.nativeEvent.text
     });
   }
 
+  /**
+   * Updates categories state variable when a different set of categories are selected
+   * @param {Array} e - Selected categories 
+   */
   handleSelectedCategoriesChange = e => {
     this.setState({
       categories: e
     });
   }
 
-  refineSearch = e => {
+  /**
+   * Updates the event list with events that match the criteria stored in the component state
+   */
+  refineSearch = () => {
     // Construct a SearchDetails object and pass it to the searchmanager
     var distance = (this.state.distance.length == 0) ? SEARCH_DETAILS_DEFAULTS.distance : this.state.distance;
     var cost = (this.state.cost.length == 0) ? SEARCH_DETAILS_DEFAULTS.cost : this.state.cost;
     var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
-    var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
+    var categories = this.state.categories;
 
-    var details = new SearchDetails("start", "end", distance, cost, partySize, categories);
+    var details = new SearchDetails('00:00', '00:00', distance, cost, partySize, categories);
 
     this.setState({
       eventList: this.searchManager.filter(details)
     });
   }
 
+  /**
+   * Renders the UI shown to the user
+   */
   render() {
     return (
       <View style={{flex: 1}}>
