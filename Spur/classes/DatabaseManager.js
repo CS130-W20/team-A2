@@ -47,6 +47,30 @@ class DatabaseManager {
         var eventRef = this.events().push();
         eventRef.set(event);
     }
+
+    /**
+     * Returns a database reference to a user
+     * @param {string} userId - Id of the user
+     */
+    getUser(userId) {
+        return this.db.ref("users/" + userId);
+    }
+
+    /**
+     * Return a database snapshot of all users
+     */
+    users() {
+        return this.db.ref("users");
+    }
+
+    /**
+     * Adds the user to the database
+     * @param {User} user - User to store into the database
+     */
+    addUser(user) {
+        var userRef = this.users().push();
+        userRef.set(user);
+    }
 }
 
 export default DatabaseManager;
