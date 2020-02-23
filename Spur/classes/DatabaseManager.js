@@ -19,11 +19,51 @@ class DatabaseManager {
         this.auth = app.auth();
         this.db = app.database();
 
-        console.log(FirebaseConfig);
-
         return this;
     }
 
+    // AUTHENTICATION METHODS
+    // THESE ARE NOT TESTED YET
+    /**
+     * Creates a new Firebase user with the provided email and password
+     * Handle errors by attaching a .catch(error => {}) callback to the returned Promise
+     * @param {string} email - User email
+     * @param {string} password - User password
+     * @returns {Promise} Promise to create a new user
+     */
+    registerUser(email, password) {
+        return this.auth.createUserWithEmailAndPassword(email, password);
+    }
+
+    /**
+     * Signs in the Firebase user identified by the email and password
+     * Handle errors by attaching a callback to the returned Promise
+     * @param {string} email - User email
+     * @param {string} password - User password
+     * @returns {Promise} Promise to login the user
+     */
+    login(email, password) {
+        return this.auth.signInWithEmailAndPassword(email, password);
+    }
+
+    /**
+     * Logs the current user out
+     * @returns {Promise} Promise to log the user out
+     */
+    logout() {
+        return this.auth.signOut();
+    }
+
+    /**
+     * Returns the user that is currently logged in
+     * @returns {FirebaseUser} The currently logged in user, or null if no user is logged in
+     */
+    getCurrentUser() {
+        return this.auth.currentUser;
+    }
+
+
+    // DATABASE METHODS
     /**
      * Returns a database reference to an event
      * @param {string} eventId - ID of the event
