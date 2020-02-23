@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import { Button,
+import { 
+     ActivityIndicator,
+     Button,
      Image,
      Platform,
      StyleSheet,
@@ -27,7 +29,8 @@ export default class BrowseScreen extends Component<Props> {
       cost: '',
       distance: '',
       categories: [],
-      eventList: []
+      eventList: [],
+      loading: false
     };
   }
 
@@ -75,6 +78,8 @@ export default class BrowseScreen extends Component<Props> {
    * Updates the event list with events that match the criteria stored in the component state
    */
   refineSearch = () => {
+    this.setState({ loading: true });
+
     // Construct a SearchDetails object and pass it to the searchmanager
     var distance = (this.state.distance.length == 0) ? SEARCH_DETAILS_DEFAULTS.distance : this.state.distance;
     var cost = (this.state.cost.length == 0) ? SEARCH_DETAILS_DEFAULTS.cost : this.state.cost;
@@ -83,9 +88,12 @@ export default class BrowseScreen extends Component<Props> {
 
     var details = new SearchDetails(distance, cost, partySize, categories);
 
-    this.setState({
-      eventList: this.searchManager.filter(details)
-    });
+    this.searchManager.filter(details).then(list => {
+      this.setState({
+        eventList: list,
+        loading: false
+      });
+    })
   }
 
   /**
@@ -137,8 +145,9 @@ export default class BrowseScreen extends Component<Props> {
             title="Find Events"
             onPress={this.refineSearch}
           />
+          {this.state.loading && <ActivityIndicator size="large" color="#00ff00" />}
           {this.state.eventList.map(event => (
-            <View style={styles.container} key={event.details.title}>
+            <View style={styles.container} key={event.eventId}>
               <Text>Event Name: {event.details.title}</Text>
               <Text>Event Time: {event.details.startTime} - {event.details.endTime}</Text>
               <Text>Distance: {event.details.location}</Text>
@@ -155,39 +164,6 @@ export default class BrowseScreen extends Component<Props> {
 BrowseScreen.navigationOptions = {
   header: null,
 };
-
-function DevelopmentModeNotice() {
-  if (__DEV__) {
-    const learnMoreButton = (
-      <Text onPress={handleLearnMorePress} style={styles.helpLinkText}>
-        Learn more
-      </Text>
-    );
-
-    return (
-      <Text style={styles.developmentModeText}>
-        Development mode is enabled: your app will be slower but you can use useful development
-        tools. {learnMoreButton}
-      </Text>
-    );
-  } else {
-    return (
-      <Text style={styles.developmentModeText}>
-        You are not in development mode: your app will run at full speed.
-      </Text>
-    );
-  }
-}
-
-function handleLearnMorePress() {
-  WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/workflow/development-mode/');
-}
-
-function handleHelpPress() {
-  WebBrowser.openBrowserAsync(
-    'https://docs.expo.io/versions/latest/get-started/create-a-new-app/#making-your-first-change'
-  );
-}
 
 const styles = StyleSheet.create({
   container: {
