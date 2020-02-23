@@ -7,6 +7,7 @@ import CreateScreen from '../screens/CreateScreen';
 import LinksScreen from '../screens/LinksScreen';
 import UserLoginScreen from '../screens/UserLoginScreen';
 import BrowseScreen from '../screens/BrowseScreen';
+import ProfileScreen from '../screens/ProfileScreen'; 
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Create';
@@ -52,6 +53,15 @@ export default function BottomTabNavigator({ navigation, route }) {
         options={{
           title: 'Browse',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        initialParams = {{ User: "Own"}} 
+        options={{
+          title: 'Profile',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
     </BottomTab.Navigator>
