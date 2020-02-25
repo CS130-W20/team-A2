@@ -1,11 +1,13 @@
 import Event from './Event';
 import EventDetails from './EventDetails';
 import { SEARCH_DETAILS_DEFAULTS } from './SearchDetails';
+import DatabaseManager from './DatabaseManager';
 import { CATEGORIES } from '../constants/categories';
 
 class SearchManager {
   /**
    * Creates a Singleton SearchManager
+   * Initializes a DatabaseManager instance
    * @constructor
    */
   constructor() {
@@ -16,6 +18,9 @@ class SearchManager {
 
     // Initialize a new instance
     SearchManager.instance = this;
+
+    this.databaseManager = new DatabaseManager();
+
     return this;
   }
 
@@ -95,19 +100,17 @@ class SearchManager {
    * If any of the searchDetails values matches the default value provided in 
    *     SEARCH_DETAILS_DEFAULTS, no filtering is done on that particular entry
    * @param {SearchDetails} searchDetails - Object containing filter criteria
-   * @returns {Array} Filtered event list
+   * @returns {Promise} Promise to return filtered event list
    */
-  filter(searchDetails) {
-    // Eventually replace this with a call to the DatabaseManager
-    var eventList = [];
-    for (var i = 1; i <= 10; i++) {
-      var details = new EventDetails("title" + i, "description" + i, 
-                                     "startTime" + i, "endTime" + i, 
-                                     "host" + i, i * 1000,
-                                     i, i, [i]);
-      var event = new Event(details, "attendees" + i, "chat" + i, "checked_in" + i);
-      eventList.push(event);
-    }
+  async filter(searchDetails) {
+    var snapshot = await this.databaseManager.events().once('value');
+
+    const allEvents = snapshot.val();
+
+    const eventList = Object.keys(allEvents).map(key => ({
+        ...allEvents[key],
+        eventId: key
+    }));
 
     if (searchDetails.partySize != SEARCH_DETAILS_DEFAULTS.partySize) {
       eventList = this.filterPartySize(eventList, parseInt(searchDetails.partySize, 10));
@@ -121,7 +124,8 @@ class SearchManager {
     if (searchDetails.distance != SEARCH_DETAILS_DEFAULTS.distance) {
       eventList = this.filterDistance(eventList, searchDetails.distance);
     }
-    return eventList;
+
+    return eventList;  
   }
 }
 

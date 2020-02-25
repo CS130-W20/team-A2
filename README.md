@@ -11,6 +11,10 @@ Spur/screens: contains the screens shown to the users
 then enter Spur root directory and run<br/>
 `npm start`
 
+## Database Setup
+Spur runs on Firebase Real-time Database. 
+To run a local copy of Spur, create a new real-time database, then rename `FirebaseConfig.js.example` to `FirebaseConfig.js` and fill in the values in the config to the values provided by Google. 
+
 ## Tests
 Tests can be found in the tests branch, located within the branch at Spur/\_\_tests\_\_<br/>
 The specific tests are:<br/>
