@@ -21,7 +21,12 @@ export default class ProfileScreen extends Component<Props>
 		super(props); 
 		//Store dummy user
 		this.databaseManager = new DatabaseManager(); 
-		this.user = this.databaseManager.getUser("Maged"); 
+
+		//Try logging in a dummy user 
+		this.databaseManager.login("maged@gmail.com", "UML123");
+		console.log(this.databaseManager.getCurrentUser());
+		//Get user from db 
+		this.user = this.databaseManager.getUser("Maged");
 		console.log("testing");
 		console.log(this.user);
 	}
@@ -41,37 +46,9 @@ export default class ProfileScreen extends Component<Props>
 				<View>
 					<Text style={styles.contentHeader}>Interests:</Text>
 				</View>
-				<ScrollView style={styles.descriptionBox}>
-					{this.user.interests.map(category => (
-						<Text style={styles.content}>
-							{category}
-						</Text>
-					))}
-				</ScrollView>
 				<View>
 					<Text style={styles.contentHeader}>History:</Text>
 				</View>
-				<ScrollView style={styles.descriptionBox}>
-					{this.user.history.map(event => (
-						<Button
-							title = {event.details.title}
-							onPress={() => Alert.alert('Will direct to event page later!')}
-						>
-						</Button>
-					))}
-				</ScrollView>
-				<View>
-					<Text style={styles.contentHeader}>Upcoming:</Text>
-				</View>
-				<ScrollView style={styles.descriptionBox}>
-					{this.user.upcoming.map(event => (
-						<Button
-							title = {event.details.title}
-							onPress={() => Alert.alert('Will direct to event page later!')}
-						>
-						</Button>
-					))}
-				</ScrollView>
 			</ScrollView>
 		);
     }
@@ -112,3 +89,33 @@ const styles = StyleSheet.create({
 	}
   });
   
+  /*
+  				<ScrollView style={styles.descriptionBox}>
+					{this.user.interests.map(category => (
+						<Text style={styles.content}>
+							{category}
+						</Text>
+					))}
+				</ScrollView>
+  				<ScrollView style={styles.descriptionBox}>
+					{this.user.history.map(event => (
+						<Button
+							title = {event.details.title}
+							onPress={() => Alert.alert('Will direct to event page later!')}
+						>
+						</Button>
+					))}
+				</ScrollView>
+				<View>
+					<Text style={styles.contentHeader}>Upcoming:</Text>
+				</View>
+				<ScrollView style={styles.descriptionBox}>
+					{this.user.upcoming.map(event => (
+						<Button
+							title = {event.details.title}
+							onPress={() => Alert.alert('Will direct to event page later!')}
+						>
+						</Button>
+					))}
+				</ScrollView>
+*/
