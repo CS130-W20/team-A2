@@ -9,41 +9,21 @@ import {
 import User from '../classes/User';
 import Event from '../classes/Event';
 import EventDetails from '../classes/EventDetails';
+import DatabaseManager from '../classes/DatabaseManager';  
 
 /**
  * Profile Screen - Displays a user profile 
- * @param {User} user - User whose profile will be displayed
+ * @param {User} user - User whose profile will be displayed. Obtained via Database Manager
  */
 export default class ProfileScreen extends Component<Props>
 {
 	constructor(props) {
 		super(props); 
-
-		//Make a dummy user for now, will change later 
-		//Dummy event 1
-		var ed1 = new EventDetails("UML Appreciation Party", 
-		  "A day focused on the universal language",
-		  "4:00 pm", "5:50 pm", "Maged", "34.0727° N, 118.4393° W", 0, 100,
-		  ["UML", "Scrum", "Design"]
-		);
-		var env1 = new Event(ed1, ["Maged", "David", "Greg", "Pravin", "Tim", "Joseph", "Mihir"], 
-		"Chat", ["Tim", "Mihir"]
-		);
-		
-		//Dummy event 2
-		var ed2 = new EventDetails("Pizza Party", 
-		  "Delicious La Monica's", "10:00 pm", "11:00 pm", "Amit", 
-		  "34.0609° N, 118.4468° W", 3.65, 10, ["Food", "Social"]
-		);
-		var env2 = new Event(ed2, ["Maged", "Mihir", "Vignesh"], "Chat",
-		  ["Maged", "Mihir", "Vignesh"]
-		);
-		
-		//Dummy User 1
-		this.user = new User("Maged", "Professor for CS 130. Nasa JPL Senior software architect",
-		 ["Architecture", "Design", "UML", "Scrum", "Ducks", "Street Fighter", "Pizza"],
-		 [env1], [env2]
-		);
+		//Store dummy user
+		this.databaseManager = new DatabaseManager(); 
+		this.user = this.databaseManager.getUser("Maged"); 
+		console.log("testing");
+		console.log(this.user);
 	}
 
     render() {
