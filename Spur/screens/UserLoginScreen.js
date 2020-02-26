@@ -46,6 +46,18 @@ export default class UserLoginScreen extends Component<Props>
         this.username= "";
        	this.password= "";
 
+	//remove default header bar for login
+	this.props.navigation.setOptions({ headerTitle: 'SPUR', 
+				  headerStyle: {
+					backgroundColor: '#96ca92',
+				   },
+				   headerTintColor: '#fff',
+				   headerTitleStyle: {
+					fontWeight: 'bold',
+					fontSize: 40,
+				   },
+				   headerTitleAlign: 'center',
+				});
 	// mock user database 
 	const makeUser = function(n, u, p){return {name: n, username:u, password:p}};
 	this.users = [makeUser("Pravin Visakan", "pvisakan", "hola_spur"), makeUser("Greg Lee", "glee", "gregiscool")];
@@ -135,14 +147,15 @@ export default class UserLoginScreen extends Component<Props>
 			visible={this.state.success}
 		>
 			<SpurText>Success!</SpurText>
-			<SpurButton onPress={()=>this.setState({success:false})} title="Close"/>
+			<SpurButton onPress={()=>{this.setState({success:false});
+						  this.props.navigation.replace("Root");}} title="Close"/>
 		</Modal>
 		<Modal
 			visible={this.state.failure}
 			color="#DC6C7B"
 		>
 			<SpurText>Failure!</SpurText>
-			<SpurButton onPress={()=>this.setState({failure:false})} title="Close"/>
+			<SpurButton onPress={()=>{this.setState({failure:false});}} title="Close"/>
 		</Modal>
 		
 		{/* Title */}

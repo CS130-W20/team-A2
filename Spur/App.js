@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import DrawerNavigator from './navigation/DrawerNavigator';
 import useLinking from './navigation/useLinking';
+import UserLoginScreen from './screens/UserLoginScreen';
 
 const Stack = createStackNavigator();
 
@@ -51,6 +52,7 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
+            <Stack.Screen name="Login" component={UserLoginScreen}/>
             <Stack.Screen name="Root" component={DrawerNavigator} />
           </Stack.Navigator>
         </NavigationContainer>

@@ -39,14 +39,14 @@ export default function DrawerNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
-      <Drawer.Screen
+      {/*<Drawer.Screen
         name="Login"
         component={UserLoginScreen}
         options={{
           title: 'Login',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
-      />
+      />*/}
       <Drawer.Screen
         name="Browse"
         component={BrowseScreen}
