@@ -12,6 +12,9 @@ import UserLoginScreen from './screens/UserLoginScreen';
 
 const Stack = createStackNavigator();
 
+// DEBUG VAR - set this to false to skip login page
+const LOGIN = true;
+
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
   const [initialNavigationState, setInitialNavigationState] = React.useState();
@@ -52,7 +55,7 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Login" component={UserLoginScreen}/>
+            {LOGIN && (<Stack.Screen name="Login" component={UserLoginScreen}/>)}
             <Stack.Screen name="Root" component={DrawerNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
