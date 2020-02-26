@@ -105,11 +105,11 @@ class DatabaseManager {
 
     /**
      * Adds the user to the database
+     * @param {String} userId - UserId to store as the name of the database entry
      * @param {User} user - User to store into the database
      */
-    addUser(user) {
-        var userRef = this.users().push();
-        userRef.set(user);
+    addUser(userId, user) {
+        this.db.ref("users/" + userId).set(user);
     }
 }
 
