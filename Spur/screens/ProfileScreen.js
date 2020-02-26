@@ -13,44 +13,80 @@ import DatabaseManager from '../classes/DatabaseManager';
 
 /**
  * Profile Screen - Displays a user profile 
- * @param {User} user - User whose profile will be displayed. Obtained via Database Manager
+ * Has a reference to the database manager which is used to retrieve user profile info
  */
 export default class ProfileScreen extends Component<Props>
 {
 	constructor(props) {
 		super(props); 
-		//Store dummy user
-		this.databaseManager = new DatabaseManager(); 
+		//Setup firebase 
+		this.databaseManager = new DatabaseManager();
+	}
 
-		//Try logging in a dummy user 
-		this.databaseManager.login("maged@gmail.com", "UML123");
-		console.log(this.databaseManager.getCurrentUser());
-		//Get user from db 
-		this.user = this.databaseManager.getUser("Maged");
-		console.log("testing");
-		console.log(this.user);
+	async getUserInfo() {
+		//Add a user 
+		var uid = this.databaseManager.getCurrentUser().uid; 
+		this.user = await (await this.databaseManager.getUser(uid).once('value')).val();
+		console.log("Completed");
+		console.log(this.user.name); 
 	}
 
     render() {
+		this.getUserInfo();
+		return( 
+			<View style={styles.titleContainer}>
+					<Text style={styles.title}>Test's Profile</Text>
+			</View>
+		)
+		/*
 		return (
 			<ScrollView style={styles.container}>
 				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{this.user.name}'s Profile</Text>
+					<Text style={styles.title}>Test's Profile</Text>
 				</View>
 				<View>
 					<Text style={styles.contentHeader}>Description:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					<Text style={styles.content}> {this.user.description}</Text>
+					<Text style={styles.content}> Description</Text>
 				</ScrollView>
 				<View>
 					<Text style={styles.contentHeader}>Interests:</Text>
 				</View>
+				<ScrollView style={styles.descriptionBox}>
+					{this.user.interests.map(category => (
+						<Text style={styles.content}>
+							{category}
+						</Text>
+					))}
+				</ScrollView>
+  				<ScrollView style={styles.descriptionBox}>
+					{this.user.history.map(event => (
+						<Button
+							title = {event.details.title}
+							onPress={() => Alert.alert('Will direct to event page later!')}
+						>
+						</Button>
+					))}
+				</ScrollView>
+				<View>
+					<Text style={styles.contentHeader}>Upcoming:</Text>
+				</View>
+				<ScrollView style={styles.descriptionBox}>
+					{this.user.upcoming.map(event => (
+						<Button
+							title = {event.details.title}
+							onPress={() => Alert.alert('Will direct to event page later!')}
+						>
+						</Button>
+					))}
+				</ScrollView>
 				<View>
 					<Text style={styles.contentHeader}>History:</Text>
 				</View>
 			</ScrollView>
 		);
+		*/
     }
 }
 
