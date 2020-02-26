@@ -12,8 +12,8 @@ import EventDetails from '../classes/EventDetails';
 import DatabaseManager from '../classes/DatabaseManager';  
 
 /**
- * Profile Screen - Displays a user profile 
- * Has a reference to the database manager which is used to retrieve user profile info
+ * Profile Screen - Displays a user profile. 
+ * Has a reference to the database manager which is used to retrieve user profile info.
  */
 export default class ProfileScreen extends Component<Props>
 {
@@ -21,34 +21,30 @@ export default class ProfileScreen extends Component<Props>
 		super(props); 
 		//Setup firebase 
 		this.databaseManager = new DatabaseManager();
+		this.user = this.getUserInfo(); 
 	}
 
 	async getUserInfo() {
 		//Add a user 
 		var uid = this.databaseManager.getCurrentUser().uid; 
-		this.user = await (await this.databaseManager.getUser(uid).once('value')).val();
+		let snapshot = await this.databaseManager.getUser(uid).once('value');
+		var user = snapshot.val();
 		console.log("Completed");
-		console.log(this.user.name); 
+		console.log(user.interests); 
+		return user; 
 	}
 
     render() {
-		this.getUserInfo();
-		return( 
-			<View style={styles.titleContainer}>
-					<Text style={styles.title}>Test's Profile</Text>
-			</View>
-		)
-		/*
 		return (
 			<ScrollView style={styles.container}>
 				<View style={styles.titleContainer}>
-					<Text style={styles.title}>Test's Profile</Text>
+					<Text style={styles.title}>{this.user.name}'s Profile</Text>
 				</View>
 				<View>
 					<Text style={styles.contentHeader}>Description:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					<Text style={styles.content}> Description</Text>
+					<Text style={styles.content}> {this.user.description}</Text>
 				</ScrollView>
 				<View>
 					<Text style={styles.contentHeader}>Interests:</Text>
@@ -86,7 +82,6 @@ export default class ProfileScreen extends Component<Props>
 				</View>
 			</ScrollView>
 		);
-		*/
     }
 }
 
