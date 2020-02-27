@@ -10,6 +10,7 @@ import User from '../classes/User';
 import Event from '../classes/Event';
 import EventDetails from '../classes/EventDetails';
 import DatabaseManager from '../classes/DatabaseManager';  
+import { get } from 'react-native/Libraries/Utilities/PixelRatio';
 
 /**
  * Profile Screen - Displays a user profile. 
@@ -19,57 +20,72 @@ export default class ProfileScreen extends Component<Props>
 {
 	constructor(props) {
 		super(props); 
-		//Setup firebase 
+		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
-		this.user = this.getUserInfo(); 
+		this.state = {
+			name: "", 
+			description: "",
+			interests: [],
+			history: [],
+			upcoming: []
+		}
+		this.getUserInfo(); 
 	}
 
+	/**
+	 * Function to log information
+	 * @param {*} - Item to be logged 
+	 */
+	log (message) {
+		console.log("Start log"); 
+		console.log(message); 
+		console.log("End log"); 
+	}
+
+	/**
+	 * GetUserInfo() - Sets the state of this component with the user informatio from databaseManager
+	 */
 	async getUserInfo() {
 		//Add a user 
 		var uid = this.databaseManager.getCurrentUser().uid; 
-		let snapshot = await this.databaseManager.getUser(uid).once('value');
-		var user = snapshot.val();
-		console.log("Completed");
-		console.log(user.interests); 
-		return user; 
+		var snapshot = await this.databaseManager.getUser(uid).once('value');
+		const user = snapshot.val();
+		this.setState({
+			name: user.name,
+			description: user.description,
+			interests: user.interests,
+			history: user.history,
+			upcoming: user.upcoming
+		})
 	}
 
     render() {
 		return (
 			<ScrollView style={styles.container}>
 				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{this.user.name}'s Profile</Text>
+					<Text style={styles.title}>{this.state.name}'s Profile</Text>
 				</View>
 				<View>
 					<Text style={styles.contentHeader}>Description:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					<Text style={styles.content}> {this.user.description}</Text>
+					<Text style={styles.content}> {this.state.description}</Text>
 				</ScrollView>
 				<View>
 					<Text style={styles.contentHeader}>Interests:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					{this.user.interests.map(category => (
+					{this.state.interests.map(category => (
 						<Text style={styles.content}>
 							{category}
 						</Text>
-					))}
-				</ScrollView>
-  				<ScrollView style={styles.descriptionBox}>
-					{this.user.history.map(event => (
-						<Button
-							title = {event.details.title}
-							onPress={() => Alert.alert('Will direct to event page later!')}
-						>
-						</Button>
 					))}
 				</ScrollView>
 				<View>
 					<Text style={styles.contentHeader}>Upcoming:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					{this.user.upcoming.map(event => (
+					{this.state.upcoming.map(event => (
 						<Button
 							title = {event.details.title}
 							onPress={() => Alert.alert('Will direct to event page later!')}
@@ -80,6 +96,15 @@ export default class ProfileScreen extends Component<Props>
 				<View>
 					<Text style={styles.contentHeader}>History:</Text>
 				</View>
+				<ScrollView style={styles.descriptionBox}>
+					{this.state.history.map(event => (
+						<Button
+							title = {event.details.title}
+							onPress={() => Alert.alert('Will direct to event page later!')}
+						>
+						</Button>
+					))}
+				</ScrollView>
 			</ScrollView>
 		);
     }
