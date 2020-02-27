@@ -10,7 +10,7 @@ import BrowseScreen from '../screens/BrowseScreen';
 import ProfileScreen from '../screens/ProfileScreen'; 
 
 const Drawer = createDrawerNavigator();
-const INITIAL_ROUTE_NAME = 'Create';
+const INITIAL_ROUTE_NAME = 'Browse';
 
 export default function DrawerNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
