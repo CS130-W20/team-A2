@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import TabBarIcon from '../components/TabBarIcon';
 
 // Import Screens
@@ -9,10 +9,10 @@ import UserLoginScreen from '../screens/UserLoginScreen';
 import BrowseScreen from '../screens/BrowseScreen';
 import ProfileScreen from '../screens/ProfileScreen'; 
 
-const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Create';
+const Drawer = createDrawerNavigator();
+const INITIAL_ROUTE_NAME = 'Browse';
 
-export default function BottomTabNavigator({ navigation, route }) {
+export default function DrawerNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
@@ -30,8 +30,8 @@ export default function BottomTabNavigator({ navigation, route }) {
 			});
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
-      <BottomTab.Screen
+    <Drawer.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+      <Drawer.Screen
         name="Create Event"
         component={CreateScreen}
         options={{
@@ -39,15 +39,15 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
-      <BottomTab.Screen
+      {/*<Drawer.Screen
         name="Login"
         component={UserLoginScreen}
         options={{
           title: 'Login',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
-      />
-      <BottomTab.Screen
+      />*/}
+      <Drawer.Screen
         name="Browse"
         component={BrowseScreen}
         options={{
@@ -55,7 +55,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
         }}
       />
-      <BottomTab.Screen
+      <Drawer.Screen
         name="Profile"
         component={ProfileScreen}
         initialParams = {{ User: "Own"}} 
@@ -64,6 +64,6 @@ export default function BottomTabNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
-    </BottomTab.Navigator>
+    </Drawer.Navigator>
   );
 }
