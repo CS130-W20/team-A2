@@ -6,10 +6,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import BottomTabNavigator from './navigation/BottomTabNavigator';
+import DrawerNavigator from './navigation/DrawerNavigator';
 import useLinking from './navigation/useLinking';
+import UserLoginScreen from './screens/UserLoginScreen';
 
 const Stack = createStackNavigator();
+
+// DEBUG VAR - set this to false to skip login page
+const LOGIN = true;
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
@@ -51,7 +55,8 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
+            {LOGIN && (<Stack.Screen name="Login" component={UserLoginScreen}/>)}
+            <Stack.Screen name="Root" component={DrawerNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
