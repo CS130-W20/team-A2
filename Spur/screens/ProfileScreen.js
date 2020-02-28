@@ -9,70 +9,83 @@ import {
 import User from '../classes/User';
 import Event from '../classes/Event';
 import EventDetails from '../classes/EventDetails';
+import DatabaseManager from '../classes/DatabaseManager';  
+import { get } from 'react-native/Libraries/Utilities/PixelRatio';
 
 /**
- * Profile Screen - Displays a user profile 
- * @param {User} user - User whose profile will be displayed
+ * Profile Screen - Displays a user profile. 
+ * Has a reference to the database manager which is used to retrieve user profile info.
  */
 export default class ProfileScreen extends Component<Props>
 {
 	constructor(props) {
 		super(props); 
+		//Setup firebase via a databaseManager
+		this.databaseManager = new DatabaseManager();
+		this.state = {
+			name: "", 
+			description: "",
+			interests: [],
+			history: [],
+			upcoming: []
+		}
+		this.getUserInfo(); 
+	}
 
-		//Make a dummy user for now, will change later 
-		//Dummy event 1
-		var ed1 = new EventDetails("UML Appreciation Party", 
-		  "A day focused on the universal language",
-		  "4:00 pm", "5:50 pm", "Maged", "34.0727° N, 118.4393° W", 0, 100,
-		  ["UML", "Scrum", "Design"]
-		);
-		var env1 = new Event(ed1, ["Maged", "David", "Greg", "Pravin", "Tim", "Joseph", "Mihir"], 
-		"Chat", ["Tim", "Mihir"]
-		);
-		
-		//Dummy event 2
-		var ed2 = new EventDetails("Pizza Party", 
-		  "Delicious La Monica's", "10:00 pm", "11:00 pm", "Amit", 
-		  "34.0609° N, 118.4468° W", 3.65, 10, ["Food", "Social"]
-		);
-		var env2 = new Event(ed2, ["Maged", "Mihir", "Vignesh"], "Chat",
-		  ["Maged", "Mihir", "Vignesh"]
-		);
-		
-		//Dummy User 1
-		this.user = new User("Maged", "Professor for CS 130. Nasa JPL Senior software architect",
-		 ["Architecture", "Design", "UML", "Scrum", "Ducks", "Street Fighter", "Pizza"],
-		 [env1], [env2]
-		);
+	/**
+	 * Function to log information
+	 * @param {*} - Item to be logged 
+	 */
+	log (message) {
+		console.log("Start log"); 
+		console.log(message); 
+		console.log("End log"); 
+	}
+
+	/**
+	 * GetUserInfo() - Sets the state of this component with the user informatio from databaseManager
+	 */
+	async getUserInfo() {
+		//Add a user 
+		var uid = this.databaseManager.getCurrentUser().uid; 
+		var snapshot = await this.databaseManager.getUser(uid).once('value');
+		const user = snapshot.val();
+		this.setState({
+			name: user.name,
+			description: user.description,
+			interests: user.interests,
+			history: user.history,
+			upcoming: user.upcoming
+		})
 	}
 
     render() {
 		return (
 			<ScrollView style={styles.container}>
 				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{this.user.name}'s Profile</Text>
+					<Text style={styles.title}>{this.state.name}'s Profile</Text>
 				</View>
 				<View>
 					<Text style={styles.contentHeader}>Description:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					<Text style={styles.content}> {this.user.description}</Text>
+					<Text style={styles.content}> {this.state.description}</Text>
 				</ScrollView>
 				<View>
 					<Text style={styles.contentHeader}>Interests:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					{this.user.interests.map(category => (
+					{this.state.interests.map(category => (
 						<Text style={styles.content}>
 							{category}
 						</Text>
 					))}
 				</ScrollView>
 				<View>
-					<Text style={styles.contentHeader}>History:</Text>
+					<Text style={styles.contentHeader}>Upcoming:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					{this.user.history.map(event => (
+					{this.state.upcoming.map(event => (
 						<Button
 							title = {event.details.title}
 							onPress={() => Alert.alert('Will direct to event page later!')}
@@ -81,10 +94,10 @@ export default class ProfileScreen extends Component<Props>
 					))}
 				</ScrollView>
 				<View>
-					<Text style={styles.contentHeader}>Upcoming:</Text>
+					<Text style={styles.contentHeader}>History:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					{this.user.upcoming.map(event => (
+					{this.state.history.map(event => (
 						<Button
 							title = {event.details.title}
 							onPress={() => Alert.alert('Will direct to event page later!')}
@@ -132,3 +145,33 @@ const styles = StyleSheet.create({
 	}
   });
   
+  /*
+  				<ScrollView style={styles.descriptionBox}>
+					{this.user.interests.map(category => (
+						<Text style={styles.content}>
+							{category}
+						</Text>
+					))}
+				</ScrollView>
+  				<ScrollView style={styles.descriptionBox}>
+					{this.user.history.map(event => (
+						<Button
+							title = {event.details.title}
+							onPress={() => Alert.alert('Will direct to event page later!')}
+						>
+						</Button>
+					))}
+				</ScrollView>
+				<View>
+					<Text style={styles.contentHeader}>Upcoming:</Text>
+				</View>
+				<ScrollView style={styles.descriptionBox}>
+					{this.user.upcoming.map(event => (
+						<Button
+							title = {event.details.title}
+							onPress={() => Alert.alert('Will direct to event page later!')}
+						>
+						</Button>
+					))}
+				</ScrollView>
+*/
