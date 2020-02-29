@@ -145,13 +145,12 @@ export default class CreateScreen extends Component<Props> {
 		}
 		else {
 		  Alert.alert("Success");
-		  this.databaseManager.db.ref('/events').push({
-			  attendees: 0,
-			  chat: 0,
-			  checked_in: 0,
-			  host: 0,
-			  details: this.state,
-			  
+		  this.databaseManager.addEvent({
+			  attendees: [],
+			  chat: '',
+			  checked_in: [],
+			  host: '',
+			  details: this.state
 		  });
 		}
 		

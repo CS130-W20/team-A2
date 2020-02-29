@@ -8,9 +8,10 @@ import LinksScreen from '../screens/LinksScreen';
 import UserLoginScreen from '../screens/UserLoginScreen';
 import BrowseScreen from '../screens/BrowseScreen';
 import ProfileScreen from '../screens/ProfileScreen'; 
+import ViewEventScreen from '../screens/ViewEventScreen';
 
 const Drawer = createDrawerNavigator();
-const INITIAL_ROUTE_NAME = 'Browse';
+const INITIAL_ROUTE_NAME = 'View Event';
 
 export default function DrawerNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -61,6 +62,15 @@ export default function DrawerNavigator({ navigation, route }) {
         initialParams = {{ User: "Own"}} 
         options={{
           title: 'Profile',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      />
+      <Drawer.Screen
+        name="View Event"
+        component={ViewEventScreen}
+        initialParams = {{ User: "Own"}} 
+        options={{
+          title: 'View Event',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />

@@ -5,25 +5,31 @@ import {
 	 View,
 	 ScrollView,
 	 Button,
-	 Alert } from 'react-native';
+     Alert } from 'react-native';
+     
+import {Badge, ListItem} from 'react-native-elements';
+
 import User from '../classes/User';
 import Event from '../classes/Event';
 import EventDetails from '../classes/EventDetails';
 import DatabaseManager from '../classes/DatabaseManager';  
+import JoinButton from '../components/JoinButton';
 import { get } from 'react-native/Libraries/Utilities/PixelRatio';
 
 /**
  * View Event Screen - Displays an event's details and allows a user to join it. 
  * Has a reference to the database manager which is used to retrieve event information.
  */
-export default class ProfileScreen extends Component<Props>
+export default class ViewEventScreen extends Component<Props>
 {
 	constructor(props) {
 		super(props); 
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.state = {
-            eventId: '12345', //In the future need a way to have this event id passed in
+            uid: 'yung dave',
+            eventId: '-M0oEUhzCeyRkWSepuHJ', //In the future need a way to have this event id passed in
+            event: '',
 
 			title: 'uml appreciation',
             description: 'to appreciate uml',
@@ -34,8 +40,15 @@ export default class ProfileScreen extends Component<Props>
             cost: '$19.19',
             partySize: '5',
             categories: [],
+
+            attendees: [],
+            chat: '',
+            checkedIn: [],
+
+
 		}
-		this.getEventDetails(); 
+        this.getEventDetails();
+        //this.getUserId(); 
 	}
 
 	/**
@@ -49,37 +62,86 @@ export default class ProfileScreen extends Component<Props>
 	}
 
 	/**
-	 * GetEventDetails() - Sets the state of this component with the event details from databaseManager
+	 * getEventDetails() - Sets the state of this component with the event details from databaseManager
 	 */
 	async getEventDetails() {
 		//Get the event from the databasemanager
-		var snapshot = await this.databaseManager.getEvent(this.eventId).once('value');
-		const event = snapshot.val();
-		this.setState({
-			title: event.title,
-            description: event.description,
-            startTime: event.startTime,
-            endTime: event.endTime,
-            host: event.host,
-            location: event.location,
-            cost: event.cost,
-            partySize: event.partySize,
-            categories: event.categories,
+		var snapshot = await this.databaseManager.getEvent(this.state.eventId).once('value');
+        const event = snapshot.val();
 
-            //should add a list of current attendees
-		})
+		this.setState({
+            event: event,
+			title: event.details.title,
+            description: event.details.description,
+            startTime: event.details.startTime,
+            endTime: event.details.endTime,
+            host: event.details.host,
+            location: event.details.location,
+            cost: event.details.cost,
+            partySize: event.details.partySize,
+            categories: event.details.categories,
+
+            attendees: event.attendees,
+            chatId: event.chat, 
+            checkedIn: event.checked_in
+        })
+    }
+    
+    /**
+	 * GetUserId() - Sets the state of this component with the user id from databaseManager
+	 */
+	async getUserId() {
+        //Get the user
+		var uid = this.databaseManager.getCurrentUser().uid; 
+		this.setState({
+			uid: uid
+        })
 	}
 
+
     render() {
+        const uid = this.state.uid;
+        const attendees = this.state.attendees;
+        const checkedIn = this.state.checkedIn;
+        
+        const isAttendee = (attendees.indexOf(uid) >= 0);
+        const isCheckedIn = (checkedIn.indexOf(uid) >= 0);
+
+        const list = [
+            {
+                title: 'Hosted By'
+            },
+            {
+                title: 'Description'
+            },
+            {
+                title: 'Party Size'
+            },
+            {
+                title: 'Cost'
+            }
+        ]
+        
+
 		return (
-            <View>
-                <Text>Howdy y'all</Text>
-            </View>
-            /*
+            
 			<ScrollView style={styles.container}>
-				<View style={styles.titleContainer}>
+                <View style={styles.titleContainer}>
 					<Text style={styles.title}>Event: {this.state.title}</Text>
 				</View>
+                <View>
+                    {
+                        list.map((item, i) => (
+                            <ListItem
+                                key={i}
+                                title={item.title}
+                                bottomDivider
+                            />
+                        ))
+                    }
+                </View>
+
+				
                 <View>
 					<Text style={styles.content}>Hosted by: {this.state.host}</Text>
 				</View>
@@ -95,19 +157,19 @@ export default class ProfileScreen extends Component<Props>
                 <View>
 					<Text style={styles.content}>End: {this.state.endTime}</Text>
 				</View>
+                <View>
+                    <Text style={styles.content}>Party Size: </Text>
+                    <Badge value="5" status="error" />
+                </View>
 
 				<View>
 					<Text style={styles.contentHeader}>Join:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-                    <Button
-                        title = {'Join Event!'}
-                        onPress={() => Alert.alert('Will add user to the event')}
-                    >
-                    </Button>
+                    <JoinButton isAttendee={isAttendee} isCheckedIn={isCheckedIn} eventId= {this.state.eventId} event={this.state.event} uid={uid}/>
 				</ScrollView>
 
-			</ScrollView>*/
+			</ScrollView>
 		);
     }
 }
