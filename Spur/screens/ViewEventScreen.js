@@ -3,18 +3,15 @@ import {
 	 StyleSheet,
 	 Text,
 	 View,
-	 ScrollView,
-	 Button,
+     ScrollView,
+     Dimensions,
      Alert } from 'react-native';
      
-import {Badge, ListItem} from 'react-native-elements';
+import {Card, Badge, ListItem, Icon, Button} from 'react-native-elements';
 
-import User from '../classes/User';
-import Event from '../classes/Event';
-import EventDetails from '../classes/EventDetails';
 import DatabaseManager from '../classes/DatabaseManager';  
 import JoinButton from '../components/JoinButton';
-import { get } from 'react-native/Libraries/Utilities/PixelRatio';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 
 /**
  * View Event Screen - Displays an event's details and allows a user to join it. 
@@ -109,16 +106,31 @@ export default class ViewEventScreen extends Component<Props>
 
         const list = [
             {
-                title: 'Hosted By'
+                title: 'Hosted By',
+                rightTitle: this.state.host
             },
             {
-                title: 'Description'
+                title: 'Party Size',
+                badge: { 
+                    value: this.state.partySize, 
+                    status: 'success', 
+                    textStyle: { color: 'white'},
+                    fontSize: 100
+                
+                }
+
             },
             {
-                title: 'Party Size'
+                title: 'Starts at',
+                rightTitle: this.state.startTime
             },
             {
-                title: 'Cost'
+                title: 'Ends at',
+                rightTitle: this.state.endTime
+            },
+            {
+                title: 'Cost',
+                rightTitle: '$' + this.state.cost
             }
         ]
         
@@ -126,48 +138,60 @@ export default class ViewEventScreen extends Component<Props>
 		return (
             
 			<ScrollView style={styles.container}>
-                <View style={styles.titleContainer}>
-					<Text style={styles.title}>Event: {this.state.title}</Text>
-				</View>
+
+
+                <Card
+                title={this.state.title}>
+                <Text style={{marginBottom: 10, textAlign: 'center'}}>
+                    {this.state.description}
+                </Text>
+                </Card>
+
+                <View style={styles.container}>
+                    <MapView style={styles.map}
+                    initialRegion={{
+                        latitude: 34.0726629,
+                        longitude: -118.4414646,
+                        latitudeDelta: 0.001,
+                        longitudeDelta: 0.001,
+                    }}
+                    >
+                        <Marker coordinate={{latitude: 34.0726629,
+                        longitude: -118.4414646}} />
+		            
+                    </MapView>
+                </View>
+
                 <View>
                     {
                         list.map((item, i) => (
                             <ListItem
                                 key={i}
                                 title={item.title}
+                                rightTitle={item.rightTitle}
+                                badge={item.badge}
                                 bottomDivider
                             />
                         ))
                     }
                 </View>
-
+                
 				
-                <View>
-					<Text style={styles.content}>Hosted by: {this.state.host}</Text>
-				</View>
-				<View>
-					<Text style={styles.contentHeader}>Description:</Text>
-				</View>
-				<ScrollView style={styles.descriptionBox}>
-					<Text style={styles.content}> {this.state.description}</Text>
-				</ScrollView>
-				<View>
-					<Text style={styles.content}>Start: {this.state.startTime}</Text>
-				</View>
-                <View>
-					<Text style={styles.content}>End: {this.state.endTime}</Text>
-				</View>
-                <View>
-                    <Text style={styles.content}>Party Size: </Text>
-                    <Badge value="5" status="error" />
-                </View>
+                <Card containerStyle={{borderWidth: 0}}>
+                
+                    <JoinButton 
+                    color="#f194ff"
+                    isAttendee={isAttendee}
+                    isCheckedIn={isCheckedIn}
+                    eventId= {this.state.eventId} 
+                    event={this.state.event} 
+                    uid={uid}/>
 
-				<View>
-					<Text style={styles.contentHeader}>Join:</Text>
-				</View>
-				<ScrollView style={styles.descriptionBox}>
-                    <JoinButton isAttendee={isAttendee} isCheckedIn={isCheckedIn} eventId= {this.state.eventId} event={this.state.event} uid={uid}/>
-				</ScrollView>
+
+                    
+                </Card>
+                
+
 
 			</ScrollView>
 		);
@@ -178,7 +202,15 @@ const styles = StyleSheet.create({
 	container: {
 	  flex: 1,
 	  backgroundColor: '#fff',
-	},
+    },
+    map: {
+        width: 380,
+        height: 200,
+        marginLeft: 'auto',
+        marginRight: 'auto'
+        //justifyContent: 'flex-end',
+        //alignItems: 'center',	
+      },
 	contentContainer: {
 	  paddingTop: 30,
 	},

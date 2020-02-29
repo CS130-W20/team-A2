@@ -20,7 +20,7 @@ export default class JoinButton extends Component<Props>
             event: this.props.event,
             isAttendee: this.props.isAttendee,
             isCheckedIn: this.props.isCheckedIn
-		}
+        }
         
     }
     
@@ -36,17 +36,16 @@ export default class JoinButton extends Component<Props>
         if (!this.state.isAttendee) {
             return( <Button
                 title = 'Join Event!'
+                color="#96CA92"
                 onPress={() => 
                     {
-                        console.log(event);
+                        
                         if (event.attendees.indexOf(uid) < 0) {
                             event.attendees.push(uid);
+                            this.databaseManager.updateEvent(eventId, event);
                         }
-                        console.log('-------');
-                        console.log(event);
                     
-                        this.databaseManager.updateEvent(eventId, event);
-                        Alert.alert('Joined Event lmao!');
+                        Alert.alert('Event Joined!');
                         
                         this.setState({isAttendee: true, isCheckedIn: false});
                     }
@@ -61,18 +60,20 @@ export default class JoinButton extends Component<Props>
                         {
                             if (event.checked_in.indexOf(uid) < 0) {
                                 event.checked_in.push(uid);
+                                this.databaseManager.updateEvent(eventId, event);
                             }
-                            console.log(event.checked_in);
-                            //The need to update the database with the new checked in list
-                            this.databaseManager.updateEvent(eventId, event);
+                           
                             
-                            Alert.alert('Will check user into the event');
+                            //Alert.alert('Will check user into the event');
                             this.setState({isAttendee: true, isCheckedIn: true});
                         }
                     }
                 />);
             } else {
-                return(<Text>You're Checked In!</Text>)
+                return( <Button
+                    title = "You're checked in!"
+                    color="green"
+                />);
             }
         }
     }
