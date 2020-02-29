@@ -43,7 +43,7 @@ export default class ProfileScreen extends Component<Props>
 	}
 
 	/**
-	 * GetUserInfo() - Sets the state of this component with the user informatio from databaseManager
+	 * GetUserInfo() - Sets the state of this component with the user information from databaseManager
 	 */
 	async getUserInfo() {
 		//Add a user 
