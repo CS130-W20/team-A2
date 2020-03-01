@@ -76,16 +76,22 @@ export default class CreateScreen extends Component<Props> {
 	handleLocationChange = e => {
 
 		const address = e.nativeEvent.text;
-		console.log(address);
+
+		if (address == '') {
+			return;
+		}
 
 		Geocoder.from(address)
         .then(json => {
-            var location = json.results[0].geometry.location;
-			console.log(location);
+            var coord = json.results[0].geometry.location;
 			
+			if (coord == undefined || coord == null) {
+				coord = this.state.region;
+			}
+
 			this.setState({
 				location: address,
-				region: location || this.state.region
+				region: coord
 			});
 
         })
@@ -260,6 +266,9 @@ export default class CreateScreen extends Component<Props> {
 
 		var loc = this.state.location || "Location";
 
+		console.log(this.state.region.lat);
+		console.log(this.state.region.lng);
+
 		return (
     <View style={styles.container}>
 
@@ -268,11 +277,17 @@ export default class CreateScreen extends Component<Props> {
 		  provider={PROVIDER_GOOGLE}
 		  style={styles.map}
           initialRegion={{
-          latitude: this.state.region.lat || 34.0726629,
-          longitude: this.state.region.lng || -118.4414646,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
-          }} 
+			latitude: this.state.region.lat,
+			longitude: this.state.region.lng,
+			latitudeDelta: 0.01,
+			longitudeDelta: 0.01,
+		  }}
+		  region={{
+			latitude: this.state.region.lat,
+			longitude: this.state.region.lng,
+			latitudeDelta: 0.01,
+			longitudeDelta: 0.01,
+		  }}
 		>
 			
 		<Marker 
@@ -308,6 +323,12 @@ export default class CreateScreen extends Component<Props> {
 		/>
 
 		
+		<Input
+			placeholder='Party Size'
+			errorStyle={{ color: 'red' }}
+			//errorMessage='ENTER A VALID ERROR HERE'
+			onChangeText={this.handlePartyChange}
+		/>
 
 		<Input
 			placeholder='Cost'
@@ -316,12 +337,7 @@ export default class CreateScreen extends Component<Props> {
 			onChangeText={this.handleCostChange}
 		/>
 
-		<Input
-			placeholder='Party Size'
-			errorStyle={{ color: 'red' }}
-			//errorMessage='ENTER A VALID ERROR HERE'
-			onChangeText={this.handlePartyChange}
-		/>
+		
 
 <DatePick
 		text='Set Date'

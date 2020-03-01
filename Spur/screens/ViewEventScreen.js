@@ -146,19 +146,24 @@ export default class ViewEventScreen extends Component<Props>
                 rightIcon: 'male'
             },
             {
+                title: 'Location',
+                rightTitle: this.state.location
+            },
+            {
+                title: 'Starts at',
+                rightTitle: (this.state.startTime.hours % 12) + ":" + this.state.startTime.minutes + (this.state.startTime.hours < 12 ? ' am' : ' pm')
+            },
+            {
                 title: 'Party Size',
-                badge: { 
+                rightTitle: this.state.partySize
+                /*badge: { 
                     value: this.state.partySize, 
                     status: 'success', 
                     textStyle: { color: 'white'},
                     fontSize: 100
                 
-                }
+                }*/
 
-            },
-            {
-                title: 'Starts at',
-                rightTitle: (this.state.startTime.hours % 12) + ":" + this.state.startTime.minutes + (this.state.startTime.hours < 12 ? ' am' : ' pm')
             },
             {
                 title: 'Cost',
