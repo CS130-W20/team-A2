@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import DatabaseManager from '../classes/DatabaseManager'; 
 import { Image,
 	 Platform,
@@ -71,6 +72,13 @@ export default class JoinButton extends Component<Props>
             } else {
                 return( <Button
                     title = "You're checked in!"
+                    icon={
+                        <Icon
+                          name="check"
+                          size={15}
+                          color="white"
+                        />
+                      }
                     color="green"
                 />);
             }

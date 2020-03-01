@@ -58,7 +58,7 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            {<Stack.Screen name="Create Event" component={ViewEventScreen}/>}
+            {<Stack.Screen name="Create Event" component={CreateScreen}/>}
             <Stack.Screen name="Root" component={DrawerNavigator} />
           </Stack.Navigator>
         </NavigationContainer>

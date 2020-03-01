@@ -3,6 +3,8 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Card, Button } from 'react-native-elements';
 import DatePick from '../components/DatePick';
+import Geocoder from 'react-native-geocoding';
+import GPlacesDemo from '../components/GPlacesDemo';
 
 import { Image,
 	 Platform,
@@ -14,7 +16,8 @@ import { Image,
      ScrollView,
 	 SafeAreaView,
 	 Alert,
-	 Picker
+	 Picker,
+	 Dimensions
 	} from 'react-native';
 
 
@@ -39,8 +42,8 @@ export default class CreateScreen extends Component<Props> {
 		date: '',
 		hostId: '',
 		region: {
-		  latitude: 34.0726629,
-		  longitude: -118.4414646,
+		  lat: 34.0726629,
+		  lng: -118.4414646,
 		},
 		};
 		this.databaseManager = new DatabaseManager();
@@ -54,7 +57,9 @@ export default class CreateScreen extends Component<Props> {
 		this.handlePartyChange = this.handlePartyChange.bind(this);
 		this.handleDescChange = this.handleDescChange.bind(this);
 
-		this.getUserId();
+		//this.getUserId();
+
+		Geocoder.init("AIzaSyAVKkB2Ad5_2IX_mw8pWRFWGHvl1LuHXf8");
 	};
 	/** Updates name state variable when input is detected.
 	* @param {string} Event Name
@@ -63,7 +68,32 @@ export default class CreateScreen extends Component<Props> {
 	this.setState({
 	    title: e
 	});
-    };
+	};
+	
+	/** Updates location and region state variables when input is detected.
+	* @param {string} Location
+	*/
+	handleLocationChange = e => {
+
+		const address = e.nativeEvent.text;
+		console.log(address);
+
+		Geocoder.from(address)
+        .then(json => {
+            var location = json.results[0].geometry.location;
+			console.log(location);
+			
+			this.setState({
+				location: address,
+				region: location || this.state.region
+			});
+
+        })
+        .catch(error => console.warn(error));
+
+		
+	};
+
 	/** Updates date state variable when input is detected.
 	* @param {string} Date
 	*/
@@ -128,7 +158,33 @@ export default class CreateScreen extends Component<Props> {
 	});
 	};
 
+	/** Updates region and location state variables when input is detected.
+	* @param {MapEvent} Marker
+	*/
+	handleDragEnd = e => {
+		
+		const coord = e.nativeEvent.coordinate;
 
+		if (coord == null) {
+			return;
+		}
+
+		const c = {
+			lat: coord.latitude,
+			lng: coord.longitude
+		}
+
+		
+		Geocoder.from(c)
+		.then(json => {
+			const address = json.results[0].formatted_address;
+            this.setState({
+				region: c,
+				location: address
+			});
+        })
+        .catch(error => console.warn(error));
+	} 
 
 	/** Validates event details
 	* @param {event} React Native Event
@@ -202,6 +258,8 @@ export default class CreateScreen extends Component<Props> {
 	*/
     render() {
 
+		var loc = this.state.location || "Location";
+
 		return (
     <View style={styles.container}>
 
@@ -210,19 +268,26 @@ export default class CreateScreen extends Component<Props> {
 		  provider={PROVIDER_GOOGLE}
 		  style={styles.map}
           initialRegion={{
-          latitude: 34.0726629,
-          longitude: -118.4414646,
+          latitude: this.state.region.lat || 34.0726629,
+          longitude: this.state.region.lng || -118.4414646,
           latitudeDelta: 0.01,
           longitudeDelta: 0.01,
           }} 
 		>
-		<Marker draggable coordinate={this.state.region} onDragEnd={(e) => this.setState({region: e.nativeEvent.coordinate})}
+			
+		<Marker 
+			draggable coordinate={{
+				latitude: this.state.region.lat,
+				longitude: this.state.region.lng
+			}}
+			 onDragEnd={this.handleDragEnd}
 		/>
+
         </MapView>
 		</ScrollView>
 		
 		<ScrollView contentContainerStyle={{flexGrow: 1}}>
-	
+
 		<Input
 			placeholder='Event Name'
 			errorStyle={{ color: 'red' }}
@@ -230,6 +295,11 @@ export default class CreateScreen extends Component<Props> {
 			onChangeText={this.handleNameChange}
 		/>
 				
+		<Input
+			placeholder={loc}
+			onBlur={this.handleLocationChange}
+		/>
+
 		<Input
 			placeholder='Description'
 			errorStyle={{ color: 'red' }}
@@ -285,7 +355,9 @@ const styles = StyleSheet.create({
   },
   map: {
 	height: 400,
-    width: 400,
+	width: Dimensions.get('window').width,
+	marginLeft: 'auto',
+	marginRight: 'auto',
     justifyContent: 'flex-end',
     alignItems: 'center',	
   },

@@ -7,7 +7,8 @@ import {
      Dimensions,
      Alert } from 'react-native';
      
-import {Card, Badge, ListItem, Icon, Button} from 'react-native-elements';
+import {Card, Badge, ListItem, Button} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import DatabaseManager from '../classes/DatabaseManager';  
 import JoinButton from '../components/JoinButton';
@@ -26,18 +27,19 @@ export default class ViewEventScreen extends Component<Props>
 		this.state = {
             uid: 'default',
             eventId: '-M1J28gx3XSzSNrofYjh', //In the future need a way to have this event id passed in
+            //eventId: props.eventId
             event: '',
 
-			title: 'uml appreciation',
-            description: 'to appreciate uml',
+			title: '',
+            description: '',
             startTime: '',
             endTime: '',
             host: '',
             hostId: '',
-            location: 'My House',
+            location: '',
             region: '',
-            cost: '$19.19',
-            partySize: '5',
+            cost: '',
+            partySize: '',
             categories: [],
 
             attendees: [],
@@ -114,9 +116,16 @@ export default class ViewEventScreen extends Component<Props>
 	}
 
     /**
-	 * GetUserInfo() - Brings the user to the host's profile page
+	 * onPressHost() - Brings the user to the host's profile page
 	 */
     onPressHost = () => Alert.alert('Will link to ' + this.state.host + '\'s profile in future');
+
+
+    /**
+	 * onPressChat() - Brings the user to the event's chat page
+     */
+    onPressChat = () => Alert.alert('Will link to chat page in future');
+
 
     render() {
         //console.log(this.state.uid);
@@ -133,7 +142,8 @@ export default class ViewEventScreen extends Component<Props>
                 title: 'Hosted By',
                 rightTitle: this.state.host,
                 chevron: true,
-                onPress: this.onPressHost
+                onPress: this.onPressHost,
+                rightIcon: 'male'
             },
             {
                 title: 'Party Size',
@@ -153,11 +163,17 @@ export default class ViewEventScreen extends Component<Props>
             {
                 title: 'Cost',
                 rightTitle: '$' + this.state.cost
-            }
+            },
+            {
+                title: 'Chat',
+                chevron: true,
+                onPress: this.onPressChat,
+                rightIcon: 'comments'
+            },
         ]
         
-        const lat = this.state.region.latitude;
-        const long = this.state.region.longitude;
+        const lat = this.state.region.lat;
+        const long = this.state.region.lng;
         var ready = true;
         if (lat == undefined || long == undefined) {
             ready = false;
@@ -186,8 +202,8 @@ export default class ViewEventScreen extends Component<Props>
                     >
                         <Marker coordinate={
                             {
-                                latitude: this.state.region.latitude,
-                                longitude: this.state.region.longitude
+                                latitude: this.state.region.lat,
+                                longitude: this.state.region.lng
                             }
                         } />
 		            
@@ -205,6 +221,12 @@ export default class ViewEventScreen extends Component<Props>
                                 bottomDivider
                                 chevron={item.chevron}
                                 onPress={item.onPress}
+                                rightIcon={
+                                    <Icon
+                                      name={item.rightIcon}
+                                      size={15}
+                                    />
+                                  }
                             />
                         ))
                     }
@@ -221,8 +243,6 @@ export default class ViewEventScreen extends Component<Props>
                     event={this.state.event} 
                     uid={uid}/>
 
-
-                    
                 </Card>
                 
 
