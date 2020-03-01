@@ -36,7 +36,6 @@ export default class JoinButton extends Component<Props>
         if (!this.state.isAttendee) {
             return( <Button
                 title = 'Join Event!'
-                color="#96CA92"
                 onPress={() => 
                     {
                         

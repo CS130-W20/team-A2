@@ -24,16 +24,18 @@ export default class ViewEventScreen extends Component<Props>
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.state = {
-            uid: 'yung dave',
-            eventId: '-M0oEUhzCeyRkWSepuHJ', //In the future need a way to have this event id passed in
+            uid: 'default',
+            eventId: '-M1J28gx3XSzSNrofYjh', //In the future need a way to have this event id passed in
             event: '',
 
 			title: 'uml appreciation',
             description: 'to appreciate uml',
-            startTime: '10:10',
-            endTime: '12:12',
-            host: 'Greg',
+            startTime: '',
+            endTime: '',
+            host: '',
+            hostId: '',
             location: 'My House',
+            region: '',
             cost: '$19.19',
             partySize: '5',
             categories: [],
@@ -45,7 +47,7 @@ export default class ViewEventScreen extends Component<Props>
 
 		}
         this.getEventDetails();
-        //this.getUserId(); 
+        this.getUserInfo(); 
 	}
 
 	/**
@@ -66,37 +68,59 @@ export default class ViewEventScreen extends Component<Props>
 		var snapshot = await this.databaseManager.getEvent(this.state.eventId).once('value');
         const event = snapshot.val();
 
+        //console.log(event);
+
+
 		this.setState({
             event: event,
 			title: event.details.title,
             description: event.details.description,
             startTime: event.details.startTime,
             endTime: event.details.endTime,
-            host: event.details.host,
+            hostId: event.details.hostId,
             location: event.details.location,
+            region: event.details.region,
             cost: event.details.cost,
             partySize: event.details.partySize,
             categories: event.details.categories,
 
             attendees: event.attendees,
             chatId: event.chat, 
-            checkedIn: event.checked_in
+            checkedIn: event.checked_in,
+
         })
+
+
+
+
     }
     
     /**
-	 * GetUserId() - Sets the state of this component with the user id from databaseManager
+	 * GetUserInfo() - Sets the state of this component with the user id information from databaseManager
 	 */
-	async getUserId() {
-        //Get the user
-		var uid = this.databaseManager.getCurrentUser().uid; 
-		this.setState({
-			uid: uid
-        })
+	async getUserInfo() {
+        //Get the current user's id
+		//var uid = this.databaseManager.getCurrentUser().uid; 
+        var uid = '1919';
+        
+        //Get the name of the host from this host's id
+        var snapshot = await this.databaseManager.getUser(this.state.hostId).once('value');
+        const host = snapshot.val();
+
+        this.setState({
+            uid: uid,
+            host: host[this.state.hostId].name
+        });
 	}
 
+    /**
+	 * GetUserInfo() - Brings the user to the host's profile page
+	 */
+    onPressHost = () => Alert.alert('Will link to ' + this.state.host + '\'s profile in future');
 
     render() {
+        //console.log(this.state.uid);
+        //console.log(this.host);
         const uid = this.state.uid;
         const attendees = this.state.attendees;
         const checkedIn = this.state.checkedIn;
@@ -107,7 +131,9 @@ export default class ViewEventScreen extends Component<Props>
         const list = [
             {
                 title: 'Hosted By',
-                rightTitle: this.state.host
+                rightTitle: this.state.host,
+                chevron: true,
+                onPress: this.onPressHost
             },
             {
                 title: 'Party Size',
@@ -122,11 +148,7 @@ export default class ViewEventScreen extends Component<Props>
             },
             {
                 title: 'Starts at',
-                rightTitle: this.state.startTime
-            },
-            {
-                title: 'Ends at',
-                rightTitle: this.state.endTime
+                rightTitle: (this.state.startTime.hours % 12) + ":" + this.state.startTime.minutes + (this.state.startTime.hours < 12 ? ' am' : ' pm')
             },
             {
                 title: 'Cost',
@@ -134,9 +156,15 @@ export default class ViewEventScreen extends Component<Props>
             }
         ]
         
+        const lat = this.state.region.latitude;
+        const long = this.state.region.longitude;
+        var ready = true;
+        if (lat == undefined || long == undefined) {
+            ready = false;
+        }
 
 		return (
-            
+            ready &&
 			<ScrollView style={styles.container}>
 
 
@@ -149,15 +177,19 @@ export default class ViewEventScreen extends Component<Props>
 
                 <View style={styles.container}>
                     <MapView style={styles.map}
-                    initialRegion={{
-                        latitude: 34.0726629,
-                        longitude: -118.4414646,
-                        latitudeDelta: 0.001,
-                        longitudeDelta: 0.001,
-                    }}
+                        initialRegion={{
+                            latitude: lat,
+                            longitude: long,
+                            latitudeDelta: 0.001,
+                            longitudeDelta: 0.001,
+                        }}
                     >
-                        <Marker coordinate={{latitude: 34.0726629,
-                        longitude: -118.4414646}} />
+                        <Marker coordinate={
+                            {
+                                latitude: this.state.region.latitude,
+                                longitude: this.state.region.longitude
+                            }
+                        } />
 		            
                     </MapView>
                 </View>
@@ -171,6 +203,8 @@ export default class ViewEventScreen extends Component<Props>
                                 rightTitle={item.rightTitle}
                                 badge={item.badge}
                                 bottomDivider
+                                chevron={item.chevron}
+                                onPress={item.onPress}
                             />
                         ))
                     }
@@ -193,7 +227,8 @@ export default class ViewEventScreen extends Component<Props>
                 
 
 
-			</ScrollView>
+            </ScrollView>
+            
 		);
     }
 }

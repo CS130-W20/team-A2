@@ -11,6 +11,7 @@ import useLinking from './navigation/useLinking';
 import UserLoginScreen from './screens/UserLoginScreen';
 import ViewEventScreen from './screens/ViewEventScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import CreateScreen from './screens/CreateScreen';
 
 const Stack = createStackNavigator();
 
@@ -57,7 +58,7 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            {<Stack.Screen name="View Event" component={ViewEventScreen}/>}
+            {<Stack.Screen name="Create Event" component={CreateScreen}/>}
             <Stack.Screen name="Root" component={DrawerNavigator} />
           </Stack.Navigator>
         </NavigationContainer>

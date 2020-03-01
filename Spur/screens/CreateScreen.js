@@ -1,5 +1,9 @@
-import React, {Component} from 'react';
+import React, {Component, useState} from 'react';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Input, Card, Button } from 'react-native-elements';
+import DatePick from '../components/DatePick';
+
 import { Image,
 	 Platform,
 	 StyleSheet,
@@ -9,22 +13,21 @@ import { Image,
 	 View,
      ScrollView,
 	 SafeAreaView,
-	 Button,
-	 Alert
+	 Alert,
+	 Picker
 	} from 'react-native';
 
-import * as WebBrowser from 'expo-web-browser';
-
-import { MonoText } from '../components/StyledText';
-import {KeyboardAvoidingView} from 'react-native';
 
 import DatabaseManager from '../classes/DatabaseManager';
 
 export default class CreateScreen extends Component<Props> {
     /** Automatically called constructor that does initial setup.
     */
+
+
     constructor(props) {
 		super(props);
+
 		this.state = {
 		title: '',
 		cost: '',
@@ -34,9 +37,10 @@ export default class CreateScreen extends Component<Props> {
 		endTime: '',
 		categories: '',
 		date: '',
+		hostId: '',
 		region: {
-		  latitude: 37.78825,
-		  longitude: -122.4324,
+		  latitude: 34.0726629,
+		  longitude: -118.4414646,
 		},
 		};
 		this.databaseManager = new DatabaseManager();
@@ -49,6 +53,8 @@ export default class CreateScreen extends Component<Props> {
 		this.handleCostChange = this.handleCostChange.bind(this);
 		this.handlePartyChange = this.handlePartyChange.bind(this);
 		this.handleDescChange = this.handleDescChange.bind(this);
+
+		this.getUserId();
 	};
 	/** Updates name state variable when input is detected.
 	* @param {string} Event Name
@@ -61,17 +67,24 @@ export default class CreateScreen extends Component<Props> {
 	/** Updates date state variable when input is detected.
 	* @param {string} Date
 	*/
-	handleDateChange = e => {
+	handleDateChange = selectedDate => {
 	this.setState({
-	    date: e
+		date: {
+			month: selectedDate.getMonth() + 1,
+			day: selectedDate.getDate(),
+			year: selectedDate.getFullYear()
+		}
 	});
     };
 	/** Updates start time state variable when input is detected.
 	* @param {string} Start Time
 	*/
-	handleStartTimeChange = e => {
+	handleStartTimeChange = selectedTime => {
 	this.setState({
-	    startTime: e
+	    startTime: {
+			hours: selectedTime.getHours(),
+			minutes: selectedTime.getMinutes()
+		}
 	});
     };
 	/** Updates end time state variable when input is detected.
@@ -113,15 +126,21 @@ export default class CreateScreen extends Component<Props> {
 	this.setState({
 	    description: e
 	});
-    };
+	};
+
+
+
 	/** Validates event details
 	* @param {event} React Native Event
 	*/
 	handleSubmit(event) {
+		console.log(this.state.region);
 		var datePattern = /[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9]/;
 		var timePattern = /[0-9][0-9]:[0-9][0-9]/;
 		var partyPattern = /[0-9]+/;
 		var costPattern = /[0-9]+/;
+
+		/*
 		if (!timePattern.test(this.state.startTime) | !timePattern.test(this.state.endTime)) {
 		  Alert.alert("Invalid Start or End Time");
 		}
@@ -152,70 +171,103 @@ export default class CreateScreen extends Component<Props> {
 			  host: '',
 			  details: this.state
 		  });
-		}
+		}*/
+
+		
+		Alert.alert("Success");
+
+		
+		this.databaseManager.addEvent({
+			  attendees: [''],
+			  chat: '',
+			  checked_in: [''],
+			  details: this.state
+		});
 		
 	};
+
+	/**
+	 * GetUserId() - Sets the hostId state of this component with the user id from databaseManager
+	 */
+	async getUserId() {
+        //Get the user
+		var uid = this.databaseManager.getCurrentUser().uid; 
+		this.setState({
+			hostId: uid
+        })
+	}
+	
+
 	/** Renders the UI shown to the user.
 	*/
     render() {
-	return (
+
+		return (
     <View style={styles.container}>
+
+		<ScrollView>
 		<MapView
 		  provider={PROVIDER_GOOGLE}
 		  style={styles.map}
           initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitude: 34.0726629,
+          longitude: -118.4414646,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
           }} 
 		>
 		<Marker draggable coordinate={this.state.region} onDragEnd={(e) => this.setState({region: e.nativeEvent.coordinate})}
 		/>
         </MapView>
+		</ScrollView>
 		
-		<View style={{flex: 1}}>
-        <ScrollView contentContainerStyle={{flexGrow: 1}}>
-		<View style={styles.textContainer}>
-		<Text style={styles.formText}>Event Name</Text>
-		<TextInput style={styles.nameText} onChangeText={this.handleNameChange} clearTextOnFocus={true}/>
-		</View>
+		<ScrollView contentContainerStyle={{flexGrow: 1}}>
+	
+		<Input
+			placeholder='Event Name'
+			errorStyle={{ color: 'red' }}
+			//errorMessage='ENTER A VALID ERROR HERE'
+			onChangeText={this.handleNameChange}
+		/>
+				
+		<Input
+			placeholder='Description'
+			errorStyle={{ color: 'red' }}
+			//errorMessage='ENTER A VALID ERROR HERE'
+			onChangeText={this.handleDescChange}
+		/>
+
 		
-		<View style={styles.textContainer}>
-		<Text style={styles.formText}>Event Date</Text>
-		<TextInput style={styles.nameText} onChangeText={this.handleDateChange} clearTextOnFocus={true}/>
-		</View>
+
+		<Input
+			placeholder='Cost'
+			errorStyle={{ color: 'red' }}
+			//errorMessage='ENTER A VALID ERROR HERE'
+			onChangeText={this.handleCostChange}
+		/>
+
+		<Input
+			placeholder='Party Size'
+			errorStyle={{ color: 'red' }}
+			//errorMessage='ENTER A VALID ERROR HERE'
+			onChangeText={this.handlePartyChange}
+		/>
+
+<DatePick
+		text='Set Date'
+		type='date'
+		onChange={this.handleDateChange}/>
+
+		<DatePick
+		text='Set Time'
+		type='time'
+		onChange={this.handleStartTimeChange}/>
+
+<Button title="Submit" onPress={this.handleSubmit}/>
+
+		</ScrollView>
+
 		
-		<View style={styles.textContainer}>
-		<Text style={styles.formText}>Start Time</Text>
-		<TextInput style={styles.input} onChangeText={this.handleStartTimeChange} clearTextOnFocus={true}/>
-		<Text style={styles.formText}>End Time</Text>
-		<TextInput style={styles.input} onChangeText={this.handleEndTimeChange} clearTextOnFocus={true}/>
-		</View>
-		
-		<View style={styles.textContainer}>
-		<Text style={styles.formText}>Cost</Text>
-		<TextInput style={styles.input} onChangeText={this.handleCostChange} clearTextOnFocus={true}/>
-		</View>
-		
-		<View style={styles.textContainer}>
-		<Text style={styles.formText}>Party Size</Text>
-		<TextInput style={styles.input} onChangeText={this.handlePartyChange} clearTextOnFocus={true}/>
-		</View>
-		
-		<View style={styles.textContainer}>
-		<Text style={styles.formText}>Category</Text>
-		<TextInput style={styles.input} onChangeText={this.handleCategoryChange} clearTextOnFocus={true}/>
-		</View>
-		
-		<Text style={styles.formText}>Description</Text>
-		<View style={styles.textContainer}>
-		<TextInput style={styles.descriptionText} onChangeText={this.handleDescChange} clearTextOnFocus={true}/>
-		</View>
-		
-		<Button title="Submit" onPress={this.handleSubmit}/>
-	    </ScrollView>
-		</View>
 
     </View>
   );

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "~10.0.0",
+    "@react-native-community/datetimepicker": "^2.2.2",
     "@react-native-community/masked-view": "0.1.5",
     "@react-navigation/bottom-tabs": "^5.0.0",
     "@react-navigation/drawer": "^5.0.7",
@@ -28,6 +29,8 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-date-picker": "^2.7.7",
+    "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^1.2.7",
     "react-native-gesture-handler": "~1.5.0",
     "react-native-maps": "0.26.1",
