@@ -25,7 +25,24 @@ class SearchManager {
   }
 
   /**
-   * Returns the events in eventList with a party size of exactly partySize people
+   * Returns the great circle distance in km between loc1 and loc2 using the Haversine formula
+   * https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula/21623206#21623206
+   * @param {Object} loc1 - Object with latitude, longitude representing latitude and longitude
+   * @param {Object} loc2 - Object with latitude, longitude representing latitude and longitude
+   * @returns {number} Kilometers between loc1 and loc2
+   */
+  distance(loc1, loc2) {
+    var p = 0.017453292519943295;    // Math.PI / 180
+    var c = Math.cos;
+    var a = 0.5 - c((loc2.latitude - loc1.latitude) * p)/2 + 
+            c(loc1.latitude * p) * c(loc2.latitude * p) * 
+            (1 - c((loc2.longitude - loc1.longitude) * p))/2;
+
+    return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
+  }
+
+  /**
+   * Returns the events in eventList with at least partySize people available
    * @param {Array} eventList - A list of events to filter from
    * @param {number} partySize - The party size to filter by
    * @returns {Array} Filtered event list
@@ -33,7 +50,11 @@ class SearchManager {
   filterPartySize(eventList, partySize) {
     var newList = [];
     for (var i = 0; i < eventList.length; i++) {
-      if (eventList[i].details.partySize == partySize) {
+      // Use the length of attendees to determine available party size
+      var currentAttendees = eventList[i].attendees.length;
+      var slotsAvailable = parseInt(eventList[i].details.partySize) - currentAttendees;
+
+      if (partySize <= slotsAvailable) {
         newList.push(eventList[i]);
       }
     }
@@ -83,12 +104,13 @@ class SearchManager {
    * Returns the events in eventList that are at most the provided distance away
    * @param {Array} eventList - A list of events to filter from 
    * @param {number} distance - The maximum valid distance to the event
+   * @param {Object} currentLocation - Object containing latitude, longitude
    * @returns {Array} Filtered event list
    */
-  filterDistance(eventList, distance) {
+  filterDistance(eventList, distance, currentLocation) {
     var newList = [];
     for (var i = 0; i < eventList.length; i++) {
-      if (eventList[i].details.location <= distance) {
+      if (this.distance(eventList[i].details.region, currentLocation) <= distance) {
         newList.push(eventList[i]);
       }
     }
@@ -107,7 +129,7 @@ class SearchManager {
 
     const allEvents = snapshot.val();
 
-    const eventList = Object.keys(allEvents).map(key => ({
+    var eventList = Object.keys(allEvents).map(key => ({
         ...allEvents[key],
         eventId: key
     }));
@@ -122,7 +144,8 @@ class SearchManager {
       eventList = this.filterCategories(eventList, searchDetails.categories);
     }
     if (searchDetails.distance != SEARCH_DETAILS_DEFAULTS.distance) {
-      eventList = this.filterDistance(eventList, searchDetails.distance);
+      eventList = this.filterDistance(eventList, searchDetails.distance, 
+                                     {latitude: searchDetails.userLatitude, longitude: searchDetails.userLongitude});
     }
 
     return eventList;  
@@ -130,10 +153,11 @@ class SearchManager {
 
   /**
    * Sorts the events in eventList based on the sorting order in searchDetails
-   * @param {Array[]} eventList - List of events to sort
+   * @param {Array} eventList - List of events to sort
    * @param {SearchDetails} searchDetails - Object containing the sorting order
+   * @returns {Array} Array of sorted events
    */
-  async sort(eventList, searchDetails) {
+  sort(eventList, searchDetails) {
     return eventList;
   }
 
@@ -141,10 +165,11 @@ class SearchManager {
    * Filters all events from the database based on the searchDetails provided
    * Sorts the list of matching events based on the sorting order also provided in searchDetails
    * @param {SearchDetails} searchDetails - Object containing filter criteria and sorting order
+   * @returns {Promise} Promise to return the sorted and filtered list of events
    */
   async filterAndSort(searchDetails) {
     var eventList = await this.filter(searchDetails);
-    var sortedList = await this.sort(eventList, searchDetails);
+    var sortedList = this.sort(eventList, searchDetails);
     return sortedList;
   }
 }

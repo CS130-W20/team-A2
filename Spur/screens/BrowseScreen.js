@@ -90,7 +90,7 @@ export default class BrowseScreen extends Component<Props> {
     var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
 
     var details = new SearchDetails(distance, cost, partySize, categories, this.state.userLat, this.state.userLng);
-    
+
     this.searchManager.filterAndSort(details).then(list => {
       this.setState({
         eventList: list,
@@ -124,7 +124,7 @@ export default class BrowseScreen extends Component<Props> {
           </View>
           <View style={styles.container}>
             <View style={styles.textContainer}>
-              <Text style={styles.formText}>Maximum Distance</Text>
+              <Text style={styles.formText}>Maximum Distance (km)</Text>
               <View style={styles.inputContainer} behavior="padding">
                 <TextInput onChange={this.handleDistanceChange} defaultValue={''} clearTextOnFocus={true}/>
               </View>
@@ -153,7 +153,7 @@ export default class BrowseScreen extends Component<Props> {
             <View style={styles.container} key={event.eventId}>
               <Text>Event ID: {event.eventId}</Text>
               <Text>Event Name: {event.details.title}</Text>
-              <Text>Location: {event.details.location} ({event.details.region.lat}, {event.details.region.lng})</Text>
+              <Text>Location: {event.details.location} ({event.details.region.latitude}, {event.details.region.longitude})</Text>
               <Text>Event Cost: ${event.details.cost}</Text>
               <Text></Text>
             </View>
