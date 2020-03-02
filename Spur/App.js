@@ -13,7 +13,7 @@ import UserLoginScreen from './screens/UserLoginScreen';
 const Stack = createStackNavigator();
 
 // DEBUG VAR - set this to false to skip login page
-const LOGIN = true;
+const LOGIN = false;
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = React.useState(false);
