@@ -129,8 +129,6 @@ class DatabaseManager {
     updateUser(userId, user) {
         this.db.ref('users/' + userId).set(user);
     }
-
-
 }
 
 

@@ -11,6 +11,7 @@ import SpurTextInput from '../components/SpurTextInput'
 import SpurText from '../components/SpurText'
 import SpurButton from '../components/SpurButton'
 import DatabaseManager from '../classes/DatabaseManager'
+import User from '../classes/User'
 
 /** 
 *   Creates a View with a text label and a text entry field
@@ -30,8 +31,7 @@ function inputField(props) {
 }
 
 /** Class for the User Login Screen **/
-export default class UserLoginScreen extends Component<Props>
-{
+export default class UserLoginScreen extends Component<Props> {
     /** 
      *  Displays a User SignUp / Log-In page for the app
      *  @constructor
@@ -54,9 +54,6 @@ export default class UserLoginScreen extends Component<Props>
                                            },
                                            headerTitleAlign: 'center',
                                          });
-        // mock user database 
-        const makeUser = function(n, u, p){return {name: n, username:u, password:p}};
-        this.users = [makeUser("Pravin Visakan", "pvisakan", "hola_spur"), makeUser("Greg Lee", "glee", "gregiscool")];
 
         this.state = {
             name: "",
@@ -66,6 +63,7 @@ export default class UserLoginScreen extends Component<Props>
             login: false,
             success: false,
             failure: false,
+            errorMsg: "",
             loading: false
         };
     }
@@ -102,18 +100,69 @@ export default class UserLoginScreen extends Component<Props>
         this.setState({password2: text});
     }
 
+    /**
+     * Attempts to register a new user using the values of the input fields
+     */
+    handleRegister() {
+        // Verify that all fields exist
+        if (this.state.name === "" || this.state.email === "" || this.state.password1 === "" || this.state.password2 === "") {
+            this.setState({failure: true, 
+                           errorMsg: "Please make sure that you have filled out every field."});
+            return;
+        }
+
+        // Verify that the two passwords match
+        if (this.state.password1 !== this.state.password2) {
+            this.setState({failure: true, 
+                           errorMsg: "Please make sure that the passwords match."})
+            return;
+        }
+
+        // Pass user registration onto Firebase
+        this.databaseManager.registerUser(this.state.email, this.state.password1)
+                            .then(authUser => {
+                                var user = new User(this.state.name);
+                                return this.databaseManager.updateUser(authUser.user.uid, user);
+                            })
+                            .then(() => {
+                                this.setState({success: true});
+                            })
+                            .catch(error => {
+                                // Error, show the user the error message
+                                this.setState({failure: true, 
+                                               errorMsg: error.message})
+                            });
+    }
+
+    /**
+     * Attempts to log the user in using the provided credentials
+     */
+    handleLogin() {
+        // Verify that fields are filled out
+        if (this.state.email === "" || this.state.password1 === "") {
+            this.setState({failure: true,
+                           errorMsg: "Please fill out all fields."})
+            return;
+        }
+
+        return this.databaseManager.login(this.state.email, this.state.password1)
+                                   .then(authUser => {
+                                        this.setState({success: true});
+                                   })
+                                   .catch(error => {
+                                        this.setState({failure: true, errorMsg: error.message});
+                                   })
+    }
+
     /** 
      *  Handler for the submit button
      *  Attempts to register the user or log the user in
     **/
     handleSubmit() {
-        // Display a loading icon while processing the register/login request
-        this.setState({loading: true});
         if (this.state.login) {
-            this.databaseManager.registerUser()
-            console.log("logging in");
+            this.handleLogin();
         } else {
-            console.log("signing up");
+            this.handleRegister();
         }
     }
 
@@ -129,7 +178,7 @@ export default class UserLoginScreen extends Component<Props>
         return (
             <View style={styles.container}>
 
-            {/* Success/Failure Modals */}
+            {/* Failure Modal */}
             <Modal
                 visible={this.state.success}
             >
@@ -142,6 +191,7 @@ export default class UserLoginScreen extends Component<Props>
                 color="#DC6C7B"
             >
                 <SpurText>Failure!</SpurText>
+                <SpurText>{this.state.errorMsg}</SpurText>
                 <SpurButton onPress={()=>{this.setState({failure:false});}} title="Close"/>
             </Modal>
             
