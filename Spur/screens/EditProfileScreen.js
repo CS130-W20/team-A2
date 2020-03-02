@@ -5,8 +5,10 @@ import {
 	 View,
 	 ScrollView} from 'react-native';
 import {
-	Input} from 'react-native-elements';
+	Input,
+	Button} from 'react-native-elements';
 import DatabaseManager from '../classes/DatabaseManager';  
+import User from '../classes/User'; 
 
 /**
  * Edit Profile Screen - Allows users to edit his/her own profile 
@@ -19,9 +21,10 @@ export default class EditProfileScreen extends Component<Props> {
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.state = {
-			name: "", 
+			userId: "", 
 			description: "",
-			interests: []
+			interests: [],
+			hasChanged: false,
         }
 		this.getUserInfo(); 
     }
@@ -35,11 +38,22 @@ export default class EditProfileScreen extends Component<Props> {
 		var snapshot = await this.databaseManager.getUser(uid).once('value');
 		const user = snapshot.val();
 		this.setState({
-			name: user.name,
+			userId: uid, 
 			description: user.description,
 			interests: user.interests,
         })
-    }
+	}
+	
+	/**
+	 * Function that sets the edited fields to firebase
+	 */
+	onConfirmChanges() {
+		console.log(this.state.userId); 
+		newUser = new User("Maged", "Nasa JPL")
+		testUser = this.databaseManager.getUser("InOwn1L1YKMKSrmP80p5GweSoH83")
+		console.log(testUser)
+		this.databaseManager.updateUser(this.state.userId, newUser)
+	}
     
     render() {
         return (
@@ -47,9 +61,25 @@ export default class EditProfileScreen extends Component<Props> {
 				<View style={styles.titleContainer}>
 					<Text style={styles.title}>Edit Profile</Text>
 				</View>
-				<ScrollView>
-					
+				<ScrollView style={styles.descriptionBox}>
+					<Input
+						value={this.state.description}
+						placeholder="Let the world know a bit about yourself!"
+						multiline
+						onChangeText={text => 
+							this.setState({
+								description: text,
+								hasChanged: true
+							})}
+					/>
 				</ScrollView>
+				<View>
+					<Text style={styles.contentHeader}>Interests:</Text>
+				</View>
+				<Button
+					title="Confirm changes"
+					onPress={() => this.onConfirmChanges()}
+				/>
 			</ScrollView>
         );
     }
@@ -89,3 +119,13 @@ const styles = StyleSheet.create({
 		height: 100
 	}
   });
+
+  /*
+  				<ScrollView style={styles.descriptionBox}>
+					{this.state.interests.map(category => (
+						<Text style={styles.content}>
+							{category}
+						</Text>
+					))}
+				</ScrollView>
+				*/
