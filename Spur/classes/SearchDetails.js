@@ -15,12 +15,16 @@ class SearchDetails {
      * @param {number} cost - Maximum desired cost
      * @param {number} partySize - Exact number of people for the event
      * @param {Array} categories - All desired categories
+     * @param {number} userLatitude - User's current latitude
+     * @param {number} userLongitude - User's current longitude
      */
-    constructor(distance, cost, partySize, categories) {
+    constructor(distance, cost, partySize, categories, userLatitude, userLongitude) {
         this.distance = distance;
         this.cost = cost;
         this.partySize = partySize;
         this.categories = categories;
+        this.userLatitude = userLatitude;
+        this.userLongitude = userLongitude;
     }
 }
 

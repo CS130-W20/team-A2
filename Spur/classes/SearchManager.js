@@ -127,6 +127,26 @@ class SearchManager {
 
     return eventList;  
   }
+
+  /**
+   * Sorts the events in eventList based on the sorting order in searchDetails
+   * @param {Array[]} eventList - List of events to sort
+   * @param {SearchDetails} searchDetails - Object containing the sorting order
+   */
+  async sort(eventList, searchDetails) {
+    return eventList;
+  }
+
+  /**
+   * Filters all events from the database based on the searchDetails provided
+   * Sorts the list of matching events based on the sorting order also provided in searchDetails
+   * @param {SearchDetails} searchDetails - Object containing filter criteria and sorting order
+   */
+  async filterAndSort(searchDetails) {
+    var eventList = await this.filter(searchDetails);
+    var sortedList = await this.sort(eventList, searchDetails);
+    return sortedList;
+  }
 }
 
 export default SearchManager;

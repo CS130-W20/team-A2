@@ -30,7 +30,10 @@ export default class BrowseScreen extends Component<Props> {
       distance: '',
       categories: [],
       eventList: [],
-      loading: false
+      loading: false,
+      // User's current latitude and longitude, hard-code until we get location figured out
+      userLat: 34,
+      userLng: -118
     };
   }
 
@@ -86,9 +89,9 @@ export default class BrowseScreen extends Component<Props> {
     var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
     var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
 
-    var details = new SearchDetails(distance, cost, partySize, categories);
-
-    this.searchManager.filter(details).then(list => {
+    var details = new SearchDetails(distance, cost, partySize, categories, this.state.userLat, this.state.userLng);
+    
+    this.searchManager.filterAndSort(details).then(list => {
       this.setState({
         eventList: list,
         loading: false
@@ -148,9 +151,9 @@ export default class BrowseScreen extends Component<Props> {
           {this.state.loading && <ActivityIndicator size="large" color="#00ff00" />}
           {this.state.eventList.map(event => (
             <View style={styles.container} key={event.eventId}>
+              <Text>Event ID: {event.eventId}</Text>
               <Text>Event Name: {event.details.title}</Text>
-              <Text>Event Time: {event.details.startTime} - {event.details.endTime}</Text>
-              <Text>Distance: {event.details.location}</Text>
+              <Text>Location: {event.details.location} ({event.details.region.lat}, {event.details.region.lng})</Text>
               <Text>Event Cost: ${event.details.cost}</Text>
               <Text></Text>
             </View>
