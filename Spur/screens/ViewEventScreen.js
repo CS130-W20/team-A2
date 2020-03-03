@@ -26,8 +26,8 @@ export default class ViewEventScreen extends Component<Props>
 		this.databaseManager = new DatabaseManager();
 		this.state = {
             uid: '',
-            eventId: '-M1J28gx3XSzSNrofYjh', //In the future need a way to have this event id passed in
-            //eventId: props.eventId
+            eventId: '-M1J28gx3XSzSNrofYjh', //Change this
+            //eventId: this.props.route.params.eventId
             event: '',
 
 			title: '',
