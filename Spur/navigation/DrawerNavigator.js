@@ -58,12 +58,14 @@ export default function DrawerNavigator({ navigation, route }) {
       />
       <Drawer.Screen
         name="Profile"
+        
         component={ProfileScreen}
         initialParams = {{ User: "Own"}} 
         options={{
           title: 'Profile',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
+
       />
       <Drawer.Screen
         name="View Event"

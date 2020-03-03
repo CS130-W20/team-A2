@@ -110,7 +110,8 @@ export default class ViewEventScreen extends Component<Props>
     /**
 	 * onPressHost() - Brings the user to the host's profile page
 	 */
-    onPressHost = () => Alert.alert('Will link to ' + this.state.host + '\'s profile in future');
+    //onPressHost = () => Alert.alert('Will link to ' + this.state.host + '\'s profile in future');
+    onPressHost = () => this.props.navigation.navigate("Profile", {userId: this.state.hostId});
 
 
     /**

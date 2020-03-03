@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Card, Button } from 'react-native-elements';
 import DatePick from '../components/DatePick';
 import Geocoder from 'react-native-geocoding';
-import GPlacesDemo from '../components/GPlacesDemo';
 
 import { Image,
 	 Platform,

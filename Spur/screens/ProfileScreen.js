@@ -12,6 +12,7 @@ import EventDetails from '../classes/EventDetails';
 import DatabaseManager from '../classes/DatabaseManager';  
 import { get } from 'react-native/Libraries/Utilities/PixelRatio';
 
+
 /**
  * Profile Screen - Displays a user profile. 
  * Has a reference to the database manager which is used to retrieve user profile info.
@@ -63,10 +64,10 @@ export default class ProfileScreen extends Component<Props>
 		return (
 			<ScrollView style={styles.container}>
 				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{this.state.name}'s Profile</Text>
+					<Text style={styles.title}>{this.props.route.params.userId}'s Profile</Text>
 				</View>
 				<View>
-					<Text style={styles.contentHeader}>Description:</Text>
+					<Text style={styles.contentHeader}>Description</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
 					<Text style={styles.content}> {this.state.description}</Text>

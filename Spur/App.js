@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, StatusBar, StyleSheet, View, NativeAppEventEmitter } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { SplashScreen } from 'expo';
 import * as Font from 'expo-font';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,8 +10,6 @@ import DrawerNavigator from './navigation/DrawerNavigator';
 import useLinking from './navigation/useLinking';
 import UserLoginScreen from './screens/UserLoginScreen';
 import ViewEventScreen from './screens/ViewEventScreen';
-import ProfileScreen from './screens/ProfileScreen';
-import CreateScreen from './screens/CreateScreen';
 
 const Stack = createStackNavigator();
 
@@ -58,7 +56,7 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         <NavigationContainer ref={containerRef} initialState={initialNavigationState}>
           <Stack.Navigator>
-            {<Stack.Screen name="Create Event" component={ViewEventScreen}/>}
+            {LOGIN && (<Stack.Screen name="Login" component={UserLoginScreen}/>)}
             <Stack.Screen name="Root" component={DrawerNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
