@@ -25,7 +25,7 @@ export default class ViewEventScreen extends Component<Props>
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.state = {
-            uid: 'default',
+            uid: '',
             eventId: '-M1J28gx3XSzSNrofYjh', //In the future need a way to have this event id passed in
             //eventId: props.eventId
             event: '',
@@ -49,7 +49,6 @@ export default class ViewEventScreen extends Component<Props>
 
 		}
         this.getEventDetails();
-        this.getUserInfo(); 
 	}
 
 	/**
@@ -66,12 +65,19 @@ export default class ViewEventScreen extends Component<Props>
 	 * getEventDetails() - Sets the state of this component with the event details from databaseManager
 	 */
 	async getEventDetails() {
+
+        //Get the current user's id
+		//var uid = this.databaseManager.getCurrentUser().uid; 
+        var uid = '1919';
+
 		//Get the event from the databasemanager
-		var snapshot = await this.databaseManager.getEvent(this.state.eventId).once('value');
-        const event = snapshot.val();
-
-        //console.log(event);
-
+		var eventSnapshot = await this.databaseManager.getEvent(this.state.eventId).once('value');
+        const event = eventSnapshot.val();
+        
+        //Get the name of the host from this host's id
+        var id = event.details.hostId;
+        var hostSnapshot = await this.databaseManager.getUser(id).once('value');
+        const host = hostSnapshot.val();
 
 		this.setState({
             event: event,
@@ -90,6 +96,9 @@ export default class ViewEventScreen extends Component<Props>
             chatId: event.chat, 
             checkedIn: event.checked_in,
 
+            uid: uid,
+            host: host.name
+
         })
 
 
@@ -97,23 +106,6 @@ export default class ViewEventScreen extends Component<Props>
 
     }
     
-    /**
-	 * GetUserInfo() - Sets the state of this component with the user id information from databaseManager
-	 */
-	async getUserInfo() {
-        //Get the current user's id
-		//var uid = this.databaseManager.getCurrentUser().uid; 
-        var uid = '1919';
-        
-        //Get the name of the host from this host's id
-        var snapshot = await this.databaseManager.getUser(this.state.hostId).once('value');
-        const host = snapshot.val();
-
-        this.setState({
-            uid: uid,
-            host: host[this.state.hostId].name
-        });
-	}
 
     /**
 	 * onPressHost() - Brings the user to the host's profile page
