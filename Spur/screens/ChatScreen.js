@@ -1,58 +1,59 @@
-import React from 'react'
-import { GiftedChat } from 'react-native-gifted-chat'
+import React, {Component} from 'react'
 import DatabaseManager from '../classes/DatabaseManager';
+import {
+	 Text,
+	 StyleSheet,
+	 View,
+	 Button,
+	 FlatList,
+	 TouchableOpacity,
+	} from 'react-native';
 
 export default class ChatScreen extends React.Component {
   
   constructor(props) {
 	super(props);
 	this.state = {
-		messages: [],
+		events: [],
 	};
 	this.databaseManager = new DatabaseManager();
-	this.chatRef = this.databaseManager.db.ref('/chat');
-	this.onSend = this.onSend.bind(this);
+	this.eventsRef = this.databaseManager.db.ref('/events');
+	this.goToChatroomScreen = this.goToChatroomScreen.bind(this);
   }
-
+  goToChatroomScreen() {
+         this.props.navigation.navigate('Chatroom');
+  }
   componentDidMount() {
-    this.listenForItems(this.chatRef);
+    this.listenForItems(this.eventsRef);
   }
   componentWillUnmount() {
-	  this.chatRef.off();
+	  this.eventsRef.off();
   }
-  //chatroom listener, not working
-  listenForItems(chatRef) {
-	
-	chatRef.on('value', (snap) => {
-		var msgs = [];
+  listenForItems(eventsRef) {
+	eventsRef.on('value', (snap) => {
+		var evnts = [];
 		snap.forEach((child) => {
-		console.log(child.val());
-		msgs.push(child.val().message);
+		evnts.push({key: child.key, name: child.val().details.title});
 		this.setState({
-			messages: msgs,
+			events: evnts,
 		});
-	
+		console.log(this.state.events);
 	});
-	
-	  
   });
  }
 
-  onSend(messages = []) {
-    messages.forEach(message => {
-		this.chatRef.push({message});
-	}
-	)
-  }
 
   render() {
     return (
-      <GiftedChat
-        messages={this.state.messages}
-        onSend={this.onSend}
-        user={{
-          _id: 1,
-        }}
+      <FlatList
+        data={this.state.events}
+        renderItem={({ item }) => (
+		  <View>
+		  <TouchableOpacity style={styles.item} onPress={() => this.goToChatroomScreen()}> 
+                 <Text style={styles.name}>{item.name}</Text> 
+          </TouchableOpacity>
+		  </View>)}
+        keyExtractor={item => item.key}
       />
     )
   }
@@ -60,4 +61,16 @@ export default class ChatScreen extends React.Component {
 
 ChatScreen.navigationOptions = {
   header: null,
-}; 
+};
+
+const styles = StyleSheet.create({
+  item: {
+    backgroundColor: '#f9c2ff',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  name: {
+    fontSize: 32,
+  },
+}); 

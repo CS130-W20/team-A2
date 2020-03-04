@@ -10,6 +10,7 @@ import BrowseScreen from '../screens/BrowseScreen';
 import ProfileScreen from '../screens/ProfileScreen'; 
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ChatScreen from '../screens/ChatScreen';
+import ChatroomScreen from '../screens/ChatroomScreen';
 
 const Drawer = createDrawerNavigator();
 const INITIAL_ROUTE_NAME = 'Browse';
@@ -79,6 +80,13 @@ export default function DrawerNavigator({ navigation, route }) {
         options={{
           title: 'Chat',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      />
+	  <Drawer.Screen
+        name="Chatroom"
+        component={ChatroomScreen}
+        options={{
+          drawerLabel: ()=>null,
         }}
       />
     </Drawer.Navigator>
