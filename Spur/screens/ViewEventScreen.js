@@ -97,7 +97,8 @@ export default class ViewEventScreen extends Component<Props>
             checkedIn: event.checked_in,
 
             uid: uid,
-            host: host.name
+            host: host.name,
+            upcoming: host.upcoming ? host.upcoming : []
 
         })
 
@@ -110,9 +111,7 @@ export default class ViewEventScreen extends Component<Props>
     /**
 	 * onPressHost() - Brings the user to the host's profile page
 	 */
-    //onPressHost = () => Alert.alert('Will link to ' + this.state.host + '\'s profile in future');
     onPressHost = () => this.props.navigation.navigate("Profile", {userId: this.state.hostId});
-
 
     /**
 	 * onPressChat() - Brings the user to the event's chat page
@@ -235,6 +234,7 @@ export default class ViewEventScreen extends Component<Props>
                 
                     <JoinButton 
                     color="#f194ff"
+                    upcoming={this.state.upcoming}
                     isAttendee={isAttendee}
                     isCheckedIn={isCheckedIn}
                     eventId= {this.state.eventId} 

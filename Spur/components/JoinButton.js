@@ -20,7 +20,7 @@ export default class JoinButton extends Component<Props>
 		this.state = {
             event: this.props.event,
             isAttendee: this.props.isAttendee,
-            isCheckedIn: this.props.isCheckedIn
+            isCheckedIn: this.props.isCheckedIn,
         }
         
     }
@@ -32,7 +32,7 @@ export default class JoinButton extends Component<Props>
         const eventId = this.props.eventId;
         const event = this.state.event;
         const uid = this.props.uid;
-
+        const upcoming = this.props.upcoming;
 
         if (!this.state.isAttendee) {
             return( <Button
@@ -42,7 +42,12 @@ export default class JoinButton extends Component<Props>
                         
                         if (event.attendees.indexOf(uid) < 0) {
                             event.attendees.push(uid);
+
+                            if (upcoming.indexOf(eventId) < 0) {
+                                upcoming.push(eventId);
+                            }
                             this.databaseManager.updateEvent(eventId, event);
+                            this.databaseManager.updateUser(uid, {upcoming: upcoming});
                         }
                     
                         Alert.alert('Event Joined!');
