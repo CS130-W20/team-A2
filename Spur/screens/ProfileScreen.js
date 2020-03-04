@@ -6,11 +6,12 @@ import {
 	 ScrollView,
 	 Button,
 	 Alert } from 'react-native';
-import User from '../classes/User';
-import Event from '../classes/Event';
-import EventDetails from '../classes/EventDetails';
-import DatabaseManager from '../classes/DatabaseManager';  
-import { get } from 'react-native/Libraries/Utilities/PixelRatio';
+import {
+	ButtonGroup} from 'react-native-elements';
+import DatabaseManager from '../classes/DatabaseManager';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import { CATEGORIES } from '../constants/categories';
+import { ViewEventScreen } from '../screens/ViewEventScreen';
 
 /**
  * Profile Screen - Displays a user profile. 
@@ -22,6 +23,7 @@ export default class ProfileScreen extends Component<Props>
 		super(props); 
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
+		this.databaseManager.login("dummy_user_uml@gmail.com", "UML123");
 		this.state = {
 			name: "", 
 			description: "",
@@ -52,11 +54,32 @@ export default class ProfileScreen extends Component<Props>
 		const user = snapshot.val();
 		this.setState({
 			name: user.name,
-			description: user.description,
-			interests: user.interests,
-			history: user.history,
-			upcoming: user.upcoming
+			description: user.description ? user.description : "",
+			interests: user.interests ? user.interests : [],
+			history: user.history ? user.history : [],
+			upcoming: user.upcoming ? user.upcoming : []
 		})
+	}
+
+	/**
+	 * Function that updates the state based on the selected/unselected items 
+	 * @param {Array[Categories]} - Array of selected categories
+	 */
+	onSelect = selection => {
+		console.log(selection);
+		this.setState({
+			interests: selection
+		});
+	}
+
+	/**
+	 * Function to view an event 
+	 * @param {String} eventId - Id of the event that we wish to view 
+	 */
+	viewEvent(eventId) {
+		this.log(eventId);
+		this.props.navigation.navigate("ViewEvent", {eventId: eventId}); 
+		this.log("nice");
 	}
 
     render() {
@@ -74,21 +97,27 @@ export default class ProfileScreen extends Component<Props>
 				<View>
 					<Text style={styles.contentHeader}>Interests:</Text>
 				</View>
-				<ScrollView style={styles.descriptionBox}>
-					{this.state.interests.map(category => (
-						<Text style={styles.content}>
-							{category}
-						</Text>
-					))}
+				<ScrollView style={styles.contentContainer}>
+					<SectionedMultiSelect
+						items={CATEGORIES}
+						uniqueKey="id"
+						subKey="children"
+						readOnlyHeadings={true}
+						expandDropDowns={true}
+						onSelectedItemsChange={this.onSelect}
+						selectedItems={this.state.interests}
+						selectText="Categories"
+						alwaysShowSelectText={true}
+					/>
 				</ScrollView>
 				<View>
 					<Text style={styles.contentHeader}>Upcoming:</Text>
 				</View>
 				<ScrollView style={styles.descriptionBox}>
-					{this.state.upcoming.map(event => (
+					{this.state.upcoming.map(eventId => (
 						<Button
-							title = {event.details.title}
-							onPress={() => Alert.alert('Will direct to event page later!')}
+							title = {"Event Page"}
+							onPress={() => this.viewEvent(eventId)}
 						>
 						</Button>
 					))}
@@ -105,6 +134,10 @@ export default class ProfileScreen extends Component<Props>
 						</Button>
 					))}
 				</ScrollView>
+				<Button
+					title="Edit profile"
+					onPress={() => this.props.navigation.navigate("EditProfile")}
+				/>
 			</ScrollView>
 		);
     }
@@ -144,34 +177,3 @@ const styles = StyleSheet.create({
 		height: 100
 	}
   });
-  
-  /*
-  				<ScrollView style={styles.descriptionBox}>
-					{this.user.interests.map(category => (
-						<Text style={styles.content}>
-							{category}
-						</Text>
-					))}
-				</ScrollView>
-  				<ScrollView style={styles.descriptionBox}>
-					{this.user.history.map(event => (
-						<Button
-							title = {event.details.title}
-							onPress={() => Alert.alert('Will direct to event page later!')}
-						>
-						</Button>
-					))}
-				</ScrollView>
-				<View>
-					<Text style={styles.contentHeader}>Upcoming:</Text>
-				</View>
-				<ScrollView style={styles.descriptionBox}>
-					{this.user.upcoming.map(event => (
-						<Button
-							title = {event.details.title}
-							onPress={() => Alert.alert('Will direct to event page later!')}
-						>
-						</Button>
-					))}
-				</ScrollView>
-*/

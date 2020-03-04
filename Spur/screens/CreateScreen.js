@@ -19,8 +19,6 @@ import { MonoText } from '../components/StyledText';
 import {KeyboardAvoidingView} from 'react-native';
 import DatabaseManager from '../classes/DatabaseManager';  
 
-import DatabaseManager from '../classes/DatabaseManager';
-
 export default class CreateScreen extends Component<Props> {
     /** Automatically called constructor that does initial setup.
     */
@@ -50,10 +48,6 @@ export default class CreateScreen extends Component<Props> {
 		this.handleCostChange = this.handleCostChange.bind(this);
 		this.handlePartyChange = this.handlePartyChange.bind(this);
 		this.handleDescChange = this.handleDescChange.bind(this);
-
-		//My test 
-		this.databaseManager = new DatabaseManager();
-		this.databaseManager.login("maged@gmail.com", "UML123");
 	};
 	/** Updates name state variable when input is detected.
 	* @param {string} Event Name
