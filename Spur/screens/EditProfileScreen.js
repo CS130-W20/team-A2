@@ -6,8 +6,7 @@ import {
 	 ScrollView} from 'react-native';
 import {
 	Input,
-	Button,
-	ButtonGroup} from 'react-native-elements';
+	Button} from 'react-native-elements';
 import DatabaseManager from '../classes/DatabaseManager';  
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { CATEGORIES } from '../constants/categories';
@@ -22,7 +21,6 @@ export default class EditProfileScreen extends Component<Props> {
 		super(props); 
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
-		this.databaseManager.login("dummy_user_uml@gmail.com", "UML123")
 		this.state = {
 			userId: "", 
 			description: "",
@@ -158,13 +156,3 @@ const styles = StyleSheet.create({
 		height: 100
 	}
   });
-
-  /*
-  				<ScrollView style={styles.descriptionBox}>
-					{this.state.interests.map(category => (
-						<Text style={styles.content}>
-							{category}
-						</Text>
-					))}
-				</ScrollView>
-				*/
