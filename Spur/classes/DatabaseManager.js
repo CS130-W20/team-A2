@@ -89,6 +89,15 @@ class DatabaseManager {
     }
 
     /**
+     * Updates an event in the database
+     * @param {string} eventId - Id of the event to be updated
+     * @param {Event} event - Event to store into the database 
+     */
+    updateEvent(eventId, event) {
+        this.db.ref('events/' + eventId).update(event);
+    }
+
+    /**
      * Returns a database reference to a user
      * @param {string} userId - Id of the user
      */
@@ -105,12 +114,22 @@ class DatabaseManager {
 
     /**
      * Adds the user to the database
+     * @param {String} userId - A string from Firebase authentication linked to the user 
      * @param {User} user - User to store into the database
      */
-    addUser(user) {
-        var userRef = this.users().push();
-        userRef.set(user);
+    addUser(userId, user) {
+        this.db.ref("users/" + userId).set(user);
+    }
+
+    /**
+     * Updates a user in the database
+     * @param {string} userId - Id of the user to be updated
+     * @param {User} user - User to store into the database 
+     */
+    updateUser(userId, user) {
+        this.db.ref('users/' + userId).update(user);
     }
 }
+
 
 export default DatabaseManager;

@@ -19,26 +19,28 @@ import { MonoText } from '../components/StyledText';
 import {KeyboardAvoidingView} from 'react-native';
 import DatabaseManager from '../classes/DatabaseManager';  
 
+import DatabaseManager from '../classes/DatabaseManager';
+
 export default class CreateScreen extends Component<Props> {
     /** Automatically called constructor that does initial setup.
     */
     constructor(props) {
 		super(props);
 		this.state = {
-		name: '',
+		title: '',
 		cost: '',
-		party: '',
-		desc: '',
+		partySize: '',
+		description: '',
 		startTime: '',
 		endTime: '',
-		category: '',
+		categories: '',
 		date: '',
 		region: {
 		  latitude: 37.78825,
 		  longitude: -122.4324,
 		},
 		};
-	
+		this.databaseManager = new DatabaseManager();
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleNameChange = this.handleNameChange.bind(this);
 		this.handleDateChange = this.handleDateChange.bind(this);
@@ -58,7 +60,7 @@ export default class CreateScreen extends Component<Props> {
 	*/
     handleNameChange = e => {
 	this.setState({
-	    name: e
+	    title: e
 	});
     };
 	/** Updates date state variable when input is detected.
@@ -90,7 +92,7 @@ export default class CreateScreen extends Component<Props> {
 	*/
 	handleCategoryChange = e => {
 	this.setState({
-	    category: e
+	    categories: e
 	});
     };
 	/** Updates cost state variable when input is detected.
@@ -106,7 +108,7 @@ export default class CreateScreen extends Component<Props> {
 	*/
 	handlePartyChange = e => {
 	this.setState({
-	    party: e
+	    partySize: e
 	});
     };
 	/** Updates description state variable when input is detected.
@@ -114,7 +116,7 @@ export default class CreateScreen extends Component<Props> {
 	*/
 	handleDescChange = e => {
 	this.setState({
-	    desc: e
+	    description: e
 	});
     };
 	/** Validates event details
@@ -131,24 +133,33 @@ export default class CreateScreen extends Component<Props> {
 		else if (!datePattern.test(this.state.date)) {
 		  Alert.alert("Invalid Date");
 		}
-		else if (!partyPattern.test(this.state.party)) {
+		else if (!partyPattern.test(this.state.partySize)) {
 		  Alert.alert("Invalid Party Size");
 		}
 		else if (!costPattern.test(this.state.cost)) {
 		  Alert.alert("Invalid Cost");
 		}
-		else if (this.state.name == '') {
-		  Alert.alert("Invalid Event Name");
+		else if (this.state.title == '') {
+		  Alert.alert("Invalid Event Title");
 		}
-		else if (this.state.category == '') {
-		  Alert.alert("Invalid Category");
+		else if (this.state.categories == '') {
+		  Alert.alert("Invalid Categories");
 		}
-		else if (this.state.desc == '') {
+		else if (this.state.description == '') {
 		  Alert.alert("Invalid Event Description");
 		}
 		else {
 		  Alert.alert("Success");
+		  this.databaseManager.db.ref('/events').push({
+			  attendees: 0,
+			  chat: 0,
+			  checked_in: 0,
+			  host: 0,
+			  details: this.state,
+			  
+		  });
 		}
+		
 	};
 	/** Renders the UI shown to the user.
 	*/
