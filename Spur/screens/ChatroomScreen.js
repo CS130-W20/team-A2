@@ -12,9 +12,11 @@ export default class ChatScreen extends React.Component {
 	this.databaseManager = new DatabaseManager();
 	this.chatRef = this.databaseManager.db.ref('/chat');
 	this.onSend = this.onSend.bind(this);
+	console.log(this.props.navigation.state);
   }
 
   componentDidMount() {
+	
     this.listenForItems(this.chatRef);
   }
   componentWillUnmount() {

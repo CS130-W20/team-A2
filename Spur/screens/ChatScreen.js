@@ -20,8 +20,10 @@ export default class ChatScreen extends React.Component {
 	this.eventsRef = this.databaseManager.db.ref('/events');
 	this.goToChatroomScreen = this.goToChatroomScreen.bind(this);
   }
-  goToChatroomScreen() {
-         this.props.navigation.navigate('Chatroom');
+  goToChatroomScreen(id) {
+         this.props.navigation.navigate('Chatroom', {
+		   eventId: id,
+		 });
   }
   componentDidMount() {
     this.listenForItems(this.eventsRef);
@@ -37,7 +39,6 @@ export default class ChatScreen extends React.Component {
 		this.setState({
 			events: evnts,
 		});
-		console.log(this.state.events);
 	});
   });
  }
@@ -49,7 +50,7 @@ export default class ChatScreen extends React.Component {
         data={this.state.events}
         renderItem={({ item }) => (
 		  <View>
-		  <TouchableOpacity style={styles.item} onPress={() => this.goToChatroomScreen()}> 
+		  <TouchableOpacity style={styles.item} onPress={() => this.goToChatroomScreen(item.key)}> 
                  <Text style={styles.name}>{item.name}</Text> 
           </TouchableOpacity>
 		  </View>)}
