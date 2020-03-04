@@ -41,7 +41,7 @@ export default class EditProfileScreen extends Component<Props> {
 		const user = snapshot.val();
 		this.setState({
 			userId: uid, 
-			description: user.description,
+			description: user.description ? user.description : "", 
 			interests: user.interests ? user.interests : []
 		})
 		console.log(user.interests)
