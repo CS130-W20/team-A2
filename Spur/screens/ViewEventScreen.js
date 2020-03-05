@@ -219,7 +219,7 @@ export default class ViewEventScreen extends Component<Props>
 
                 <Overlay 
                     isVisible={this.state.isVisible}
-                    height={60 * this.state.numAttendees}
+                    height={70 * this.state.numAttendees}
                     onBackdropPress={() => 
                         this.setState({isVisible: false})
                     }
