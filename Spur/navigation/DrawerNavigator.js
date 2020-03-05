@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TabBarIcon from '../components/TabBarIcon';
+import { createStackNavigator } from '@react-navigation/stack'; 
 
 // Import Screens
 import CreateScreen from '../screens/CreateScreen';
@@ -10,9 +11,85 @@ import BrowseScreen from '../screens/BrowseScreen';
 import ProfileScreen from '../screens/ProfileScreen'; 
 import EditProfileScreen from '../screens/EditProfileScreen';
 import ChatNavigator from '../navigation/ChatNavigator';
+import OtherProfileScreen from '../screens/OtherProfileScreen';
+import ViewEventScreen from '../screens/ViewEventScreen';
 
 const Drawer = createDrawerNavigator();
 const INITIAL_ROUTE_NAME = 'Browse';
+const StackProfile = createStackNavigator(); 
+const StackEvent = createStackNavigator(); 
+const StackCreate = createStackNavigator(); 
+const StackBrowse = createStackNavigator(); 
+
+/**
+ * Stack Navigator for Profile 
+ * {Profile, {View Event Stack}, Edit Profile} are within this stack
+ */
+function ProfileStack() {
+  return ( 
+    <StackProfile.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <StackProfile.Screen name = "Profile" component={ProfileScreen} />
+      <StackProfile.Screen name = "ViewEvent" component={ViewEventStack} />
+      <StackProfile.Screen name = "EditProfile" component={EditProfileScreen} />
+    </StackProfile.Navigator>
+  );
+}
+
+/**
+ * Stack Navigator for View Event
+ * {View Event, Other Profile} are within this stack
+ */
+function ViewEventStack() {
+  return (
+    <StackEvent.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <StackEvent.Screen name = "ViewEvent" component={ViewEventScreen} />
+      <StackEvent.Screen name = "OtherProfile" component={OtherProfileScreen} />
+      {/*StackEvent.Screen name = "ChatRoom" component={ChatRoomScreen} */}
+    </StackEvent.Navigator>
+  );
+}
+
+/**
+ * Stack Navigator for Create Event
+ * {Create Event, {View Event Stack}} are within this stack 
+ */
+function CreateEventStack() {
+  return (
+    <StackCreate.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <StackCreate.Screen name = "CreateEvent" component={CreateScreen} />
+      <StackCreate.Screen name = "ViewEvent" component={ViewEventStack} />
+    </StackCreate.Navigator>
+  );
+}
+
+/**
+ * Stack Navigator for Browse Event
+ * {Browse Event, {View Event Stack}} are within this stack 
+ */
+function BrowseEventStack() {
+  return (
+    <StackBrowse.Navigator
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <StackBrowse.Screen name = "BrowseEvent" component={BrowseScreen} />
+      <StackBrowse.Screen name = "ViewEvent" component={ViewEventStack} />
+    </StackBrowse.Navigator>
+  );
+}
 
 export default function DrawerNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
@@ -35,7 +112,7 @@ export default function DrawerNavigator({ navigation, route }) {
     <Drawer.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
       <Drawer.Screen
         name="Create Event"
-        component={CreateScreen}
+        component={CreateEventStack}
         options={{
           title: 'Create',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
@@ -51,7 +128,7 @@ export default function DrawerNavigator({ navigation, route }) {
       />*/}
       <Drawer.Screen
         name="Browse"
-        component={BrowseScreen}
+        component={BrowseEventStack}
         options={{
           title: 'Browse',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
@@ -59,10 +136,10 @@ export default function DrawerNavigator({ navigation, route }) {
       />
       <Drawer.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={ProfileStack}
         options={{
           title: 'Profile',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
         }}
       />
       <Drawer.Screen
@@ -85,3 +162,16 @@ export default function DrawerNavigator({ navigation, route }) {
     </Drawer.Navigator>
   );
 }
+
+/*
+
+      <Drawer.Screen
+        name="ViewEvent"
+        component={ViewEventScreen}
+        options={{
+          title: 'View Event',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      />
+
+      */
