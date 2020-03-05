@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
 import DatabaseManager from '../classes/DatabaseManager';
 
@@ -8,11 +8,13 @@ export default class ChatScreen extends React.Component {
 	super(props);
 	this.state = {
 		messages: [],
+		id: 0,
 	};
+
+	console.log(this.props.route.params.id);
 	this.databaseManager = new DatabaseManager();
-	this.chatRef = this.databaseManager.db.ref('/chat');
+	this.chatRef = this.databaseManager.db.ref('/chat' + this.props.route.params.id);
 	this.onSend = this.onSend.bind(this);
-	console.log(this.props.navigation.state);
   }
 
   componentDidMount() {
@@ -28,7 +30,6 @@ export default class ChatScreen extends React.Component {
 	chatRef.on('value', (snap) => {
 		var msgs = [];
 		snap.forEach((child) => {
-		console.log(child.val());
 		msgs.push(child.val().message);
 		this.setState({
 			messages: msgs,
@@ -60,6 +61,7 @@ export default class ChatScreen extends React.Component {
   }
 }
 
+
 ChatScreen.navigationOptions = {
   header: null,
-}; 
+};

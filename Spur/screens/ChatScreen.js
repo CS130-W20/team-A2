@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import DatabaseManager from '../classes/DatabaseManager';
+
 import {
 	 Text,
 	 StyleSheet,
@@ -18,13 +19,8 @@ export default class ChatScreen extends React.Component {
 	};
 	this.databaseManager = new DatabaseManager();
 	this.eventsRef = this.databaseManager.db.ref('/events');
-	this.goToChatroomScreen = this.goToChatroomScreen.bind(this);
   }
-  goToChatroomScreen(id) {
-         this.props.navigation.navigate('Chatroom', {
-		   eventId: id,
-		 });
-  }
+
   componentDidMount() {
     this.listenForItems(this.eventsRef);
   }
@@ -35,7 +31,7 @@ export default class ChatScreen extends React.Component {
 	eventsRef.on('value', (snap) => {
 		var evnts = [];
 		snap.forEach((child) => {
-		evnts.push({key: child.key, name: child.val().details.title});
+		evnts.push({id: child.key, name: child.val().details.title});
 		this.setState({
 			events: evnts,
 		});
@@ -50,11 +46,13 @@ export default class ChatScreen extends React.Component {
         data={this.state.events}
         renderItem={({ item }) => (
 		  <View>
-		  <TouchableOpacity style={styles.item} onPress={() => this.goToChatroomScreen(item.key)}> 
+		  <TouchableOpacity style={styles.item} onPress={() => {
+		    this.props.navigation.navigate('Chatroom', {id: item.id, title: item.name});  			
+		  }}> 
                  <Text style={styles.name}>{item.name}</Text> 
           </TouchableOpacity>
 		  </View>)}
-        keyExtractor={item => item.key}
+        keyExtractor={item => item.id}
       />
     )
   }
