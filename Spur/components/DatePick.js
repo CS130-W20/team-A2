@@ -28,8 +28,6 @@ const DatePick = (props) => {
 
   const onChange = (event, selectedDate) => {
 
-    console.log(selectedDate);
-
     props.onChange(selectedDate);
     const currentDate = selectedDate || date;
     
