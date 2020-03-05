@@ -9,6 +9,7 @@ import UserLoginScreen from '../screens/UserLoginScreen';
 import BrowseScreen from '../screens/BrowseScreen';
 import ProfileScreen from '../screens/ProfileScreen'; 
 import EditProfileScreen from '../screens/EditProfileScreen';
+import ChatNavigator from '../navigation/ChatNavigator';
 
 const Drawer = createDrawerNavigator();
 const INITIAL_ROUTE_NAME = 'Browse';
@@ -72,6 +73,15 @@ export default function DrawerNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
+	  <Drawer.Screen
+        name="ChatNavigator"
+        component={ChatNavigator}
+        options={{
+          title: 'Chat',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      />
+
     </Drawer.Navigator>
   );
 }
