@@ -71,7 +71,7 @@ export default class EditProfileScreen extends Component<Props> {
     
     render() {
         return (
-			<ScrollView>
+			<View style={{flex: 1, flexDirection: 'column'}}>
 				<View style={styles.titleContainer}>
 					<Text style={styles.title}>Edit Profile</Text>
 				</View>
@@ -103,21 +103,23 @@ export default class EditProfileScreen extends Component<Props> {
 						alwaysShowSelectText={true}
 					/>
 				</ScrollView>
-				<View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', marginBottom: 36}}>
-					<View style={{flex:1}}>
+				<View style={styles.bottom}>
+				  <View style={styles.btnBox}>
+					<View style={styles.btn}>
 						<Button
 						title="Cancel changes"
 						onPress={() => this.getUserInfo()}
 						/>
 					</View>
-					<View style={{flex:1}}>
+					<View style={styles.btn}>
 						<Button
 						title="Confirm changes"
 						onPress={() => this.onConfirmChanges()}
 						/>
 					</View>
+				  </View>
 				</View>
-			</ScrollView>
+			</View>
         );
     }
 }
@@ -152,7 +154,20 @@ const styles = StyleSheet.create({
 	},
 	descriptionBox: {
 		backgroundColor: '#E4EBE3', 
-		borderRadius: 10,
-		height: 100
+        borderRadius: 10,
+	    height: 100
+	},
+	btnBox: {
+	    flex: 1, 
+		flexDirection: 'row',
+	    marginBottom: 36,
+	},
+	bottom: {
+		flexDirection: 'column-reverse'
+		
+	},
+	btn: {
+		flex:1, 
+		height: 50
 	}
   });
