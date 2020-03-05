@@ -7,7 +7,7 @@ import {
      Dimensions,
      Alert } from 'react-native';
      
-import {Card, Badge, ListItem, Button, Overlay} from 'react-native-elements';
+import {Card, ListItem, Overlay} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import DatabaseManager from '../classes/DatabaseManager';  
@@ -27,8 +27,8 @@ export default class ViewEventScreen extends Component<Props>
 		this.databaseManager = new DatabaseManager();
 		this.state = {
             uid: '',
-            eventId: '-M1J28gx3XSzSNrofYjh', //Change this
-            //eventId: props.route.params.eventId,
+            //eventId: '-M1J28gx3XSzSNrofYjh', //Change this
+            eventId: props.route.params.eventId,
             event: '',
 
 			title: '',
@@ -56,23 +56,13 @@ export default class ViewEventScreen extends Component<Props>
 	}
 
 	/**
-	 * Function to log information
-	 * @param {*} - Item to be logged 
-	 */
-	log (message) {
-		console.log("Start log"); 
-		console.log(message); 
-		console.log("End log"); 
-	}
-
-	/**
 	 * getEventDetails() - Sets the state of this component with the event details from databaseManager
 	 */
 	async getEventDetails() {
 
         //Get the current user's id
-		//var uid = this.databaseManager.getCurrentUser().uid; 
-        var uid = '1919';
+		var uid = this.databaseManager.getCurrentUser().uid; 
+        //var uid = '7fW18YZaJ0eESZ8Y1FhieKwwh0g2';
 
 
 		//Get the event from the databasemanager
@@ -145,8 +135,6 @@ export default class ViewEventScreen extends Component<Props>
 
 
     render() {
-        //console.log(this.state.uid);
-        //console.log(this.host);
         const uid = this.state.uid;
         const attendees = this.state.attendees;
         const checkedIn = this.state.checkedIn;
@@ -173,14 +161,6 @@ export default class ViewEventScreen extends Component<Props>
             {
                 title: 'Party Size',
                 rightTitle: this.state.partySize
-                /*badge: { 
-                    value: this.state.partySize, 
-                    status: 'success', 
-                    textStyle: { color: 'white'},
-                    fontSize: 100
-                
-                }*/
-
             },
             {
                 title: 'Cost',
@@ -316,8 +296,6 @@ const styles = StyleSheet.create({
         height: 200,
         marginLeft: 'auto',
         marginRight: 'auto'
-        //justifyContent: 'flex-end',
-        //alignItems: 'center',	
       },
 	contentContainer: {
 	  paddingTop: 30,

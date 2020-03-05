@@ -1,16 +1,12 @@
 import React, {Component} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DatabaseManager from '../classes/DatabaseManager'; 
-import { Image,
-	 Platform,
-	 StyleSheet,
-	 Text,
-	 TextInput,
-	 TouchableOpacity,
-     Alert } from 'react-native';
+import { Alert } from 'react-native';
 import {Button} from 'react-native-elements';
 
-
+/**
+ * Join Button - Displays an button which allows users to join or check into events
+ */
 export default class JoinButton extends Component<Props>
 {
     constructor(props) {
@@ -34,6 +30,7 @@ export default class JoinButton extends Component<Props>
         const uid = this.props.uid;
         const upcoming = this.props.upcoming;
 
+        // If not an attendee, display a join button
         if (!this.state.isAttendee) {
             return( <Button
                 title = 'Join Event!'
@@ -57,7 +54,7 @@ export default class JoinButton extends Component<Props>
                 }
             />);
         } else {
-
+            //If an attendee not checked in, display check in button
             if (!this.state.isCheckedIn) {
                 return( <Button
                     title = 'Check into Event!'
@@ -70,8 +67,6 @@ export default class JoinButton extends Component<Props>
                                 this.databaseManager.updateEvent(eventId, {checked_in: checkedIn});
                             }
                            
-                            
-                            //Alert.alert('Will check user into the event');
                             this.setState({isAttendee: true, isCheckedIn: true});
                         }
                     }

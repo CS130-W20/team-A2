@@ -1,32 +1,26 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { Input, Card, Button } from 'react-native-elements';
+import { Input, Button } from 'react-native-elements';
 import DatePick from '../components/DatePick';
 import Geocoder from 'react-native-geocoding';
 
-import { Image,
-	 Platform,
+import { 
 	 StyleSheet,
-	 Text,
-	 TextInput,
-	 TouchableOpacity,
 	 View,
      ScrollView,
-	 SafeAreaView,
 	 Alert,
-	 Picker,
 	 Dimensions
 	} from 'react-native';
 
-
 import DatabaseManager from '../classes/DatabaseManager';
 
+/**
+ * Create Event Screen - Allows user to specify details for a new event. 
+ * Has a reference to the database manager which is used to retrieve user information.
+ */
 export default class CreateScreen extends Component<Props> {
     /** Automatically called constructor that does initial setup.
     */
-
-
     constructor(props) {
 		super(props);
 
@@ -57,8 +51,7 @@ export default class CreateScreen extends Component<Props> {
 		this.handlePartyChange = this.handlePartyChange.bind(this);
 		this.handleDescChange = this.handleDescChange.bind(this);
 
-		//this.getUserId();
-
+		this.getUserInfo();
 		Geocoder.init("AIzaSyAVKkB2Ad5_2IX_mw8pWRFWGHvl1LuHXf8");
 	};
 	/** Updates name state variable when input is detected.
@@ -81,6 +74,7 @@ export default class CreateScreen extends Component<Props> {
 			return;
 		}
 
+		// Convert from an address to a latlng location
 		Geocoder.from(address)
         .then(json => {
             var coord = json.results[0].geometry.location;
@@ -180,7 +174,7 @@ export default class CreateScreen extends Component<Props> {
 			lng: coord.longitude
 		}
 
-		
+		//Convert from a coordinate to a plaintext name
 		Geocoder.from(c)
 		.then(json => {
 			const address = json.results[0].formatted_address;
@@ -197,19 +191,10 @@ export default class CreateScreen extends Component<Props> {
 	*/
 	handleSubmit(event) {
 
-		var datePattern = /[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9]/;
-		var timePattern = /[0-9][0-9]:[0-9][0-9]/;
 		var partyPattern = /[0-9]+/;
 		var costPattern = /[0-9]+/;
-
-		/*
-		if (!timePattern.test(this.state.startTime) | !timePattern.test(this.state.endTime)) {
-		  Alert.alert("Invalid Start or End Time");
-		}
-		else if (!datePattern.test(this.state.date)) {
-		  Alert.alert("Invalid Date");
-		}
-		else if (!partyPattern.test(this.state.partySize)) {
+		
+		if (!partyPattern.test(this.state.partySize)) {
 		  Alert.alert("Invalid Party Size");
 		}
 		else if (!costPattern.test(this.state.cost)) {
@@ -218,46 +203,32 @@ export default class CreateScreen extends Component<Props> {
 		else if (this.state.title == '') {
 		  Alert.alert("Invalid Event Title");
 		}
-		else if (this.state.categories == '') {
-		  Alert.alert("Invalid Categories");
-		}
 		else if (this.state.description == '') {
 		  Alert.alert("Invalid Event Description");
 		}
 		else {
-		  Alert.alert("Success");
-		  this.databaseManager.addEvent({
-			  attendees: [],
-			  chat: '',
-			  checked_in: [],
-			  host: '',
-			  details: this.state
-		  });
-		}*/
+			const eventId = this.databaseManager.addEvent({
+				attendees: [this.state.hostId],
+				attendeeNames: [this.state.hostName],
+				chat: '',
+				checked_in: [],
+				details: this.state
+			  });
+			  
+			// Now it should navigate to the corresponding ViewEvent screen
+			this.props.navigation.navigate("ViewEvent", { screen: "ViewEvent",
+				params: {eventId: eventId}
+			});
+			}
 		
-		const eventId = this.databaseManager.addEvent({
-			  attendees: [this.state.hostId],
-			  attendeeNames: [this.state.hostName],
-			  chat: '',
-			  checked_in: [],
-			  details: this.state
-		});
-
-		console.log('eventid')
-		console.log(eventId)
-
-		Alert.alert("Success");
-		// Now it should navigate to the corresponding ViewEvent screen
-		this.props.navigation.navigate("ViewEvent", { screen: "ViewEvent",
-			params: {eventId: eventId}
-		});
+		
 		
 	};
 
 	/**
-	 * GetUserId() - Sets the hostId state of this component with the user id from databaseManager
+	 * GetUserInfo() - Sets the hostId and hostName state of this component with the user's information from databaseManager
 	 */
-	async getUserId() {
+	async getUserInfo() {
         //Get the user
 		var uid = this.databaseManager.getCurrentUser().uid;
 		var snapshot = await this.databaseManager.getUser(uid).once('value');
@@ -313,7 +284,6 @@ export default class CreateScreen extends Component<Props> {
 		<Input
 			placeholder='Event Name'
 			errorStyle={{ color: 'red' }}
-			//errorMessage='ENTER A VALID ERROR HERE'
 			onChangeText={this.handleNameChange}
 		/>
 				
@@ -325,7 +295,6 @@ export default class CreateScreen extends Component<Props> {
 		<Input
 			placeholder='Description'
 			errorStyle={{ color: 'red' }}
-			//errorMessage='ENTER A VALID ERROR HERE'
 			onChangeText={this.handleDescChange}
 		/>
 
@@ -333,34 +302,31 @@ export default class CreateScreen extends Component<Props> {
 		<Input
 			placeholder='Party Size'
 			errorStyle={{ color: 'red' }}
-			//errorMessage='ENTER A VALID ERROR HERE'
 			onChangeText={this.handlePartyChange}
 		/>
 
 		<Input
 			placeholder='Cost'
 			errorStyle={{ color: 'red' }}
-			//errorMessage='ENTER A VALID ERROR HERE'
 			onChangeText={this.handleCostChange}
 		/>
 
 		
 
-<DatePick
-		text='Set Date'
-		type='date'
-		onChange={this.handleDateChange}/>
-
 		<DatePick
-		text='Set Time'
-		type='time'
-		onChange={this.handleStartTimeChange}/>
+				text='Set Date'
+				type='date'
+				onChange={this.handleDateChange}/>
 
-<Button title="Submit" onPress={this.handleSubmit}/>
+				<DatePick
+				text='Set Time'
+				type='time'
+				onChange={this.handleStartTimeChange}
+		/>
+
+		<Button title="Submit" onPress={this.handleSubmit}/>
 
 		</ScrollView>
-
-		
 
     </View>
   );

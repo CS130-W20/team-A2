@@ -2,6 +2,10 @@ import React, {useState} from 'react';
 import {View, Button, Platform, StyleSheet} from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+
+/**
+ * Date Pick - Displays a modal to let users input a date or time
+ */
 const DatePick = (props) => {
   const [date, setDate] = useState(new Date(1598051730000));
   const [mode, setMode] = useState(props.type);
