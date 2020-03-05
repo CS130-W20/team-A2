@@ -63,9 +63,11 @@ export default class JoinButton extends Component<Props>
                     title = 'Check into Event!'
                     onPress={() => 
                         {
-                            if (event.checked_in.indexOf(uid) < 0) {
-                                event.checked_in.push(uid);
-                                this.databaseManager.updateEvent(eventId, event);
+                            const checkedIn = event.checked_in ? event.checked_in : []
+
+                            if (checkedIn.indexOf(uid) < 0) {
+                                checkedIn.push(uid);
+                                this.databaseManager.updateEvent(eventId, {checked_in: checkedIn});
                             }
                            
                             

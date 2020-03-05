@@ -31,19 +31,19 @@ export default class CreateScreen extends Component<Props> {
 		super(props);
 
 		this.state = {
-		title: '',
-		cost: '',
-		partySize: '',
-		description: '',
-		startTime: '',
-		endTime: '',
-		categories: '',
-		date: '',
-		hostId: '',
-		region: {
-		  lat: 34.0726629,
-		  lng: -118.4414646,
-		},
+			title: '',
+			cost: '',
+			partySize: '',
+			description: '',
+			startTime: '',
+			endTime: '',
+			categories: '',
+			date: '',
+			hostId: '',
+			region: {
+				lat: 34.0726629,
+				lng: -118.4414646,
+			},
 		};
 		this.databaseManager = new DatabaseManager();
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -195,7 +195,7 @@ export default class CreateScreen extends Component<Props> {
 	* @param {event} React Native Event
 	*/
 	handleSubmit(event) {
-		console.log(this.state.region);
+
 		var datePattern = /[0-9][0-9]\/[0-9][0-9]\/[0-9][0-9]/;
 		var timePattern = /[0-9][0-9]:[0-9][0-9]/;
 		var partyPattern = /[0-9]+/;
@@ -233,16 +233,21 @@ export default class CreateScreen extends Component<Props> {
 			  details: this.state
 		  });
 		}*/
-
 		
-		Alert.alert("Success");
-
-		
-		this.databaseManager.addEvent({
-			  attendees: [''],
+		const eventId = this.databaseManager.addEvent({
+			  attendees: [this.state.hostId],
 			  chat: '',
-			  checked_in: [''],
+			  checked_in: [],
 			  details: this.state
+		});
+
+		console.log('eventid')
+		console.log(eventId)
+
+		Alert.alert("Success");
+		// Now it should navigate to the corresponding ViewEvent screen
+		this.props.navigation.navigate("ViewEvent", { screen: "ViewEvent",
+			params: {eventId: eventId}
 		});
 		
 	};
@@ -264,9 +269,6 @@ export default class CreateScreen extends Component<Props> {
     render() {
 
 		var loc = this.state.location || "Location";
-
-		console.log(this.state.region.lat);
-		console.log(this.state.region.lng);
 
 		return (
     <View style={styles.container}>

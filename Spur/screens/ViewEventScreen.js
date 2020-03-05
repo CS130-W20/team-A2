@@ -21,13 +21,17 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 export default class ViewEventScreen extends Component<Props>
 {
 	constructor(props) {
+
+        //console.log('hey');
+        //console.log(props);
+
 		super(props); 
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.state = {
             uid: '',
-            eventId: '-M1J28gx3XSzSNrofYjh', //Change this
-            //eventId: this.props.route.params.eventId
+            //eventId: '-M1J28gx3XSzSNrofYjh', //Change this
+            eventId: props.route.params.eventId,
             event: '',
 
 			title: '',
@@ -70,6 +74,7 @@ export default class ViewEventScreen extends Component<Props>
 		//var uid = this.databaseManager.getCurrentUser().uid; 
         var uid = '1919';
 
+
 		//Get the event from the databasemanager
 		var eventSnapshot = await this.databaseManager.getEvent(this.state.eventId).once('value');
         const event = eventSnapshot.val();
@@ -92,9 +97,9 @@ export default class ViewEventScreen extends Component<Props>
             partySize: event.details.partySize,
             categories: event.details.categories,
 
-            attendees: event.attendees,
+            attendees: event.attendees ? event.attendees : [],
             chatId: event.chat, 
-            checkedIn: event.checked_in,
+            checkedIn: event.checked_in ? event.checked_in : [],
 
             uid: uid,
             host: host.name,
@@ -111,7 +116,7 @@ export default class ViewEventScreen extends Component<Props>
     /**
 	 * onPressHost() - Brings the user to the host's profile page
 	 */
-    onPressHost = () => this.props.navigation.navigate("Profile", {userId: this.state.hostId});
+    onPressHost = () => this.props.navigation.navigate("OtherProfile", {userId: this.state.hostId});
 
     /**
 	 * onPressChat() - Brings the user to the event's chat page

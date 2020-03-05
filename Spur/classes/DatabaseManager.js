@@ -82,10 +82,13 @@ class DatabaseManager {
     /**
      * Adds the event into the database
      * @param {Event} event - Event to store into the database
+     * @returns {String} The unique id associated with this newly created event
      */
     addEvent(event) {
         var eventRef = this.events().push();
         eventRef.set(event);
+
+        return eventRef.key;
     }
 
     /**
@@ -119,6 +122,7 @@ class DatabaseManager {
     addUser(user) {
         var userRef = this.users().push();
         userRef.set(user);
+        return userRef.key;
     }
 
     /**
