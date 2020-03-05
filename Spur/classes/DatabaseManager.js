@@ -117,12 +117,11 @@ class DatabaseManager {
 
     /**
      * Adds the user to the database
+     * @param {String} userId - A string from Firebase authentication linked to the user 
      * @param {User} user - User to store into the database
      */
-    addUser(user) {
-        var userRef = this.users().push();
-        userRef.set(user);
-        return userRef.key;
+    addUser(userId, user) {
+        this.db.ref("users/" + userId).set(user);
     }
 
     /**
@@ -131,10 +130,8 @@ class DatabaseManager {
      * @param {User} user - User to store into the database 
      */
     updateUser(userId, user) {
-        this.db.ref('users/' + userId).set(user);
+        this.db.ref('users/' + userId).update(user);
     }
-
-
 }
 
 
