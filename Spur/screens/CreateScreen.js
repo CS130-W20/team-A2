@@ -40,6 +40,7 @@ export default class CreateScreen extends Component<Props> {
 			categories: '',
 			date: '',
 			hostId: '',
+			hostName: '',
 			region: {
 				lat: 34.0726629,
 				lng: -118.4414646,
@@ -236,6 +237,7 @@ export default class CreateScreen extends Component<Props> {
 		
 		const eventId = this.databaseManager.addEvent({
 			  attendees: [this.state.hostId],
+			  attendeeNames: [this.state.hostName],
 			  chat: '',
 			  checked_in: [],
 			  details: this.state
@@ -257,9 +259,13 @@ export default class CreateScreen extends Component<Props> {
 	 */
 	async getUserId() {
         //Get the user
-		var uid = this.databaseManager.getCurrentUser().uid; 
+		var uid = this.databaseManager.getCurrentUser().uid;
+		var snapshot = await this.databaseManager.getUser(uid).once('value');
+		const user = snapshot.val();
+
 		this.setState({
-			hostId: uid
+			hostId: uid,
+			hostName: user.name
         })
 	}
 	

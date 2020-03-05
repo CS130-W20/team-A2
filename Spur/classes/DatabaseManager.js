@@ -97,7 +97,7 @@ class DatabaseManager {
      * @param {Event} event - Event to store into the database 
      */
     updateEvent(eventId, event) {
-        this.db.ref('events/' + eventId).set(event);
+        this.db.ref('events/' + eventId).update(event);
     }
 
     /**

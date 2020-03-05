@@ -7,7 +7,7 @@ import {
      Dimensions,
      Alert } from 'react-native';
      
-import {Card, Badge, ListItem, Button} from 'react-native-elements';
+import {Card, Badge, ListItem, Button, Overlay} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import DatabaseManager from '../classes/DatabaseManager';  
@@ -22,16 +22,13 @@ export default class ViewEventScreen extends Component<Props>
 {
 	constructor(props) {
 
-        //console.log('hey');
-        //console.log(props);
-
 		super(props); 
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.state = {
             uid: '',
-            //eventId: '-M1J28gx3XSzSNrofYjh', //Change this
-            eventId: props.route.params.eventId,
+            eventId: '-M1J28gx3XSzSNrofYjh', //Change this
+            //eventId: props.route.params.eventId,
             event: '',
 
 			title: '',
@@ -50,6 +47,9 @@ export default class ViewEventScreen extends Component<Props>
             chat: '',
             checkedIn: [],
 
+            isVisible: false,
+            attendeeNames: [],
+            numAttendees: 0,
 
 		}
         this.getEventDetails();
@@ -84,6 +84,16 @@ export default class ViewEventScreen extends Component<Props>
         var hostSnapshot = await this.databaseManager.getUser(id).once('value');
         const host = hostSnapshot.val();
 
+        var attendeeNames = []
+        var i;
+        for (i = 0; i < event.attendeeNames.length; i++) {
+            attendeeNames.push({
+                name: event.attendeeNames[i],
+                id: event.attendees[i]
+            });
+        }
+
+
 		this.setState({
             event: event,
 			title: event.details.title,
@@ -98,12 +108,15 @@ export default class ViewEventScreen extends Component<Props>
             categories: event.details.categories,
 
             attendees: event.attendees ? event.attendees : [],
+            attendeeNames: attendeeNames,
+            numAttendees: event.attendees.length,
             chatId: event.chat, 
             checkedIn: event.checked_in ? event.checked_in : [],
 
             uid: uid,
             host: host.name,
-            upcoming: host.upcoming ? host.upcoming : []
+            upcoming: host.upcoming ? host.upcoming : [],
+
 
         })
 
@@ -117,6 +130,13 @@ export default class ViewEventScreen extends Component<Props>
 	 * onPressHost() - Brings the user to the host's profile page
 	 */
     onPressHost = () => this.props.navigation.navigate("OtherProfile", {userId: this.state.hostId});
+
+
+    /**
+	 * onPressAttendees() - Opens the list of attendees
+	 */
+    onPressAttendees = () => this.setState({isVisible: true});
+
 
     /**
 	 * onPressChat() - Brings the user to the event's chat page
@@ -167,6 +187,11 @@ export default class ViewEventScreen extends Component<Props>
                 rightTitle: '$' + this.state.cost
             },
             {
+                title: 'Attendees',
+                chevron: true,
+                onPress: this.onPressAttendees
+            },
+            {
                 title: 'Chat',
                 chevron: true,
                 onPress: this.onPressChat,
@@ -198,8 +223,8 @@ export default class ViewEventScreen extends Component<Props>
                         initialRegion={{
                             latitude: lat,
                             longitude: long,
-                            latitudeDelta: 0.001,
-                            longitudeDelta: 0.001,
+                            latitudeDelta: 0.0005,
+                            longitudeDelta: 0.0005,
                         }}
                     >
                         <Marker coordinate={
@@ -211,6 +236,31 @@ export default class ViewEventScreen extends Component<Props>
 		            
                     </MapView>
                 </View>
+
+                <Overlay 
+                    isVisible={this.state.isVisible}
+                    height={60 * this.state.numAttendees}
+                    onBackdropPress={() => 
+                        this.setState({isVisible: false})
+                    }
+                >
+                    {
+                        this.state.attendeeNames.map((item, i) => (
+                            <ListItem
+                                key={i}
+                                title={item.name}
+                                onPress={() => 
+                                    {
+                                        this.setState({isVisible: false});
+                                        this.props.navigation.navigate("OtherProfile", {userId: item.id});
+                                    }
+                                }
+                                bottomDivider
+                                chevron
+                            />
+                        ))
+                    }
+                </Overlay>
 
                 <View>
                     {
