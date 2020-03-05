@@ -1,6 +1,10 @@
 import React, {Component} from 'react'
-import { GiftedChat } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble } from 'react-native-gifted-chat'
 import DatabaseManager from '../classes/DatabaseManager';
+import {
+	 StyleSheet,
+	 View,
+	} from 'react-native';
 
 export default class ChatScreen extends React.Component {
   
@@ -8,17 +12,17 @@ export default class ChatScreen extends React.Component {
 	super(props);
 	this.state = {
 		messages: [],
-		id: 0,
+		id: this.props.route.params.id,
+		title: this.props.route.params.title,
+		userID: this.props.route.params.userID,
 	};
-
-	console.log(this.props.route.params.id);
+    
 	this.databaseManager = new DatabaseManager();
-	this.chatRef = this.databaseManager.db.ref('/chat' + this.props.route.params.id);
+	this.chatRef = this.databaseManager.db.ref('/chat/' + this.props.route.params.id);
 	this.onSend = this.onSend.bind(this);
   }
 
   componentDidMount() {
-	
     this.listenForItems(this.chatRef);
   }
   componentWillUnmount() {
@@ -47,15 +51,29 @@ export default class ChatScreen extends React.Component {
 	}
 	)
   }
-
+  renderBubble(props) { 
+    return ( 
+	  <Bubble {...props} 
+        wrapperStyle={{
+          left: {
+            backgroundColor: 'white',
+          },
+          right: {
+            backgroundColor: '#4287f5'
+          }
+        }} />
+	);
+  }
   render() {
     return (
       <GiftedChat
         messages={this.state.messages}
         onSend={this.onSend}
         user={{
-          _id: 1,
+          _id: this.state.userID,
         }}
+		renderBubble={this.renderBubble}
+		inverted={false}
       />
     )
   }
@@ -65,3 +83,12 @@ export default class ChatScreen extends React.Component {
 ChatScreen.navigationOptions = {
   header: null,
 };
+
+const styles = StyleSheet.create({
+  bg: {
+    backgroundColor: '#FFFFFF',
+  },
+  name: {
+    fontSize: 32,
+  },
+}); 

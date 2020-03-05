@@ -8,11 +8,12 @@ import ChatroomScreen from '../screens/ChatroomScreen';
 const Stack = createStackNavigator();
 
 export default class ChatNavigator extends React.Component {
+	
 	render() {
 		return (
             <Stack.Navigator initialRouteName={'Chat'}>
             <Stack.Screen name="Chat" component={ChatScreen} />
-			<Stack.Screen name="Chatroom" component={ChatroomScreen} />
+			<Stack.Screen name="Chatroom" component={ChatroomScreen} options={({ route }) => ({ title: route.params.title })}/>
             </Stack.Navigator>
 		);
 	}
