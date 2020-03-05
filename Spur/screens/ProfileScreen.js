@@ -11,7 +11,6 @@ import {
 import DatabaseManager from '../classes/DatabaseManager';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { CATEGORIES } from '../constants/categories';
-import { ViewEventScreen } from '../screens/ViewEventScreen';
 
 /**
  * Profile Screen - Displays a user profile. 
