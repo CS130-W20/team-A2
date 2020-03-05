@@ -8,7 +8,8 @@ import ChatroomScreen from '../screens/ChatroomScreen';
 const Stack = createStackNavigator();
 
 export default class ChatNavigator extends React.Component {
-	
+	/** Render the main chat stack navigator, with the initial page being the Chat list.
+    */
 	render() {
 		return (
             <Stack.Navigator initialRouteName={'Chat'}>
