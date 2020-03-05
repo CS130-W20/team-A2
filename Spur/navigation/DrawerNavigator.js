@@ -9,6 +9,7 @@ import UserLoginScreen from '../screens/UserLoginScreen';
 import BrowseScreen from '../screens/BrowseScreen';
 import ProfileScreen from '../screens/ProfileScreen'; 
 import EditProfileScreen from '../screens/EditProfileScreen';
+import HistoryScreen from '../screens/HistoryScreen';
 
 const Drawer = createDrawerNavigator();
 const INITIAL_ROUTE_NAME = 'Browse';
@@ -69,6 +70,14 @@ export default function DrawerNavigator({ navigation, route }) {
         component={EditProfileScreen}
         options={{
           title: 'EditProfile',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
+        }}
+      />
+      <Drawer.Screen
+        name="History"
+        component={HistoryScreen}
+        options={{
+          title: 'History',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
         }}
       />
