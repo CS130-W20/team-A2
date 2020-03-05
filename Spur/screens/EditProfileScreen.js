@@ -56,6 +56,7 @@ export default class EditProfileScreen extends Component<Props> {
 			description: this.state.description,
 			interests: this.state.interests ? this.state.interests : []
 		});
+		this.props.navigation.navigate("Profile")
 	}
 
 	/**
@@ -71,7 +72,7 @@ export default class EditProfileScreen extends Component<Props> {
     
     render() {
         return (
-			<ScrollView>
+			<ScrollView style={{flex: 1}}>
 				<View style={styles.titleContainer}>
 					<Text style={styles.title}>Edit Profile</Text>
 				</View>
@@ -103,18 +104,20 @@ export default class EditProfileScreen extends Component<Props> {
 						alwaysShowSelectText={true}
 					/>
 				</ScrollView>
-				<View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', marginBottom: 36}}>
-					<View style={{flex:1}}>
-						<Button
-						title="Cancel changes"
-						onPress={() => this.getUserInfo()}
-						/>
-					</View>
-					<View style={{flex:1}}>
-						<Button
-						title="Confirm changes"
-						onPress={() => this.onConfirmChanges()}
-						/>
+				<View>
+					<View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', marginBottom: 36}}>
+						<View style={{flex:1}}>
+							<Button
+							title="Cancel changes"
+							onPress={() => this.getUserInfo()}
+							/>
+						</View>
+						<View style={{flex:1}}>
+							<Button
+							title="Confirm changes"
+							onPress={() => this.onConfirmChanges()}
+							/>
+						</View>
 					</View>
 				</View>
 			</ScrollView>

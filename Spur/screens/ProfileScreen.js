@@ -7,11 +7,10 @@ import {
 	 Button,
 	 Alert } from 'react-native';
 import {
-	ButtonGroup} from 'react-native-elements';
+	Card} from 'react-native-elements';
 import DatabaseManager from '../classes/DatabaseManager';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { CATEGORIES } from '../constants/categories';
-import DisplayCategories from '../components/DisplayCategories';
 
 /**
  * Profile Screen - Displays a user profile. 
@@ -29,9 +28,9 @@ export default class ProfileScreen extends Component<Props>
 			description: "",
 			interests: [],
 			history: [],
-			upcoming: []
+			upcoming: [],
+			hasChanged: false
 		}
-		this.getUserInfo(); 
 	}
 
 	/**
@@ -67,9 +66,6 @@ export default class ProfileScreen extends Component<Props>
 	 */
 	onSelect = selection => {
 		console.log(selection);
-		this.setState({
-			interests: selection
-		});
 	}
 
 	/**
@@ -83,7 +79,88 @@ export default class ProfileScreen extends Component<Props>
 	}
 
     render() {
+		var profileTitle = this.state.name + '\'s Profile'
+		/*
+		this.setState({
+			hasChanged: this.props.params.hasChanged
+		})*/
+		this.getUserInfo()
 		return (
+			<ScrollView style={styles.container}>
+				<Card title = {profileTitle}>
+					<Text>{this.state.description}</Text>
+				</Card>
+				<SectionedMultiSelect
+						items={CATEGORIES}
+						uniqueKey="id"
+						subKey="children"
+						readOnlyHeadings={true}
+						expandDropDowns={true}
+						onSelectedItemsChange={this.onSelect}
+						selectedItems={this.state.interests}
+						selectText="Interests"
+						alwaysShowSelectText={true}
+					/>
+				<Card title = "Upcoming Events">
+					<ScrollView>
+						{this.state.upcoming.map(eventId => (
+							<Button
+								title = {"Event Page"}
+								onPress={() => this.viewEvent(eventId)}
+							>
+							</Button>
+						))}
+					</ScrollView>
+				</Card>
+				<View style={{flex: 1, justifyContent:'flex-end', bottom: 15}}>
+					<Button
+						title="Edit profile"
+						onPress={() => this.props.navigation.navigate("EditProfile")}
+					/>
+				</View>
+			</ScrollView>
+		);
+    }
+}
+
+const styles = StyleSheet.create({
+	container: {
+	  flex: 1,
+	  backgroundColor: '#fff',
+	},
+	contentContainer: {
+	  paddingTop: 30,
+	},
+	titleContainer: {
+	  backgroundColor: '#96CA92',
+	  borderRadius: 10
+	},
+	title: {
+	  fontSize: 20,
+	  fontWeight: 'bold',
+	  textAlign: 'center',
+	  color: 'white'
+	},
+	contentHeader: {
+		color: 'black',
+		fontSize: 20,
+		textAlign: 'left'
+	},
+	content: {
+		color: 'black', 
+		fontSize: 15,
+		textAlign: 'left'
+	},
+	descriptionBox: {
+		backgroundColor: '#E4EBE3', 
+		borderRadius: 10,
+		height: 100
+	}
+  });
+
+
+  /*
+return (
 			<ScrollView style={styles.container}>
 				<View style={styles.titleContainer}>
 					<Text style={styles.title}>{this.state.name}'s Profile</Text>
@@ -140,40 +217,5 @@ export default class ProfileScreen extends Component<Props>
 				/>
 			</ScrollView>
 		);
-    }
-}
 
-const styles = StyleSheet.create({
-	container: {
-	  flex: 1,
-	  backgroundColor: '#fff',
-	},
-	contentContainer: {
-	  paddingTop: 30,
-	},
-	titleContainer: {
-	  backgroundColor: '#96CA92',
-	  borderRadius: 10
-	},
-	title: {
-	  fontSize: 20,
-	  fontWeight: 'bold',
-	  textAlign: 'center',
-	  color: 'white'
-	},
-	contentHeader: {
-		color: 'black',
-		fontSize: 20,
-		textAlign: 'left'
-	},
-	content: {
-		color: 'black', 
-		fontSize: 15,
-		textAlign: 'left'
-	},
-	descriptionBox: {
-		backgroundColor: '#E4EBE3', 
-		borderRadius: 10,
-		height: 100
-	}
-  });
+		*/
