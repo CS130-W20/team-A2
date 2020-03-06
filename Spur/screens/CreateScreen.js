@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Keyboard} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { Input, Button, Text } from 'react-native-elements';
 import DatePick from '../components/DatePick';
@@ -102,24 +103,24 @@ export default class CreateScreen extends Component<Props> {
 	* @param {string} Date
 	*/
 	handleDateChange = selectedDate => {
-	this.setState({
-		date: {
-			month: selectedDate.getMonth() + 1,
-			day: selectedDate.getDate(),
-			year: selectedDate.getFullYear()
-		}
-	});
+		this.setState({
+			date: {
+				month: selectedDate.getMonth() + 1,
+				day: selectedDate.getDate(),
+				year: selectedDate.getFullYear()
+			}
+		});
     };
 	/** Updates start time state variable when input is detected.
 	* @param {string} Start Time
 	*/
 	handleStartTimeChange = selectedTime => {
-	this.setState({
-	    startTime: {
-			hours: selectedTime.getHours(),
-			minutes: selectedTime.getMinutes()
-		}
-	});
+		this.setState({
+			startTime: {
+				hours: selectedTime.getHours(),
+				minutes: selectedTime.getMinutes()
+			}
+		});
     };
 	/** Updates end time state variable when input is detected.
 	* @param {string} End Time
@@ -292,7 +293,7 @@ export default class CreateScreen extends Component<Props> {
 
         </MapView>
 		
-		<View contentContainerStyle={{flexGrow: 2}}>
+	<ScrollView contentContainerStyle={{flexGrow: 2}}>
 
 		<Input
 			placeholder='Event Name'
@@ -314,6 +315,7 @@ export default class CreateScreen extends Component<Props> {
 		<Input
 			placeholder='Categories'
 			onFocus={() => {
+				Keyboard.dismiss();
 				if (this.wasFocused) {
 					this.wasFocused = false;
 				} else {
@@ -339,12 +341,13 @@ export default class CreateScreen extends Component<Props> {
         </View>
 
 		<DatePick
-				text='Set Date'
+				time={this.state.date}
 				type='date'
-				onChange={this.handleDateChange}/>
+				onChange={this.handleDateChange}
+		/>
 
-				<DatePick
-				text='Set Time'
+		<DatePick
+				time={this.state.startTime}
 				type='time'
 				onChange={this.handleStartTimeChange}
 		/>
@@ -363,10 +366,16 @@ export default class CreateScreen extends Component<Props> {
 		/>	
 
 		
-
-		<Button title="Submit" onPress={this.handleSubmit}/>
-
+		<View style={styles.bottom}>
+			<View style={styles.btnbox}>
+				<View style={styles.btn}>
+				<Button title="Submit" onPress={this.handleSubmit}/>
+				</View>
+			</View>
 		</View>
+		
+
+		</ScrollView>
 
     </View>
   );
@@ -383,7 +392,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   map: {
-	height: 380,
+	height: 350,
 	width: Dimensions.get('window').width,
 	marginLeft: 'auto',
 	marginRight: 'auto',
@@ -430,4 +439,17 @@ const styles = StyleSheet.create({
 	flexDirection: 'row',
 	padding: 5,
   },
+  btnBox: {
+	    flex: 1, 
+		flexDirection: 'row',
+	    marginBottom: 36,
+	},
+	bottom: {
+		flexDirection: 'column-reverse'
+		
+	},
+	btn: {
+		flex:1, 
+		height: 50
+	}
 });

@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {View, Button, Platform, StyleSheet} from 'react-native';
+import {View, Button, Platform, StyleSheet, Keyboard} from 'react-native';
+import {Input} from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 
@@ -20,6 +21,7 @@ const DatePick = (props) => {
     showMode(props.type);
     setShow(!show);
     props.onChange(date);
+    Keyboard.dismiss();
   };
 
   const showTimepicker = () => {
@@ -37,10 +39,23 @@ const DatePick = (props) => {
     
   };
 
+
+  var placeholder = (props.type == 'date') ? 'Date' : 'Time';
+  if (props.type == 'date') {
+      placeholder = (props.time == '') ? placeholder : props.time.month + "/" + props.time.day;
+  } else {
+      placeholder = (props.time == '') ? placeholder : (props.time.hours % 12) + ":" + props.time.minutes + (props.time.hours < 12 ? ' am' : ' pm');
+  }
+
   return (
+
+
     <View>
       <View>
-        <Button onPress={showDatepicker} title={props.text} />
+        <Input
+          placeholder={placeholder}
+          onFocus={showDatepicker}
+        />
       </View>
       {show && (
         <DateTimePicker
