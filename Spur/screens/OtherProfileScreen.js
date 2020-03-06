@@ -6,7 +6,7 @@ import {
 	 ScrollView,
 	 Button} from 'react-native';
 import {
-	ButtonGroup} from 'react-native-elements';
+	Card} from 'react-native-elements';
 import DatabaseManager from '../classes/DatabaseManager';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { CATEGORIES } from '../constants/categories';
@@ -38,16 +38,23 @@ export default class OtherProfileScreen extends Component<Props>
             description : user.description ? user.description : "",
             interest : user.interest ? user.interest : []
         })
-    }
-
-    render() {
-		var profileTitle = this.state.name + '\'s Profile'
-        return (
-			<ScrollView style={styles.container}>
-				<Card title = {profileTitle}>
-					<Text>{this.state.description}</Text>
-				</Card>
-				<Card title = "Interests">
+	}
+	
+	/**
+	 * Function that returns interests if selected, otherwise it'll give a string that shows that it is empty
+	 */
+	getInterests() {
+		if (this.state.interest.length == 0) {
+			//Return text saying interests is empty 
+			console.log("Entered?")
+			return (
+				<Text style={{textAlign: 'center'}}>
+					No interests yet!
+				</Text>
+			)
+		} else {
+			//Return multisectioned list for interests
+			return(
 				<SectionedMultiSelect
 						items={CATEGORIES}
 						uniqueKey="id"
@@ -60,6 +67,20 @@ export default class OtherProfileScreen extends Component<Props>
 						alwaysShowSelectText={true}
 						hideSelect={true}
 					/>
+			)
+		}
+	}
+
+    render() {
+		var profileTitle = this.state.name + '\'s Profile'
+		var interests = this.getInterests(); 
+        return (
+			<ScrollView style={styles.container}>
+				<Card title = {profileTitle}>
+					<Text>{this.state.description}</Text>
+				</Card>
+				<Card title = "Interests">
+					{interests}
 				</Card>
             </ScrollView>
         )
