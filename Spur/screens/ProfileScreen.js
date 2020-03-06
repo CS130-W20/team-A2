@@ -86,10 +86,11 @@ export default class ProfileScreen extends Component<Props>
 		})*/
 		this.getUserInfo()
 		return (
-			<ScrollView style={styles.container}>
+			<View style={{flex: 1, flexDirection: 'column'}}>
 				<Card title = {profileTitle}>
 					<Text>{this.state.description}</Text>
 				</Card>
+				<Card title = "Interests">
 				<SectionedMultiSelect
 						items={CATEGORIES}
 						uniqueKey="id"
@@ -100,7 +101,9 @@ export default class ProfileScreen extends Component<Props>
 						selectedItems={this.state.interests}
 						selectText="Interests"
 						alwaysShowSelectText={true}
+						hideSelect={true}
 					/>
+				</Card>
 				<Card title = "Upcoming Events">
 					<ScrollView>
 						{this.state.upcoming.map(eventId => (
@@ -112,13 +115,26 @@ export default class ProfileScreen extends Component<Props>
 						))}
 					</ScrollView>
 				</Card>
-				<View style={{flex: 1, justifyContent:'flex-end', bottom: 15}}>
-					<Button
-						title="Edit profile"
-						onPress={() => this.props.navigation.navigate("EditProfile")}
-					/>
+				<ScrollView style={styles.contentContainer}>
+				</ScrollView>
+				<View style={styles.bottom}>
+					<View style={styles.btnBox}>
+						<View style={styles.btn}>
+							<Button
+								title="View History"
+								onPress={() => Alert.alert("Will navigate to history!")}
+								/*onPress={() => this.props.navigation.navigate("History")}*/
+							/>
+						</View>
+						<View style={styles.btn}>
+							<Button
+								title="Edit Profile"
+								onPress={() => this.props.navigation.navigate("EditProfile")}
+							/>
+						</View>
+					</View>
 				</View>
-			</ScrollView>
+			</View>
 		);
     }
 }
@@ -153,12 +169,34 @@ const styles = StyleSheet.create({
 	},
 	descriptionBox: {
 		backgroundColor: '#E4EBE3', 
-		borderRadius: 10,
-		height: 100
+        borderRadius: 10,
+	    height: 100
+	},
+	btnBox: {
+	    flex: 1, 
+		flexDirection: 'row',
+	    marginBottom: 36,
+	},
+	bottom: {
+		flexDirection: 'column-reverse'
+	},
+	btn: {
+		flex:1, 
+		height: 50
 	}
   });
-
-
+/*
+				<View style={styles.bottom}>
+					<View style={styles.btnBox}>
+						<View style={styles.btn}>
+							<Button
+								title="Edit profile"
+								onPress={() => this.props.navigation.navigate("EditProfile")}
+							/>
+						</View>
+					</View>
+				</View>
+				*/
   /*
 return (
 			<ScrollView style={styles.container}>

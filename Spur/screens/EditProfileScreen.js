@@ -6,7 +6,8 @@ import {
 	 ScrollView} from 'react-native';
 import {
 	Input,
-	Button} from 'react-native-elements';
+	Button,
+	Card} from 'react-native-elements';
 import DatabaseManager from '../classes/DatabaseManager';  
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { CATEGORIES } from '../constants/categories';
@@ -32,7 +33,6 @@ export default class EditProfileScreen extends Component<Props> {
 
     /**
 	 * GetUserInfo() - Sets the state of this component with the user informatio from databaseManager
-	 * Also used to cancel changes, as it will pull the data from Firebase and reset the state accordingly
 	 */
 	async getUserInfo() {
 		//Add a user 
@@ -49,7 +49,7 @@ export default class EditProfileScreen extends Component<Props> {
 	}
 	
 	/**
-	 * Function that sets the edited fields to firebase
+	 * Function that sets the edited fields to firebase and navigates back to profile
 	 */
 	onConfirmChanges() {
 		this.databaseManager.updateUser(this.state.userId, {
@@ -59,6 +59,12 @@ export default class EditProfileScreen extends Component<Props> {
 		this.props.navigation.navigate("Profile")
 	}
 
+	/**
+	 * Function that discards the changes and navigates back to profile 
+	 */
+	onCancelChanges(){
+		this.props.navigation.navigate("Profile")
+	}
 	/**
 	 * Function that updates the state based on the selected/unselected items 
 	 * @param {Array[Categories]} - Array of selected categories
@@ -71,12 +77,12 @@ export default class EditProfileScreen extends Component<Props> {
 	}
     
     render() {
-        return (
-			<ScrollView style={{flex: 1}}>
+		return (
+		<View style={{flex: 1, flexDirection: 'column'}}>
 				<View style={styles.titleContainer}>
 					<Text style={styles.title}>Edit Profile</Text>
 				</View>
-				<ScrollView style={styles.descriptionBox}>
+				<Card title ="Edit description">
 					<Input
 						value={this.state.description}
 						placeholder="Let the world know a bit about yourself!"
@@ -87,11 +93,8 @@ export default class EditProfileScreen extends Component<Props> {
 								hasChanged: true
 							})}
 					/>
-				</ScrollView>
-				<View style={styles.titleContainer}>
-					<Text style={styles.title}>Edit Interests</Text>
-				</View>
-				<ScrollView style={styles.contentContainer}>
+				</Card>
+				<Card title = "Change Interests">
 					<SectionedMultiSelect
 						items={CATEGORIES}
 						uniqueKey="id"
@@ -103,28 +106,29 @@ export default class EditProfileScreen extends Component<Props> {
 						selectText="Categories"
 						alwaysShowSelectText={true}
 					/>
+				</Card>
+				<ScrollView style={styles.contentContainer}>
 				</ScrollView>
-				<View>
-					<View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', marginBottom: 36}}>
-						<View style={{flex:1}}>
-							<Button
-							title="Cancel changes"
-							onPress={() => this.getUserInfo()}
-							/>
-						</View>
-						<View style={{flex:1}}>
-							<Button
-							title="Confirm changes"
-							onPress={() => this.onConfirmChanges()}
-							/>
-						</View>
+				<View style={styles.bottom}>
+				  <View style={styles.btnBox}>
+					<View style={styles.btn}>
+						<Button
+						title="Cancel changes"
+						onPress={() => this.onCancelChanges()}
+						/>
 					</View>
+					<View style={styles.btn}>
+						<Button
+						title="Confirm changes"
+						onPress={() => this.onConfirmChanges()}
+						/>
+					</View>
+				  </View>
 				</View>
-			</ScrollView>
+			</View>
         );
     }
 }
-
 const styles = StyleSheet.create({
 	container: {
 	  flex: 1,
@@ -155,7 +159,20 @@ const styles = StyleSheet.create({
 	},
 	descriptionBox: {
 		backgroundColor: '#E4EBE3', 
-		borderRadius: 10,
-		height: 100
+        borderRadius: 10,
+	    height: 100
+	},
+	btnBox: {
+	    flex: 1, 
+		flexDirection: 'row',
+	    marginBottom: 36,
+	},
+	bottom: {
+		flexDirection: 'column-reverse'
+		
+	},
+	btn: {
+		flex:1, 
+		height: 50
 	}
   });
