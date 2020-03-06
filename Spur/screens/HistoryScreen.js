@@ -58,9 +58,12 @@ export default class ProfileScreen extends Component<Props>
 				return allEvents[id]
 			}
 		});
+		this.setState({
+			events: eventList ? eventList : []
+		})
 		console.log("Printing Event List");
 		console.log(eventList);
-
+		
 	}
 
 	render() {
