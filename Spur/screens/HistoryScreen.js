@@ -11,7 +11,7 @@ import Event from '../classes/Event';
 import EventDetails from '../classes/EventDetails';
 import DatabaseManager from '../classes/DatabaseManager';  
 import { get } from 'react-native/Libraries/Utilities/PixelRatio';
-
+import { CATEGORIES } from '../constants/categories'; 
 /**
  * History Screen - Displays a user profile. 
  * Has a reference to the database manager which is used to retrieve user profile info.
@@ -63,7 +63,31 @@ export default class ProfileScreen extends Component<Props>
 		})
 		console.log("Printing Event List");
 		console.log(eventList);
+
+		//Make a hashmap of id to category name 
+		var categories = CATEGORIES 
+        var catMap = new Map() 
+        categories.forEach(function(category) {
+            catMap.set(category.id, category.name)
+            category.children.forEach(function(child) {
+                catMap.set(child.id, child.name)
+            })
+		});
 		
+		//Make a hashmap of id to count
+		var catCount = new Map();
+		eventList.forEach(function(event){
+			event.details.categories.forEach(function(catId) {
+				//Check if category exists in map
+				var currVal = catCount.get(catId) 
+				if (currVal == undefined) {
+					catCount.set(catId, 1)
+				} else {
+					
+				}
+				//If it does, increment count by one 
+			})
+		})
 	}
 
 	render() {
