@@ -41,20 +41,26 @@ export default class OtherProfileScreen extends Component<Props>
     }
 
     render() {
+		var profileTitle = this.state.name + '\'s Profile'
         return (
 			<ScrollView style={styles.container}>
-				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{this.state.name}'s Profile</Text>
-				</View>
-				<View>
-					<Text style={styles.contentHeader}>Description:</Text>
-				</View>
-				<ScrollView style={styles.descriptionBox}>
-					<Text style={styles.content}> {this.state.description}</Text>
-				</ScrollView>
-				<View>
-					<Text style={styles.contentHeader}>Interests:</Text>
-				</View>
+				<Card title = {profileTitle}>
+					<Text>{this.state.description}</Text>
+				</Card>
+				<Card title = "Interests">
+				<SectionedMultiSelect
+						items={CATEGORIES}
+						uniqueKey="id"
+						subKey="children"
+						readOnlyHeadings={true}
+						expandDropDowns={true}
+						onSelectedItemsChange={this.onSelect}
+						selectedItems={this.state.interests}
+						selectText="Interests"
+						alwaysShowSelectText={true}
+						hideSelect={true}
+					/>
+				</Card>
             </ScrollView>
         )
     }
