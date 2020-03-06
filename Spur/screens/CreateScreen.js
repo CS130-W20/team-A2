@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
+import {Keyboard} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import { Input, Button } from 'react-native-elements';
+import { Input, Button, Text } from 'react-native-elements';
 import DatePick from '../components/DatePick';
 import Geocoder from 'react-native-geocoding';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import { CATEGORIES } from '../constants/categories';
 
 import { 
 	 StyleSheet,
@@ -31,7 +34,7 @@ export default class CreateScreen extends Component<Props> {
 			description: '',
 			startTime: '',
 			endTime: '',
-			categories: '',
+			categories: [],
 			date: '',
 			hostId: '',
 			hostName: '',
@@ -50,6 +53,8 @@ export default class CreateScreen extends Component<Props> {
 		this.handleCostChange = this.handleCostChange.bind(this);
 		this.handlePartyChange = this.handlePartyChange.bind(this);
 		this.handleDescChange = this.handleDescChange.bind(this);
+
+		this.wasFocused = false;
 
 		this.getUserInfo();
 		Geocoder.init("AIzaSyAVKkB2Ad5_2IX_mw8pWRFWGHvl1LuHXf8");
@@ -98,24 +103,24 @@ export default class CreateScreen extends Component<Props> {
 	* @param {string} Date
 	*/
 	handleDateChange = selectedDate => {
-	this.setState({
-		date: {
-			month: selectedDate.getMonth() + 1,
-			day: selectedDate.getDate(),
-			year: selectedDate.getFullYear()
-		}
-	});
+		this.setState({
+			date: {
+				month: selectedDate.getMonth() + 1,
+				day: selectedDate.getDate(),
+				year: selectedDate.getFullYear()
+			}
+		});
     };
 	/** Updates start time state variable when input is detected.
 	* @param {string} Start Time
 	*/
 	handleStartTimeChange = selectedTime => {
-	this.setState({
-	    startTime: {
-			hours: selectedTime.getHours(),
-			minutes: selectedTime.getMinutes()
-		}
-	});
+		this.setState({
+			startTime: {
+				hours: selectedTime.getHours(),
+				minutes: selectedTime.getMinutes()
+			}
+		});
     };
 	/** Updates end time state variable when input is detected.
 	* @param {string} End Time
@@ -186,6 +191,16 @@ export default class CreateScreen extends Component<Props> {
         .catch(error => console.warn(error));
 	} 
 
+	/**
+   * Updates categories state variable when a different set of categories are selected
+   * @param {Array} e - Selected categories 
+   */
+	handleSelectedCategoriesChange = e => {
+		this.setState({
+		categories: e
+		});
+	}
+
 	/** Validates event details
 	* @param {event} React Native Event
 	*/
@@ -241,6 +256,7 @@ export default class CreateScreen extends Component<Props> {
 	}
 	
 
+
 	/** Renders the UI shown to the user.
 	*/
     render() {
@@ -250,21 +266,20 @@ export default class CreateScreen extends Component<Props> {
 		return (
     <View style={styles.container}>
 
-		<ScrollView>
 		<MapView
 		  provider={PROVIDER_GOOGLE}
 		  style={styles.map}
           initialRegion={{
 			latitude: this.state.region.lat,
 			longitude: this.state.region.lng,
-			latitudeDelta: 0.01,
-			longitudeDelta: 0.01,
+			latitudeDelta: 0.005,
+			longitudeDelta: 0.005,
 		  }}
 		  region={{
 			latitude: this.state.region.lat,
 			longitude: this.state.region.lng,
-			latitudeDelta: 0.01,
-			longitudeDelta: 0.01,
+			latitudeDelta: 0.005,
+			longitudeDelta: 0.005,
 		  }}
 		>
 			
@@ -277,14 +292,19 @@ export default class CreateScreen extends Component<Props> {
 		/>
 
         </MapView>
-		</ScrollView>
 		
-		<ScrollView contentContainerStyle={{flexGrow: 1}}>
+	<ScrollView contentContainerStyle={{flexGrow: 2}}>
 
 		<Input
 			placeholder='Event Name'
 			errorStyle={{ color: 'red' }}
 			onChangeText={this.handleNameChange}
+		/>
+
+		<Input
+			placeholder='Description'
+			errorStyle={{ color: 'red' }}
+			onChangeText={this.handleDescChange}
 		/>
 				
 		<Input
@@ -293,9 +313,43 @@ export default class CreateScreen extends Component<Props> {
 		/>
 
 		<Input
-			placeholder='Description'
-			errorStyle={{ color: 'red' }}
-			onChangeText={this.handleDescChange}
+			placeholder='Categories'
+			onFocus={() => {
+				Keyboard.dismiss();
+				if (this.wasFocused) {
+					this.wasFocused = false;
+				} else {
+					this.SectionedMultiSelect._toggleSelector();
+					this.wasFocused = true;
+				}
+			}}
+		/>
+
+		<View style={styles.textContainer}>
+              <SectionedMultiSelect
+                items={CATEGORIES}
+                uniqueKey="id"
+				subKey="children"
+				selectText="Categories"
+				readOnlyHeadings={true}
+				hideSelect={true}
+                expandDropDowns={true}
+                onSelectedItemsChange={this.handleSelectedCategoriesChange}
+				selectedItems={this.state.categories}
+				ref={SectionedMultiSelect => this.SectionedMultiSelect = SectionedMultiSelect}
+              />
+        </View>
+
+		<DatePick
+				time={this.state.date}
+				type='date'
+				onChange={this.handleDateChange}
+		/>
+
+		<DatePick
+				time={this.state.startTime}
+				type='time'
+				onChange={this.handleStartTimeChange}
 		/>
 
 		
@@ -309,22 +363,17 @@ export default class CreateScreen extends Component<Props> {
 			placeholder='Cost'
 			errorStyle={{ color: 'red' }}
 			onChangeText={this.handleCostChange}
-		/>
+		/>	
 
 		
-
-		<DatePick
-				text='Set Date'
-				type='date'
-				onChange={this.handleDateChange}/>
-
-				<DatePick
-				text='Set Time'
-				type='time'
-				onChange={this.handleStartTimeChange}
-		/>
-
-		<Button title="Submit" onPress={this.handleSubmit}/>
+		<View style={styles.bottom}>
+			<View style={styles.btnbox}>
+				<View style={styles.btn}>
+				<Button title="Submit" onPress={this.handleSubmit}/>
+				</View>
+			</View>
+		</View>
+		
 
 		</ScrollView>
 
@@ -343,7 +392,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   map: {
-	height: 400,
+	height: 350,
 	width: Dimensions.get('window').width,
 	marginLeft: 'auto',
 	marginRight: 'auto',
@@ -385,9 +434,22 @@ const styles = StyleSheet.create({
     paddingRight: 15  
   },
   textContainer: {
-	flexGrow: 1,
+	flexGrow: 0,
     justifyContent: 'center',
 	flexDirection: 'row',
 	padding: 5,
   },
+  btnBox: {
+	    flex: 1, 
+		flexDirection: 'row',
+	    marginBottom: 36,
+	},
+	bottom: {
+		flexDirection: 'column-reverse'
+		
+	},
+	btn: {
+		flex:1, 
+		height: 50
+	}
 });
