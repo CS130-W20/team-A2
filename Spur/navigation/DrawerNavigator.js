@@ -13,6 +13,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import ChatNavigator from '../navigation/ChatNavigator';
 import OtherProfileScreen from '../screens/OtherProfileScreen';
 import ViewEventScreen from '../screens/ViewEventScreen';
+import ChatroomScreen from '../screens/ChatroomScreen';
 
 const Drawer = createDrawerNavigator();
 const INITIAL_ROUTE_NAME = 'Browse';
@@ -52,7 +53,7 @@ function ViewEventStack() {
     >
       <StackEvent.Screen name = "ViewEvent" component={ViewEventScreen} />
       <StackEvent.Screen name = "OtherProfile" component={OtherProfileScreen} />
-      {/*StackEvent.Screen name = "ChatRoom" component={ChatRoomScreen} */}
+      <StackEvent.Screen name = "Chatroom" component={ChatroomScreen} />
     </StackEvent.Navigator>
   );
 }

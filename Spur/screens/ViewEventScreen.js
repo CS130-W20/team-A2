@@ -35,7 +35,8 @@ export default class ViewEventScreen extends Component<Props>
 		this.databaseManager = new DatabaseManager();
 		this.state = {
             uid: '',
-            //eventId: '-M1q_RXGp3vgRhchzwIR', //Change this
+            userName: '',
+            //eventId: '-M1rGGXEmvqiZxyEUR3o', //Change this
             eventId: props.route.params.eventId,
             event: '',
 
@@ -68,13 +69,13 @@ export default class ViewEventScreen extends Component<Props>
 
     }
     
+    /*
+    *  Requests permission from user for permission to access location
+    */
     async setUpLocation() {
         Location.requestPermissionsAsync();
-        var loc = await Location.getLastKnownPositionAsync();
-        console.log(loc);
     }
 
-    
 
 	/**
 	 * getEventDetails() - Sets the state of this component with the event details from databaseManager
@@ -84,7 +85,8 @@ export default class ViewEventScreen extends Component<Props>
         //Get the current user's id
 		var uid = this.databaseManager.getCurrentUser().uid; 
         //var uid = 'zeHE8IVhlmbDeavl83TKtsZRGuI3';
-
+        var userSnapshot = await this.databaseManager.getUser(uid).once('value');
+		const user = userSnapshot.val();
 
 		//Get the event from the databasemanager
 		var eventSnapshot = await this.databaseManager.getEvent(this.state.eventId).once('value');
@@ -134,6 +136,7 @@ export default class ViewEventScreen extends Component<Props>
             checkedIn: event.checked_in ? event.checked_in : [],
 
             uid: uid,
+            userName: user.name,
             host: host.name,
             upcoming: host.upcoming ? host.upcoming : [],
 
@@ -151,18 +154,22 @@ export default class ViewEventScreen extends Component<Props>
 	 */
     onPressHost = () => this.props.navigation.navigate("OtherProfile", {userId: this.state.hostId});
 
-
     /**
 	 * onPressAttendees() - Opens the list of attendees
 	 */
     onPressAttendees = () => this.setState({isVisible: true});
 
-
     /**
 	 * onPressChat() - Brings the user to the event's chat page
      */
-    onPressChat = () => Alert.alert('Will link to chat page in future');
-
+    onPressChat = () => this.props.navigation.navigate("Chatroom",
+        {
+            id: this.state.eventId,
+            title: this.state.title, 
+            userID: this.state.uid, 
+            userName: this.state.userName,
+        }
+    );
 
     render() {
         const uid = this.state.uid;
@@ -219,7 +226,6 @@ export default class ViewEventScreen extends Component<Props>
 		return (
             ready &&
 			<ScrollView style={styles.container}>
-
 
                 <Card
                 title={this.state.title}>
