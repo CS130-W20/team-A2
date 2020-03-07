@@ -220,7 +220,7 @@ export default class ViewEventScreen extends Component<Props>
                 </View>
 
                 
-                <SectionedMultiSelect
+                <SectionedMultiSelect styles={styles.select}
 						items={CATEGORIES}
 						uniqueKey="id"
 						subKey="children"
@@ -231,6 +231,7 @@ export default class ViewEventScreen extends Component<Props>
 						selectText="Categories"
                         alwaysShowSelectText={true}
                         hideSelect={true}
+                        center
 				/>
 
                 <Overlay 
@@ -341,6 +342,9 @@ const styles = StyleSheet.create({
 		backgroundColor: '#E4EBE3', 
 		borderRadius: 10,
 		height: 100
-	}
+    },
+    select: {
+        justifyContent: 'space-evenly'
+    }
   });
   

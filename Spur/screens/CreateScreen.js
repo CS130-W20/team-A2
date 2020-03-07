@@ -383,6 +383,7 @@ export default class CreateScreen extends Component<Props> {
 					this.SectionedMultiSelect._toggleSelector();
 					this.wasFocused = true;
 				}
+				Keyboard.dismiss();
 			}}
 		/>
 

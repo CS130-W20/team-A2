@@ -2,11 +2,12 @@ import React, {Component} from 'react';
 import { Image,
          Platform,
          StyleSheet,
-         Text,
-         TextInput,
          TouchableOpacity,
          Modal,
          View } from 'react-native';
+
+import {Text, Input} from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import SpurTextInput from '../components/SpurTextInput'
 import SpurText from '../components/SpurText'
 import SpurButton from '../components/SpurButton'
@@ -22,12 +23,40 @@ import User from '../classes/User'
 **/
 function inputField(props) {
     // for name, username, password fields
-    return(
+    /*return(
         <View style={{flexDirection: 'row', justifyContent: 'flex-start', padding: 10}}>    
         <SpurText>{props.text}: </SpurText>
         <SpurTextInput secureTextEntry={props.security} onChangeText={props.onChangeText} />
         </View>
-    );
+    );*/
+
+    if (props.icon === '') {
+        return(
+            <View style={{flexDirection: 'row', justifyContent: 'flex-start', padding: 10}}>    
+            <Input 
+                secureTextEntry={props.security}
+                onChangeText={props.onChangeText}
+                placeholder={props.text}
+                errorMessage={props.errorMessage}
+                onBlur={props.onBlur}
+            />
+            </View>
+        ); 
+    } else {
+        return(
+            <View style={{flexDirection: 'row', justifyContent: 'flex-start', padding: 10}}>    
+            <Input 
+                secureTextEntry={props.security}
+                onChangeText={props.onChangeText}
+                placeholder={props.text}
+                onBlur={props.onBlur}
+                errorMessage={props.errorMessage}
+                rightIcon={{ type: 'font-awesome', name: props.icon }}
+            />
+            </View>
+        ); 
+    }
+
 }
 
 /** Class for the User Login Screen **/
@@ -64,7 +93,11 @@ export default class UserLoginScreen extends Component<Props> {
             success: false,
             failure: false,
             errorMsg: "",
-            loading: false
+            loading: false,
+
+            nameInvalid: false,
+            emailInvalid: false,
+            passwordMismatch: false,
         };
     }
 
@@ -100,12 +133,38 @@ export default class UserLoginScreen extends Component<Props> {
         this.setState({password2: text});
     }
 
+
+    validateName = () => {
+        console.log(this.state);
+        if (this.state.name == '') {
+            this.setState({nameInvalid: true});
+        } else {
+            this.setState({nameInvalid: false});
+        }
+    }
+
+    validateEmail = () => {
+        if (this.state.email == '') {
+            this.setState({emailInvalid: true});
+        } else {
+            this.setState({emailInvalid: false});
+        }
+    }
+
+    validatePasswords = () => {
+        if (this.state.password1 != this.state.password2) {
+            this.setState({passwordMismatch: true});
+        } else {
+            this.setState({passwordMismatch: false});
+        }
+    }
+
     /**
      * Attempts to register a new user using the values of the input fields
      */
     handleRegister() {
         // Verify that all fields exist
-        if (this.state.name === "" || this.state.email === "" || this.state.password1 === "" || this.state.password2 === "") {
+        if (this.state.nameInvalid || this.state.emailInvalid || this.state.password1 === "" || this.state.password2 === "") {
             this.setState({failure: true, 
                            errorMsg: "Please make sure that you have filled out every field."});
             return;
@@ -147,7 +206,8 @@ export default class UserLoginScreen extends Component<Props> {
 
         return this.databaseManager.login(this.state.email, this.state.password1)
                                    .then(authUser => {
-                                        this.setState({success: true});
+                                        //this.setState({success: true});
+                                        this.props.navigation.replace("Root");
                                    })
                                    .catch(error => {
                                         this.setState({failure: true, errorMsg: error.message});
@@ -175,6 +235,7 @@ export default class UserLoginScreen extends Component<Props> {
      *  React render function
     **/
     render() {
+        console.log(this.state);
         return (
             <View style={styles.container}>
 
@@ -200,10 +261,45 @@ export default class UserLoginScreen extends Component<Props> {
         
             {/* Text Fields */} 
             <View style={{}}>
-            {!this.state.login && inputField({text:"Name", onChangeText: this.handleName.bind(this)})}
-            {inputField({text:"Email", onChangeText: this.handleEmail.bind(this)})}
-            {inputField({text:"Password", onChangeText: this.handlePassword1.bind(this), security:true})}
-            {!this.state.login && inputField({text:"Confirm Password", onChangeText: this.handlePassword2.bind(this), security: true})}
+            {!this.state.login && 
+                inputField({
+                    text:"Name",
+                    icon:"user",
+                    onBlur: this.validateName, 
+                    onChangeText: this.handleName.bind(this),
+                    errorMessage: this.state.nameInvalid ? 'Please enter a valid name' : '',
+                })
+            }
+            {inputField({
+                text:"Email", 
+                icon:"envelope", 
+                onBlur: this.validateEmail, 
+                onChangeText: this.handleEmail.bind(this),
+                errorMessage: this.state.emailInvalid ? 'Please enter a valid email' : '',
+                })
+            }
+            {!this.state.login && 
+                inputField({
+                    text:"Password", 
+                    onChangeText: this.handlePassword1.bind(this), security:true
+                })
+            }
+            {this.state.login && 
+                inputField({
+                    text:"Password", 
+                    icon:"unlock", 
+                    onChangeText: this.handlePassword1.bind(this), security:true
+                })
+            }
+            {!this.state.login && 
+                inputField({
+                    text:"Confirm Password", 
+                    onBlur: this.validatePasswords, 
+                    onChangeText: this.handlePassword2.bind(this), 
+                    errorMessage: this.state.passwordMismatch ? "Passwords don't match" : "",
+                    security: true
+                })
+            }
             </View>
 
             {/*Submit Button*/}
