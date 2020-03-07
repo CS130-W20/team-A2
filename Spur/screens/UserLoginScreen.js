@@ -137,7 +137,6 @@ export default class UserLoginScreen extends Component<Props> {
     * Checks that the user's name is nonempty
     */
     validateName = () => {
-        console.log(this.state);
         if (this.state.name == '') {
             this.setState({nameInvalid: true});
         } else {

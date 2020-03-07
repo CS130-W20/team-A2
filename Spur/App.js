@@ -9,6 +9,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import DrawerNavigator from './navigation/DrawerNavigator';
 import useLinking from './navigation/useLinking';
 import UserLoginScreen from './screens/UserLoginScreen';
+import ViewEventScreen from './screens/ViewEventScreen';
+import CreateEventScreen from './screens/CreateScreen';
 
 const Stack = createStackNavigator();
 

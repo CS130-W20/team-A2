@@ -5,16 +5,22 @@ import {
 	 View,
      ScrollView,
      Dimensions,
+     PermissionsAndroid,
      Alert } from 'react-native';
+     
      
 import {Card, ListItem, Overlay} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import DatabaseManager from '../classes/DatabaseManager';  
 import JoinButton from '../components/JoinButton';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, Circle} from 'react-native-maps';
 import {CATEGORIES} from '../constants/categories';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import * as TaskManager from 'expo-task-manager';
 
 /**
  * View Event Screen - Displays an event's details and allows a user to join it. 
@@ -29,7 +35,7 @@ export default class ViewEventScreen extends Component<Props>
 		this.databaseManager = new DatabaseManager();
 		this.state = {
             uid: '',
-            //eventId: '-M1J28gx3XSzSNrofYjh', //Change this
+            //eventId: '-M1q_RXGp3vgRhchzwIR', //Change this
             eventId: props.route.params.eventId,
             event: '',
 
@@ -52,10 +58,23 @@ export default class ViewEventScreen extends Component<Props>
             isVisible: false,
             attendeeNames: [],
             numAttendees: 0,
+            radius: 30,
 
 		}
         this.getEventDetails();
-	}
+        this.setUpLocation();
+        
+        
+
+    }
+    
+    async setUpLocation() {
+        Location.requestPermissionsAsync();
+        var loc = await Location.getLastKnownPositionAsync();
+        console.log(loc);
+    }
+
+    
 
 	/**
 	 * getEventDetails() - Sets the state of this component with the event details from databaseManager
@@ -64,7 +83,7 @@ export default class ViewEventScreen extends Component<Props>
 
         //Get the current user's id
 		var uid = this.databaseManager.getCurrentUser().uid; 
-        //var uid = '7fW18YZaJ0eESZ8Y1FhieKwwh0g2';
+        //var uid = 'zeHE8IVhlmbDeavl83TKtsZRGuI3';
 
 
 		//Get the event from the databasemanager
@@ -85,6 +104,15 @@ export default class ViewEventScreen extends Component<Props>
             });
         }
 
+        // Set up geofencing
+        const regions = [{
+            identifier: event.details.title,
+            latitude: event.details.region.lat,
+            longitude: event.details.region.lng, 
+            radius: this.state.radius,
+        }]
+
+        Location.startGeofencingAsync('check in', regions);
 
 		this.setState({
             event: event,
@@ -202,19 +230,33 @@ export default class ViewEventScreen extends Component<Props>
 
                 <View style={styles.container}>
                     <MapView style={styles.map}
+                        showsUserLocation={true}
                         initialRegion={{
                             latitude: lat,
                             longitude: long,
-                            latitudeDelta: 0.0005,
-                            longitudeDelta: 0.0005,
+                            latitudeDelta: 0.0007,
+                            longitudeDelta: 0.0007,
                         }}
                     >
-                        <Marker coordinate={
-                            {
-                                latitude: this.state.region.lat,
-                                longitude: this.state.region.lng
+                        <Marker 
+                            coordinate={
+                                {
+                                    latitude: this.state.region.lat,
+                                    longitude: this.state.region.lng
+                                }
                             }
-                        } />
+                        />
+
+                        <Circle 
+                            center={
+                                {
+                                    latitude: this.state.region.lat,
+                                    longitude: this.state.region.lng
+                                }
+                            }
+                            radius={this.state.radius}
+                            strokeColor="#00eef2"
+                        />
 		            
                     </MapView>
                 </View>
@@ -303,6 +345,16 @@ export default class ViewEventScreen extends Component<Props>
 		);
     }
 }
+
+TaskManager.defineTask('check in', ({ data: { eventType, region }, error }) => {
+    if (error) {
+      return;
+    }
+    if (eventType === Location.GeofencingEventType.Enter) {
+        Alert.alert("You've entered the area of this event! Check in!");
+    }
+  }
+);
 
 const styles = StyleSheet.create({
 	container: {
