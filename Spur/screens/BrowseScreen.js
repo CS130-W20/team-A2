@@ -3,6 +3,7 @@ import {
      ActivityIndicator,
      Button,
      Image,
+     Picker,
      Platform,
      StyleSheet,
      Text,
@@ -14,9 +15,13 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import * as WebBrowser from 'expo-web-browser';
 
 import { CATEGORIES } from '../constants/categories';
-import SearchDetails, { SEARCH_DETAILS_DEFAULTS } from '../classes/SearchDetails';
+import SearchDetails, { SEARCH_DETAILS_DEFAULTS, SORT_STRATEGIES } from '../classes/SearchDetails';
 import SearchManager from '../classes/SearchManager';
 import { MonoText } from '../components/StyledText';
+
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import * as TaskManager from 'expo-task-manager';
 
 export default class BrowseScreen extends Component<Props> {
   constructor(props) {
@@ -24,11 +29,14 @@ export default class BrowseScreen extends Component<Props> {
 
     this.searchManager = new SearchManager();
 
+    Location.requestPermissionsAsync();
+
     this.state = {
       partySize: '',
       cost: '',
       distance: '',
       categories: [],
+      sortType: SORT_STRATEGIES.byDistance,
       eventList: [],
       loading: false
     };
@@ -80,20 +88,20 @@ export default class BrowseScreen extends Component<Props> {
   refineSearch = () => {
     this.setState({ loading: true });
 
-    // Construct a SearchDetails object and pass it to the searchmanager
-    var distance = (this.state.distance.length == 0) ? SEARCH_DETAILS_DEFAULTS.distance : this.state.distance;
-    var cost = (this.state.cost.length == 0) ? SEARCH_DETAILS_DEFAULTS.cost : this.state.cost;
-    var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
-    var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
+    Location.getLastKnownPositionAsync().then(loc => {
+      var distance = (this.state.distance.length == 0) ? SEARCH_DETAILS_DEFAULTS.distance : this.state.distance;
+      var cost = (this.state.cost.length == 0) ? SEARCH_DETAILS_DEFAULTS.cost : this.state.cost;
+      var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
+      var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
 
-    var details = new SearchDetails(distance, cost, partySize, categories);
-
-    this.searchManager.filter(details).then(list => {
+      var details = new SearchDetails(distance, cost, partySize, categories, loc.latitude, loc.longitude, this.state.sortType);
+      return details;
+    }).then(details => this.searchManager.filterAndSort(details).then(list => {
       this.setState({
         eventList: list,
         loading: false
-      });
-    })
+      })
+    }));
   }
 
   /**
@@ -121,7 +129,7 @@ export default class BrowseScreen extends Component<Props> {
           </View>
           <View style={styles.container}>
             <View style={styles.textContainer}>
-              <Text style={styles.formText}>Maximum Distance</Text>
+              <Text style={styles.formText}>Maximum Distance (km)</Text>
               <View style={styles.inputContainer} behavior="padding">
                 <TextInput onChange={this.handleDistanceChange} defaultValue={''} clearTextOnFocus={true}/>
               </View>
@@ -141,6 +149,13 @@ export default class BrowseScreen extends Component<Props> {
               />
             </View>
           </View>
+          <Text style={styles.formText}>Sort by:</Text>
+          <Picker 
+            selectedValue = {this.state.sortType}
+            onValueChange={(itemValue, itemIndex) => this.setState({sortType: itemValue})}>
+            <Picker.Item label="Distance" value={SORT_STRATEGIES.byDistance} />
+            <Picker.Item label="Cost" value={SORT_STRATEGIES.byCost} />
+          </Picker>
           <Button
             title="Find Events"
             onPress={this.refineSearch}
@@ -148,9 +163,9 @@ export default class BrowseScreen extends Component<Props> {
           {this.state.loading && <ActivityIndicator size="large" color="#00ff00" />}
           {this.state.eventList.map(event => (
             <View style={styles.container} key={event.eventId}>
+              <Text>Event ID: {event.eventId}</Text>
               <Text>Event Name: {event.details.title}</Text>
-              <Text>Event Time: {event.details.startTime} - {event.details.endTime}</Text>
-              <Text>Distance: {event.details.location}</Text>
+              <Text>Location: {event.details.location} ({event.details.region.lat}, {event.details.region.lng})</Text>
               <Text>Event Cost: ${event.details.cost}</Text>
               <Text></Text>
             </View>

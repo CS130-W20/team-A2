@@ -275,7 +275,6 @@ export default class CreateScreen extends Component<Props> {
 	* @param {event} React Native Event
 	*/
 	handleSubmit(event) {
-				
 		if (this.state.nameEmpty || this.state.descriptionEmpty || this.state.partySizeInvalid || this.state.costInvalid) {
 			Alert.alert('Please update invalid information');
 		} else {
@@ -299,9 +298,6 @@ export default class CreateScreen extends Component<Props> {
 				params: {eventId: eventId}
 			});
 		}
-		
-		
-		
 	};
 
 	/**
