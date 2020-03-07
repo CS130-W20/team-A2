@@ -19,11 +19,17 @@ import SearchDetails, { SEARCH_DETAILS_DEFAULTS, SORT_STRATEGIES } from '../clas
 import SearchManager from '../classes/SearchManager';
 import { MonoText } from '../components/StyledText';
 
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import * as TaskManager from 'expo-task-manager';
+
 export default class BrowseScreen extends Component<Props> {
   constructor(props) {
     super(props);
 
     this.searchManager = new SearchManager();
+
+    Location.requestPermissionsAsync();
 
     this.state = {
       partySize: '',
@@ -32,10 +38,7 @@ export default class BrowseScreen extends Component<Props> {
       categories: [],
       sortType: SORT_STRATEGIES.byDistance,
       eventList: [],
-      loading: false,
-      // User's current latitude and longitude, hard-code until we get location figured out
-      userLat: 34,
-      userLng: -118
+      loading: false
     };
   }
 
@@ -84,22 +87,21 @@ export default class BrowseScreen extends Component<Props> {
    */
   refineSearch = () => {
     this.setState({ loading: true });
-    console.log(this.state);
 
-    // Construct a SearchDetails object and pass it to the searchmanager
-    var distance = (this.state.distance.length == 0) ? SEARCH_DETAILS_DEFAULTS.distance : this.state.distance;
-    var cost = (this.state.cost.length == 0) ? SEARCH_DETAILS_DEFAULTS.cost : this.state.cost;
-    var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
-    var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
+    Location.getLastKnownPositionAsync().then(loc => {
+      var distance = (this.state.distance.length == 0) ? SEARCH_DETAILS_DEFAULTS.distance : this.state.distance;
+      var cost = (this.state.cost.length == 0) ? SEARCH_DETAILS_DEFAULTS.cost : this.state.cost;
+      var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
+      var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
 
-    var details = new SearchDetails(distance, cost, partySize, categories, this.state.userLat, this.state.userLng, this.state.sortType);
-
-    this.searchManager.filterAndSort(details).then(list => {
+      var details = new SearchDetails(distance, cost, partySize, categories, loc.latitude, loc.longitude, this.state.sortType);
+      return details;
+    }).then(details => this.searchManager.filterAndSort(details).then(list => {
       this.setState({
         eventList: list,
         loading: false
-      });
-    })
+      })
+    }));
   }
 
   /**
