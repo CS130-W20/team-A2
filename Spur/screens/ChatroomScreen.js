@@ -34,6 +34,7 @@ export default class ChatScreen extends React.Component {
 	  this.chatRef.off();
   }
   /** Retrieve new chat messages and push them to the messages state variable.
+  *   @param {Object} Firebase Reference
   */
   listenForItems(chatRef) {
 	
@@ -51,6 +52,7 @@ export default class ChatScreen extends React.Component {
   });
  }
   /** Called when a user sends a message, push it to the database
+  * @param {Array} List of messages
   */
   onSend(messages = []) {
     messages.forEach(message => {
