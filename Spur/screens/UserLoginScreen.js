@@ -133,7 +133,9 @@ export default class UserLoginScreen extends Component<Props> {
         this.setState({password2: text});
     }
 
-
+    /*
+    * Checks that the user's name is nonempty
+    */
     validateName = () => {
         console.log(this.state);
         if (this.state.name == '') {
@@ -143,6 +145,9 @@ export default class UserLoginScreen extends Component<Props> {
         }
     }
 
+    /*
+    * Checks that the user's email is nonempty
+    */
     validateEmail = () => {
         if (this.state.email == '') {
             this.setState({emailInvalid: true});
@@ -151,6 +156,9 @@ export default class UserLoginScreen extends Component<Props> {
         }
     }
 
+    /*
+    * Checks that the user's two passwords match
+    */
     validatePasswords = () => {
         if (this.state.password1 != this.state.password2) {
             this.setState({passwordMismatch: true});

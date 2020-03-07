@@ -206,6 +206,9 @@ export default class CreateScreen extends Component<Props> {
 		});
 	}
 
+	/*
+	* Checks that the title of the event is nonempty
+	*/
 	validateEventName = () => {
 		if (this.state.title == '') {
 			this.setState({
@@ -218,6 +221,9 @@ export default class CreateScreen extends Component<Props> {
 		}
 	}
 
+	/*
+	* Checks that the description of the event is nonempty
+	*/
 	validateDescription = () => {
 		if (this.state.description == '') {
 			this.setState({
@@ -230,6 +236,9 @@ export default class CreateScreen extends Component<Props> {
 		}
 	}
 
+	/*
+	* Checks that the party size of the event is a number
+	*/
 	validatePartySize = () => {
 		var partyPattern = /[0-9]+/;
 		
@@ -244,6 +253,9 @@ export default class CreateScreen extends Component<Props> {
 		}
 	}
 
+	/*
+	* Checks that the cost of the event is a number
+	*/
 	validateCost = () => {
 		
 		var costPattern = /[0-9]+/;
@@ -263,7 +275,6 @@ export default class CreateScreen extends Component<Props> {
 	* @param {event} React Native Event
 	*/
 	handleSubmit(event) {
-
 				
 		if (this.state.nameEmpty || this.state.descriptionEmpty || this.state.partySizeInvalid || this.state.costInvalid) {
 			Alert.alert('Please update invalid information');
