@@ -163,7 +163,7 @@ export default class BrowseScreen extends Component<Props> {
             <View style={styles.container} key={event.eventId}>
               <Text>Event ID: {event.eventId}</Text>
               <Text>Event Name: {event.details.title}</Text>
-              <Text>Location: {event.details.location} ({event.details.region.latitude}, {event.details.region.longitude})</Text>
+              <Text>Location: {event.details.location} ({event.details.region.lat}, {event.details.region.lng})</Text>
               <Text>Event Cost: ${event.details.cost}</Text>
               <Text></Text>
             </View>

@@ -27,16 +27,16 @@ class SearchManager {
   /**
    * Returns the great circle distance in km between loc1 and loc2 using the Haversine formula
    * https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula/21623206#21623206
-   * @param {Object} loc1 - Object with latitude, longitude representing latitude and longitude
-   * @param {Object} loc2 - Object with latitude, longitude representing latitude and longitude
+   * @param {Object} loc1 - Object with lat, lng representing latitude and longitude
+   * @param {Object} loc2 - Object with lat, lng representing latitude and longitude
    * @returns {number} Kilometers between loc1 and loc2
    */
   distance(loc1, loc2) {
     var p = 0.017453292519943295;    // Math.PI / 180
     var c = Math.cos;
-    var a = 0.5 - c((loc2.latitude - loc1.latitude) * p)/2 + 
-            c(loc1.latitude * p) * c(loc2.latitude * p) * 
-            (1 - c((loc2.longitude - loc1.longitude) * p))/2;
+    var a = 0.5 - c((loc2.lat - loc1.lat) * p)/2 + 
+            c(loc1.lat * p) * c(loc2.lat * p) * 
+            (1 - c((loc2.lng - loc1.lng) * p))/2;
 
     return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
   }
@@ -145,7 +145,7 @@ class SearchManager {
     }
     if (searchDetails.distance != SEARCH_DETAILS_DEFAULTS.distance) {
       eventList = this.filterDistance(eventList, searchDetails.distance, 
-                                     {latitude: searchDetails.userLatitude, longitude: searchDetails.userLongitude});
+                                     {lat: searchDetails.userLatitude, lng: searchDetails.userLongitude});
     }
 
     return eventList;  
@@ -161,7 +161,7 @@ class SearchManager {
   sortByDistance(eventList, latitude, longitude, desc = false) {
     // Compute and add distance to each event in eventList, then sort by distance
     for (var i = 0; i < eventList.length; i++) {
-      eventList[i].distance = this.distance(eventList[i].details.region, {latitude: latitude, longitude: longitude})
+      eventList[i].distance = this.distance(eventList[i].details.region, {lat: latitude, lng: longitude})
     }
 
     eventList.sort((a, b) => a.distance - b.distance);
