@@ -13,6 +13,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import DatabaseManager from '../classes/DatabaseManager';  
 import JoinButton from '../components/JoinButton';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import {CATEGORIES} from '../constants/categories';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 
 /**
  * View Event Screen - Displays an event's details and allows a user to join it. 
@@ -217,13 +219,28 @@ export default class ViewEventScreen extends Component<Props>
                     </MapView>
                 </View>
 
+                
+                <SectionedMultiSelect
+						items={CATEGORIES}
+						uniqueKey="id"
+						subKey="children"
+						readOnlyHeadings={true}
+						expandDropDowns={true}
+						onSelectedItemsChange={()=>{}}
+						selectedItems={this.state.categories}
+						selectText="Categories"
+                        alwaysShowSelectText={true}
+                        hideSelect={true}
+				/>
+
                 <Overlay 
                     isVisible={this.state.isVisible}
-                    height={70 * this.state.numAttendees}
+                    height={55 * this.state.numAttendees}
                     onBackdropPress={() => 
                         this.setState({isVisible: false})
                     }
                 >
+                    <View>
                     {
                         this.state.attendeeNames.map((item, i) => (
                             <ListItem
@@ -240,6 +257,7 @@ export default class ViewEventScreen extends Component<Props>
                             />
                         ))
                     }
+                    </View>
                 </Overlay>
 
                 <View>
@@ -263,7 +281,6 @@ export default class ViewEventScreen extends Component<Props>
                         ))
                     }
                 </View>
-                
 				
                 <Card containerStyle={{borderWidth: 0}}>
                 
