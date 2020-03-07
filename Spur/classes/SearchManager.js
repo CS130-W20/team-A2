@@ -1,6 +1,6 @@
 import Event from './Event';
 import EventDetails from './EventDetails';
-import { SEARCH_DETAILS_DEFAULTS } from './SearchDetails';
+import { SEARCH_DETAILS_DEFAULTS, SORT_STRATEGIES } from './SearchDetails';
 import DatabaseManager from './DatabaseManager';
 import { CATEGORIES } from '../constants/categories';
 
@@ -152,13 +152,47 @@ class SearchManager {
   }
 
   /**
-   * Sorts the events in eventList based on the sorting order in searchDetails
+   * Sorts the events in eventList in increasing distance in place
+   * @param {Array} eventList - List of events to sort
+   * @param {number} latitude - Latitude to compute distances from
+   * @param {number} longitude - Longitude to compute distances from
+   * @param {boolean} desc - If true, sort in descending order
+   */
+  sortByDistance(eventList, latitude, longitude, desc = false) {
+    // Compute and add distance to each event in eventList, then sort by distance
+    for (var i = 0; i < eventList.length; i++) {
+      eventList[i].distance = this.distance(eventList[i].details.region, {latitude: latitude, longitude: longitude})
+    }
+
+    eventList.sort((a, b) => a.distance - b.distance);
+    if (desc) {
+      eventList.reverse();
+    }
+  }
+
+  /**
+   * Sorts the events in eventList in increasing order of cost in place
+   * @param {Array} eventList - List of events to sort
+   * @param {boolean} desc - If true, sort in decreasing order
+   */
+  sortByCost(eventList, desc = false) {
+    eventList.sort((a, b) => a.details.cost - b.details.cost);
+    if (desc) {
+      eventList.reverse();
+    }
+  }
+
+  /**
+   * Sorts the events in eventList based on the sorting order in searchDetails in place
    * @param {Array} eventList - List of events to sort
    * @param {SearchDetails} searchDetails - Object containing the sorting order
-   * @returns {Array} Array of sorted events
    */
   sort(eventList, searchDetails) {
-    return eventList;
+    if (searchDetails.sortType == SORT_STRATEGIES.byDistance) {
+      this.sortByDistance(eventList, searchDetails.latitude, searchDetails.longitude);
+    } else {
+      this.sortByCost(eventList);
+    }
   }
 
   /**
@@ -169,8 +203,8 @@ class SearchManager {
    */
   async filterAndSort(searchDetails) {
     var eventList = await this.filter(searchDetails);
-    var sortedList = this.sort(eventList, searchDetails);
-    return sortedList;
+    this.sort(eventList, searchDetails);
+    return eventList;
   }
 }
 

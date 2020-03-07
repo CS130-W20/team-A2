@@ -3,6 +3,7 @@ import {
      ActivityIndicator,
      Button,
      Image,
+     Picker,
      Platform,
      StyleSheet,
      Text,
@@ -14,7 +15,7 @@ import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import * as WebBrowser from 'expo-web-browser';
 
 import { CATEGORIES } from '../constants/categories';
-import SearchDetails, { SEARCH_DETAILS_DEFAULTS } from '../classes/SearchDetails';
+import SearchDetails, { SEARCH_DETAILS_DEFAULTS, SORT_STRATEGIES } from '../classes/SearchDetails';
 import SearchManager from '../classes/SearchManager';
 import { MonoText } from '../components/StyledText';
 
@@ -29,6 +30,7 @@ export default class BrowseScreen extends Component<Props> {
       cost: '',
       distance: '',
       categories: [],
+      sortType: SORT_STRATEGIES.byDistance,
       eventList: [],
       loading: false,
       // User's current latitude and longitude, hard-code until we get location figured out
@@ -82,6 +84,7 @@ export default class BrowseScreen extends Component<Props> {
    */
   refineSearch = () => {
     this.setState({ loading: true });
+    console.log(this.state);
 
     // Construct a SearchDetails object and pass it to the searchmanager
     var distance = (this.state.distance.length == 0) ? SEARCH_DETAILS_DEFAULTS.distance : this.state.distance;
@@ -89,7 +92,7 @@ export default class BrowseScreen extends Component<Props> {
     var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
     var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
 
-    var details = new SearchDetails(distance, cost, partySize, categories, this.state.userLat, this.state.userLng);
+    var details = new SearchDetails(distance, cost, partySize, categories, this.state.userLat, this.state.userLng, this.state.sortType);
 
     this.searchManager.filterAndSort(details).then(list => {
       this.setState({
@@ -144,6 +147,13 @@ export default class BrowseScreen extends Component<Props> {
               />
             </View>
           </View>
+          <Text style={styles.formText}>Sort by:</Text>
+          <Picker 
+            selectedValue = {this.state.sortType}
+            onValueChange={(itemValue, itemIndex) => this.setState({sortType: itemValue})}>
+            <Picker.Item label="Distance" value={SORT_STRATEGIES.byDistance} />
+            <Picker.Item label="Cost" value={SORT_STRATEGIES.byCost} />
+          </Picker>
           <Button
             title="Find Events"
             onPress={this.refineSearch}
