@@ -23,39 +23,22 @@ import User from '../classes/User'
 **/
 function inputField(props) {
     // for name, username, password fields
-    /*return(
-        <View style={{flexDirection: 'row', justifyContent: 'flex-start', padding: 10}}>    
-        <SpurText>{props.text}: </SpurText>
-        <SpurTextInput secureTextEntry={props.security} onChangeText={props.onChangeText} />
-        </View>
-    );*/
 
-    if (props.icon === '') {
-        return(
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start', padding: 10}}>    
-            <Input 
-                secureTextEntry={props.security}
-                onChangeText={props.onChangeText}
-                placeholder={props.text}
-                errorMessage={props.errorMessage}
-                onBlur={props.onBlur}
-            />
-            </View>
-        ); 
-    } else {
-        return(
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start', padding: 10}}>    
-            <Input 
-                secureTextEntry={props.security}
-                onChangeText={props.onChangeText}
-                placeholder={props.text}
-                onBlur={props.onBlur}
-                errorMessage={props.errorMessage}
-                rightIcon={{ type: 'font-awesome', name: props.icon }}
-            />
-            </View>
-        ); 
-    }
+    
+    return(
+        <View style={{flexDirection: 'row', justifyContent: 'flex-start', padding: 10}}>    
+        <Input 
+            secureTextEntry={props.security}
+            onChangeText={props.onChangeText}
+            placeholder={props.text}
+            onBlur={props.onBlur}
+            errorMessage={props.errorMessage}
+            label={props.label}
+            rightIcon={{ type: 'font-awesome', name: props.icon }}
+        />
+        </View>
+    ); 
+    
 
 }
 
