@@ -242,7 +242,6 @@ export default class UserLoginScreen extends Component<Props> {
      *  React render function
     **/
     render() {
-        console.log(this.state);
         return (
             <View style={styles.container}>
 
