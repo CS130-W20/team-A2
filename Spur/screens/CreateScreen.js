@@ -42,6 +42,11 @@ export default class CreateScreen extends Component<Props> {
 				lat: 34.0726629,
 				lng: -118.4414646,
 			},
+
+			nameEmpty: false,
+			descriptionEmpty: false,
+			partySizeInvalid: false,
+			costInvalid: false,
 		};
 		this.databaseManager = new DatabaseManager();
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -201,27 +206,75 @@ export default class CreateScreen extends Component<Props> {
 		});
 	}
 
+	validateEventName = () => {
+		if (this.state.title == '') {
+			this.setState({
+				nameEmpty: true
+			});
+		} else {
+			this.setState({
+				nameEmpty: false
+			});
+		}
+	}
+
+	validateDescription = () => {
+		if (this.state.description == '') {
+			this.setState({
+				descriptionEmpty: true
+			});
+		} else {
+			this.setState({
+				descriptionEmpty: false
+			});
+		}
+	}
+
+	validatePartySize = () => {
+		var partyPattern = /[0-9]+/;
+		
+		if (!partyPattern.test(this.state.partySize)) {
+			this.setState({
+				partySizeInvalid: true
+			});
+		} else {
+			this.setState({
+				partySizeInvalid: false
+			});
+		}
+	}
+
+	validateCost = () => {
+		
+		var costPattern = /[0-9]+/;
+
+		if (!costPattern.test(this.state.cost)) {
+			this.setState({
+				costInvalid: true
+			});
+		} else {
+			this.setState({
+				costInvalid: false
+			});
+		}
+	}
+
 	/** Validates event details
 	* @param {event} React Native Event
 	*/
 	handleSubmit(event) {
 
-		var partyPattern = /[0-9]+/;
-		var costPattern = /[0-9]+/;
-		
-		if (!partyPattern.test(this.state.partySize)) {
-		  Alert.alert("Invalid Party Size");
-		}
-		else if (!costPattern.test(this.state.cost)) {
-		  Alert.alert("Invalid Cost");
-		}
-		else if (this.state.title == '') {
-		  Alert.alert("Invalid Event Title");
-		}
-		else if (this.state.description == '') {
-		  Alert.alert("Invalid Event Description");
-		}
-		else {
+				
+		if (this.state.nameEmpty || this.state.descriptionEmpty || this.state.partySizeInvalid || this.state.costInvalid) {
+			Alert.alert('Please update invalid information');
+		} else {
+
+			// Clear out the state related to validation so it's not passed int o Firebase
+			this.state.nameEmpty = [];
+			this.state.descriptionEmpty = [];
+			this.state.partySizeInvalid = [];
+			this.state.costInvalid = [];
+
 			const eventId = this.databaseManager.addEvent({
 				attendees: [this.state.hostId],
 				attendeeNames: [this.state.hostName],
@@ -234,7 +287,7 @@ export default class CreateScreen extends Component<Props> {
 			this.props.navigation.navigate("ViewEvent", { screen: "ViewEvent",
 				params: {eventId: eventId}
 			});
-			}
+		}
 		
 		
 		
@@ -262,6 +315,10 @@ export default class CreateScreen extends Component<Props> {
     render() {
 
 		var loc = this.state.location || "Location";
+		const eventNameError = this.state.nameEmpty ? 'Please enter a nonempty name' : '';
+		const descriptionError = this.state.descriptionEmpty ? 'Please enter a nonempty description' : '';
+		const partySizeError = this.state.partySizeInvalid ? 'Please enter a valid party size' : '';
+		const costError = this.state.costInvalid ? 'Please enter a valid cost' : '';
 
 		return (
     <View style={styles.container}>
@@ -299,12 +356,16 @@ export default class CreateScreen extends Component<Props> {
 			placeholder='Event Name'
 			errorStyle={{ color: 'red' }}
 			onChangeText={this.handleNameChange}
+			onBlur={this.validateEventName}
+			errorMessage={eventNameError}
 		/>
-
+		
 		<Input
 			placeholder='Description'
 			errorStyle={{ color: 'red' }}
 			onChangeText={this.handleDescChange}
+			onBlur={this.validateDescription}
+			errorMessage={descriptionError}
 		/>
 				
 		<Input
@@ -357,14 +418,17 @@ export default class CreateScreen extends Component<Props> {
 			placeholder='Party Size'
 			errorStyle={{ color: 'red' }}
 			onChangeText={this.handlePartyChange}
+			onBlur={this.validatePartySize}
+			errorMessage={partySizeError}
 		/>
 
 		<Input
 			placeholder='Cost'
 			errorStyle={{ color: 'red' }}
 			onChangeText={this.handleCostChange}
+			onBlur={this.validateCost}
+			errorMessage={costError}
 		/>	
-
 		
 		<View style={styles.bottom}>
 			<View style={styles.btnbox}>
