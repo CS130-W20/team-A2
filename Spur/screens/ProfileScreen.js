@@ -7,7 +7,7 @@ import {
 	 Button,
 	 Alert } from 'react-native';
 import {
-	Card} from 'react-native-elements';
+	Card, ListItem} from 'react-native-elements';
 import DatabaseManager from '../classes/DatabaseManager';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { CATEGORIES } from '../constants/categories';
@@ -65,7 +65,6 @@ export default class ProfileScreen extends Component<Props>
 	 * @param {Array[Categories]} - Array of selected categories
 	 */
 	onSelect = selection => {
-		console.log(selection);
 	}
 
 	/**
@@ -73,9 +72,7 @@ export default class ProfileScreen extends Component<Props>
 	 * @param {String} eventId - Id of the event that we wish to view 
 	 */
 	viewEvent(eventId) {
-		this.log(eventId);
 		this.props.navigation.navigate("ViewEvent", {eventId: eventId}); 
-		this.log("nice");
 	}
 
     render() {
@@ -106,12 +103,16 @@ export default class ProfileScreen extends Component<Props>
 				</Card>
 				<Card title = "Upcoming Events">
 					<ScrollView>
-						{this.state.upcoming.map(eventId => (
+						{this.state.upcoming.map((eventId, index) => (
+							<ListItem
+								key={index}
+								title={eventId.}
+							/*
 							<Button
 								title = {"Event Page"}
 								onPress={() => this.viewEvent(eventId)}
 							>
-							</Button>
+							</Button>*/
 						))}
 					</ScrollView>
 				</Card>
