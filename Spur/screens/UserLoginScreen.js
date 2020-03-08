@@ -7,6 +7,8 @@ import { Image,
          View ,
          YellowBox } from 'react-native';
 
+import Toast from 'react-native-tiny-toast';
+
 import {Text, Input} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SpurTextInput from '../components/SpurTextInput'
@@ -178,11 +180,15 @@ export default class UserLoginScreen extends Component<Props> {
                             })
                             .then(() => {
                                 this.setState({success: true});
+                                this.props.navigation.replace("Root");
+				Toast.show('Sign Up Successful');
+				//this.props.navigation.replace("Root")
                             })
                             .catch(error => {
                                 // Error, show the user the error message
                                 this.setState({failure: true, 
                                                errorMsg: error.message})
+				Toast.show('Sign Up Failed');
                             });
     }
 
@@ -200,10 +206,12 @@ export default class UserLoginScreen extends Component<Props> {
         return this.databaseManager.login(this.state.email, this.state.password1)
                                    .then(authUser => {
                                         //this.setState({success: true});
+					Toast.show('Login Successful');
                                         this.props.navigation.replace("Root");
                                    })
                                    .catch(error => {
                                         this.setState({failure: true, errorMsg: error.message});
+					Toast.show('Login Failed');
                                    })
     }
 
@@ -231,8 +239,10 @@ export default class UserLoginScreen extends Component<Props> {
         return (
             <View style={styles.container}>
 
-            {/* Failure Modal */}
-            <Modal
+            {/* Success/Failure Notifications */}
+	    {/*<Toast visible={this.state.success}> Success </Toast>
+	    <Toast visible={this.state.Failure}> Failure </Toast>*/}
+            {/*<Modal
                 visible={this.state.success}
             >
                 <SpurText>Success!</SpurText>
@@ -246,7 +256,7 @@ export default class UserLoginScreen extends Component<Props> {
                 <SpurText>Failure!</SpurText>
                 <SpurText>{this.state.errorMsg}</SpurText>
                 <SpurButton onPress={()=>{this.setState({failure:false});}} title="Close"/>
-            </Modal>
+            </Modal>*/}
             
             {/* Title */}
             {this.state.login?<SpurText styles = {{textAlign: 'center',}}>Log In to SPUR!</SpurText>:<SpurText styles = {{textAlign: 'center',}}>Sign Up for SPUR!</SpurText>}
