@@ -56,14 +56,14 @@ export default class EditProfileScreen extends Component<Props> {
 			description: this.state.description,
 			interests: this.state.interests ? this.state.interests : []
 		});
-		this.props.navigation.navigate("Profile")
+		this.props.navigation.push("Profile")
 	}
 
 	/**
 	 * Function that discards the changes and navigates back to profile 
 	 */
 	onCancelChanges(){
-		this.props.navigation.navigate("Profile")
+		this.props.navigation.push("Profile")
 	}
 	/**
 	 * Function that updates the state based on the selected/unselected items 
