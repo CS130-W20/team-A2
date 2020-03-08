@@ -152,18 +152,24 @@ class SearchManager {
   }
 
   /**
-   * Sorts the events in eventList in increasing distance in place
-   * @param {Array} eventList - List of events to sort
+   * Adds the distance to each event to each event in eventList
+   * @param {Array} eventList - List of events to compute distances to
    * @param {number} latitude - Latitude to compute distances from
    * @param {number} longitude - Longitude to compute distances from
+   */
+  addDistances(eventList, latitude, longitude) {
+    // Compute and add distance to each event in eventList
+    for (var i = 0; i < eventList.length; i++) {
+      eventList[i].distance = this.distance(eventList[i].details.region, {lat: latitude, lng: longitude});
+    }
+  }
+
+  /**
+   * Sorts the events in eventList in increasing distance in place
+   * @param {Array} eventList - List of events to sort
    * @param {boolean} desc - If true, sort in descending order
    */
-  sortByDistance(eventList, latitude, longitude, desc = false) {
-    // Compute and add distance to each event in eventList, then sort by distance
-    for (var i = 0; i < eventList.length; i++) {
-      eventList[i].distance = this.distance(eventList[i].details.region, {lat: latitude, lng: longitude})
-    }
-
+  sortByDistance(eventList, desc = false) {
     eventList.sort((a, b) => a.distance - b.distance);
     if (desc) {
       eventList.reverse();
@@ -188,8 +194,9 @@ class SearchManager {
    * @param {SearchDetails} searchDetails - Object containing the sorting order
    */
   sort(eventList, searchDetails) {
+    this.addDistances(eventList, searchDetails.userLatitude, searchDetails.userLongitude);
     if (searchDetails.sortType == SORT_STRATEGIES.byDistance) {
-      this.sortByDistance(eventList, searchDetails.latitude, searchDetails.longitude);
+      this.sortByDistance(eventList);
     } else {
       this.sortByCost(eventList);
     }
