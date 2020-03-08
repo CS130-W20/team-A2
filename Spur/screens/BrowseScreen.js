@@ -3,6 +3,7 @@ import {
      ActivityIndicator,
      Button,
      Image,
+     Keyboard,
      Picker,
      Platform,
      StyleSheet,
@@ -10,6 +11,7 @@ import {
      TextInput,
      TouchableOpacity,
      View } from 'react-native';
+import { ButtonGroup, Input, ListItem } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import * as WebBrowser from 'expo-web-browser';
@@ -48,7 +50,7 @@ export default class BrowseScreen extends Component<Props> {
    */
   handlePartySizeChange = e => {
     this.setState({
-      partySize: e.nativeEvent.text
+      partySize: e
     });
   }
 
@@ -58,7 +60,7 @@ export default class BrowseScreen extends Component<Props> {
    */
   handleCostChange = e => {
     this.setState({
-      cost: e.nativeEvent.text
+      cost: e
     });
   }
 
@@ -68,7 +70,7 @@ export default class BrowseScreen extends Component<Props> {
    */
   handleDistanceChange = e => {
     this.setState({
-      distance: e.nativeEvent.text
+      distance: e
     });
   }
 
@@ -80,6 +82,14 @@ export default class BrowseScreen extends Component<Props> {
     this.setState({
       categories: e
     });
+  }
+
+  handleSortChange = e => {
+    this.setState({
+      sortType: e+1,
+      eventList: []
+    })
+    this.refineSearch();
   }
 
   /**
@@ -94,7 +104,7 @@ export default class BrowseScreen extends Component<Props> {
       var partySize = (this.state.partySize.length == 0) ? SEARCH_DETAILS_DEFAULTS.partySize : this.state.partySize;
       var categories = (this.state.categories.length == 0) ? SEARCH_DETAILS_DEFAULTS.categories: this.state.categories;
 
-      var details = new SearchDetails(distance, cost, partySize, categories, loc.latitude, loc.longitude, this.state.sortType);
+      var details = new SearchDetails(distance, cost, partySize, categories, loc.coords.latitude, loc.coords.longitude, this.state.sortType);
       return details;
     }).then(details => this.searchManager.filterAndSort(details).then(list => {
       this.setState({
@@ -109,66 +119,91 @@ export default class BrowseScreen extends Component<Props> {
    */
   render() {
     return (
-      <View style={{flex: 1}}>
-        <ScrollView contentContainerStyle={{flexGrow: 1}}>
-          <View style={styles.container}>
-            <View style={styles.textContainer}>
-              <Text style={styles.formText}>Party Size</Text>
-              <View style={styles.inputContainer} behavior="padding">
-                <TextInput onChange={this.handlePartySizeChange} defaultValue={''} clearTextOnFocus={true}/>
-              </View>
-            </View>
-          </View>
-          <View style={styles.container}>
-            <View style={styles.textContainer}>
-              <Text style={styles.formText}>Maximum Cost</Text>
-              <View style={styles.inputContainer} behavior="padding">
-                <TextInput onChange={this.handleCostChange} defaultValue={''} clearTextOnFocus={true}/>
-              </View>
-            </View>
-          </View>
-          <View style={styles.container}>
-            <View style={styles.textContainer}>
-              <Text style={styles.formText}>Maximum Distance (km)</Text>
-              <View style={styles.inputContainer} behavior="padding">
-                <TextInput onChange={this.handleDistanceChange} defaultValue={''} clearTextOnFocus={true}/>
-              </View>
-            </View>
-          </View>
-          <View style={styles.container}>
-            <View style={styles.textContainer}>
-              <Text style={styles.formText}>Categories</Text>
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={{flexGrow: 0}}>
+          <Input 
+            onChangeText={this.handlePartySizeChange}
+            label="Available Party Size"
+          />
+
+          <Input
+            onChangeText={this.handleCostChange}
+            label="Maximum Cost"
+          />
+
+          <Input
+            onChangeText={this.handleDistanceChange}
+            label="Maximum Distance (km)"
+          />
+        
+          <Input
+            label = "Categories"
+            placeholder = "Select Categories"
+            onFocus={() => {
+              Keyboard.dismiss();
+              if (this.wasFocused) {
+                this.wasFocused = false;
+              } else {
+                this.SectionedMultiSelect._toggleSelector();
+                this.wasFocused = true;
+              }
+              Keyboard.dismiss();
+            }}
+          />
+
+          <View style={styles.textContainer}>
               <SectionedMultiSelect
                 items={CATEGORIES}
                 uniqueKey="id"
                 subKey="children"
+                selectText="Categories"
                 readOnlyHeadings={true}
+                hideSelect={true}
                 expandDropDowns={true}
                 onSelectedItemsChange={this.handleSelectedCategoriesChange}
                 selectedItems={this.state.categories}
+                ref={SectionedMultiSelect => this.SectionedMultiSelect = SectionedMultiSelect}
               />
-            </View>
           </View>
-          <Text style={styles.formText}>Sort by:</Text>
-          <Picker 
-            selectedValue = {this.state.sortType}
-            onValueChange={(itemValue, itemIndex) => this.setState({sortType: itemValue})}>
-            <Picker.Item label="Distance" value={SORT_STRATEGIES.byDistance} />
-            <Picker.Item label="Cost" value={SORT_STRATEGIES.byCost} />
-          </Picker>
+
+          <ButtonGroup
+            onPress = {this.handleSortChange}
+            buttons = {['Distance', 'Cost']}
+            selectedIndex = {this.state.sortType - 1}
+          />
+
           <Button
             title="Find Events"
             onPress={this.refineSearch}
           />
           {this.state.loading && <ActivityIndicator size="large" color="#00ff00" />}
-          {this.state.eventList.map(event => (
-            <View style={styles.container} key={event.eventId}>
-              <Text>Event ID: {event.eventId}</Text>
-              <Text>Event Name: {event.details.title}</Text>
-              <Text>Location: {event.details.location} ({event.details.region.lat}, {event.details.region.lng})</Text>
-              <Text>Event Cost: ${event.details.cost}</Text>
-              <Text></Text>
-            </View>
+          {this.state.eventList.map((event, i) => (
+            <ListItem
+              key={event.eventId}
+              title={
+                <Text style={{fontWeight: 'bold'}}>{event.details.title}</Text>
+              }
+              rightTitle={
+                <View>
+                  <Text style={{textAlign: 'center'}}>{event.details.date.year}-{event.details.date.month}-{event.details.date.day}</Text>
+                  <Text style={{textAlign: 'center'}}>{event.details.startTime.hours}:{event.details.startTime.minutes} - {event.details.startTime.hours + 1}:{event.details.startTime.minutes}</Text>
+                </View>
+              }
+              subtitle= {
+                <View>
+                  <Text>Participants: {event.attendees.length}/{event.details.partySize}</Text>
+                  <Text>{event.details.location} ({Math.round(event.distance * 100)/100} km away)</Text>
+                  <Text>Cost: ${event.details.cost}</Text>
+                </View>
+              }
+              chevron
+              bottomDivider
+              onPress={() => this.props.navigation.navigate("ViewEvent",
+                                                            {
+                                                              screen: "ViewEvent",
+                                                              params: {eventId: event.eventId}  
+                                                            })}
+            />
             ))}
         </ScrollView>
       </View>
