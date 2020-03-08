@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import { Image,
+import { 
+         ActivityIndicator,
+         Image,
          Platform,
          StyleSheet,
          TouchableOpacity,
@@ -7,9 +9,7 @@ import { Image,
          View ,
          YellowBox } from 'react-native';
 
-import Toast from 'react-native-tiny-toast';
-
-import {Text, Input} from 'react-native-elements';
+import {Text, Input, Overlay} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SpurTextInput from '../components/SpurTextInput'
 import SpurText from '../components/SpurText'
@@ -77,7 +77,7 @@ export default class UserLoginScreen extends Component<Props> {
             email: "",
             password1: "",
             password2: "",
-            login: false,
+            login: true,
             success: false,
             failure: false,
             errorMsg: "",
@@ -161,14 +161,16 @@ export default class UserLoginScreen extends Component<Props> {
         // Verify that all fields exist
         if (this.state.nameInvalid || this.state.emailInvalid || this.state.password1 === "" || this.state.password2 === "") {
             this.setState({failure: true, 
-                           errorMsg: "Please make sure that you have filled out every field."});
+                           errorMsg: "Please make sure that you have filled out every field.",
+                           loading: false});
             return;
         }
 
         // Verify that the two passwords match
         if (this.state.password1 !== this.state.password2) {
             this.setState({failure: true, 
-                           errorMsg: "Please make sure that the passwords match."})
+                           errorMsg: "Please make sure that the passwords match.",
+                           loading: false})
             return;
         }
 
@@ -179,16 +181,16 @@ export default class UserLoginScreen extends Component<Props> {
                                 return this.databaseManager.updateUser(authUser.user.uid, user);
                             })
                             .then(() => {
-                                this.setState({success: true});
+                                this.setState({success: true, 
+                                               loading: false});
                                 this.props.navigation.replace("Root");
-				Toast.show('Sign Up Successful');
 				//this.props.navigation.replace("Root")
                             })
                             .catch(error => {
                                 // Error, show the user the error message
                                 this.setState({failure: true, 
+                                               loading: false, 
                                                errorMsg: error.message})
-				Toast.show('Sign Up Failed');
                             });
     }
 
@@ -199,19 +201,21 @@ export default class UserLoginScreen extends Component<Props> {
         // Verify that fields are filled out
         if (this.state.email === "" || this.state.password1 === "") {
             this.setState({failure: true,
+                           loading: false,
                            errorMsg: "Please fill out all fields."})
             return;
         }
 
         return this.databaseManager.login(this.state.email, this.state.password1)
                                    .then(authUser => {
-                                        //this.setState({success: true});
-					Toast.show('Login Successful');
+                                        this.setState({success: true,
+                                                       loading: false});
                                         this.props.navigation.replace("Root");
                                    })
                                    .catch(error => {
-                                        this.setState({failure: true, errorMsg: error.message});
-					Toast.show('Login Failed');
+                                        this.setState({failure: true, 
+                                                       loading: false,
+                                                       errorMsg: error.message});
                                    })
     }
 
@@ -220,6 +224,9 @@ export default class UserLoginScreen extends Component<Props> {
      *  Attempts to register the user or log the user in
     **/
     handleSubmit() {
+        this.setState({
+            loading: true
+        });
         if (this.state.login) {
             this.handleLogin();
         } else {
@@ -237,80 +244,72 @@ export default class UserLoginScreen extends Component<Props> {
     **/
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.container}>            
+                <Overlay isVisible={this.state.failure} height="15%" onBackdropPress={() => this.setState({failure: false})}>
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <Text style={{fontSize: 18, color:"#ff0000"}}>{this.state.errorMsg}</Text>
+                    </View>
+                </Overlay>
 
-            {/* Success/Failure Notifications */}
-	    {/*<Toast visible={this.state.success}> Success </Toast>
-	    <Toast visible={this.state.Failure}> Failure </Toast>*/}
-            {/*<Modal
-                visible={this.state.success}
-            >
-                <SpurText>Success!</SpurText>
-                <SpurButton onPress={()=>{this.setState({success:false});
-                              this.props.navigation.replace("Root");}} title="Close"/>
-            </Modal>
-            <Modal
-                visible={this.state.failure}
-                color="#DC6C7B"
-            >
-                <SpurText>Failure!</SpurText>
-                <SpurText>{this.state.errorMsg}</SpurText>
-                <SpurButton onPress={()=>{this.setState({failure:false});}} title="Close"/>
-            </Modal>*/}
+                <Overlay isVisible={this.state.loading} height="25%" >
+                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <ActivityIndicator size="large" color="#00ff00" />
+                    </View>
+                </Overlay>
+
+                {/* Title */}
+                {this.state.login?<SpurText styles = {{textAlign: 'center',}}>Log In to SPUR!</SpurText>:<SpurText styles = {{textAlign: 'center',}}>Sign Up for SPUR!</SpurText>}
             
-            {/* Title */}
-            {this.state.login?<SpurText styles = {{textAlign: 'center',}}>Log In to SPUR!</SpurText>:<SpurText styles = {{textAlign: 'center',}}>Sign Up for SPUR!</SpurText>}
-        
-            {/* Text Fields */} 
-            <View style={{}}>
-            {!this.state.login && 
-                inputField({
-                    text:"Name",
-                    icon:"user",
-                    onBlur: this.validateName, 
-                    onChangeText: this.handleName.bind(this),
-                    errorMessage: this.state.nameInvalid ? 'Please enter a valid name' : '',
-                })
-            }
-            {inputField({
-                text:"Email", 
-                icon:"envelope", 
-                onBlur: this.validateEmail, 
-                onChangeText: this.handleEmail.bind(this),
-                errorMessage: this.state.emailInvalid ? 'Please enter a valid email' : '',
-                })
-            }
-            {!this.state.login && 
-                inputField({
-                    text:"Password", 
-                    onChangeText: this.handlePassword1.bind(this), security:true
-                })
-            }
-            {this.state.login && 
-                inputField({
-                    text:"Password", 
-                    icon:"unlock", 
-                    onChangeText: this.handlePassword1.bind(this), security:true
-                })
-            }
-            {!this.state.login && 
-                inputField({
-                    text:"Confirm Password", 
-                    onBlur: this.validatePasswords, 
-                    onChangeText: this.handlePassword2.bind(this), 
-                    errorMessage: this.state.passwordMismatch ? "Passwords don't match" : "",
-                    security: true
-                })
-            }
-            </View>
+                {/* Text Fields */} 
+                <View style={{}}>
+                {!this.state.login && 
+                    inputField({
+                        text:"Name",
+                        icon:"user",
+                        onBlur: this.validateName, 
+                        onChangeText: this.handleName.bind(this),
+                        errorMessage: this.state.nameInvalid ? 'Please enter a valid name' : '',
+                    })
+                }
+                {inputField({
+                    text:"Email", 
+                    icon:"envelope", 
+                    onBlur: this.validateEmail, 
+                    onChangeText: this.handleEmail.bind(this),
+                    errorMessage: this.state.emailInvalid ? 'Please enter a valid email' : '',
+                    })
+                }
+                {!this.state.login && 
+                    inputField({
+                        text:"Password", 
+                        onChangeText: this.handlePassword1.bind(this), security:true
+                    })
+                }
+                {this.state.login && 
+                    inputField({
+                        text:"Password", 
+                        icon:"unlock", 
+                        onChangeText: this.handlePassword1.bind(this), security:true
+                    })
+                }
+                {!this.state.login && 
+                    inputField({
+                        text:"Confirm Password", 
+                        onBlur: this.validatePasswords, 
+                        onChangeText: this.handlePassword2.bind(this), 
+                        errorMessage: this.state.passwordMismatch ? "Passwords don't match" : "",
+                        security: true
+                    })
+                }
+                </View>
 
-            {/*Submit Button*/}
-            <SpurButton onPress={this.handleSubmit.bind(this)} title="Submit"/>
+                {/*Submit Button*/}
+                <SpurButton onPress={this.handleSubmit.bind(this)} title="Submit"/>
 
-            {/*Switch Between Sign Up and Log In*/}
-            { this.state.login?(<SpurText styles = {{textAlign: 'center',}}>No account yet?</SpurText>):(<SpurText styles = {{textAlign: 'center',}}>Have an account?</SpurText>)}
-            
-            { this.state.login?(<SpurButton onPress={()=>this.setState({login:false})} title="Sign Up"/>):(<SpurButton onPress={()=>this.setState({login:true})} title="Log In"/>)}
+                {/*Switch Between Sign Up and Log In*/}
+                { this.state.login?(<SpurText styles = {{textAlign: 'center',}}>No account yet?</SpurText>):(<SpurText styles = {{textAlign: 'center',}}>Have an account?</SpurText>)}
+                
+                { this.state.login?(<SpurButton onPress={()=>this.setState({login:false})} title="Sign Up"/>):(<SpurButton onPress={()=>this.setState({login:true})} title="Log In"/>)}
 
             </View>
         );

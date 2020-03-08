@@ -6,7 +6,6 @@ import DatePick from '../components/DatePick';
 import Geocoder from 'react-native-geocoding';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { CATEGORIES } from '../constants/categories';
-import Toast from 'react-native-tiny-toast';
 
 import { 
 	 StyleSheet,
@@ -304,8 +303,6 @@ export default class CreateScreen extends Component<Props> {
 			upcoming.push(eventId);
 			this.databaseManager.updateUser(this.state.hostId, {upcoming: upcoming});
 
-			  
-			Toast.show("Event Created");
 			// Now it should navigate to the corresponding ViewEvent screen
 			this.props.navigation.navigate("ViewEvent", { screen: "ViewEvent",
 				params: {eventId: eventId}
