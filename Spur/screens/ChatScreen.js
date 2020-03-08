@@ -43,6 +43,7 @@ export default class ChatScreen extends React.Component {
 	  this.eventsRef.off();
   }
   /** Update state variable userName with the user's name.
+  *   @param {Object} Firebase Reference
   */
   updateName(userRef) {
 	userRef.once('value', (data) => {
@@ -53,6 +54,7 @@ export default class ChatScreen extends React.Component {
   }
   /** Retrieves the list of events a user has joined and push it along with
   *   specific event details to the events state variable.
+  *   @param {Object} Firebase Reference
   */
   listenForJoinedEvents(joinedEventsRef) {
 	joinedEventsRef.on('value', (snap) => {
