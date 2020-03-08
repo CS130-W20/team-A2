@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import {
-	 StyleSheet,
-	 Text,
-	 View,
-	 ScrollView,
-	 Button} from 'react-native';
+	StyleSheet,
+	Text,
+	ScrollView} from 'react-native';
 import {
-	ButtonGroup} from 'react-native-elements';
+	Card} from 'react-native-elements';
 import DatabaseManager from '../classes/DatabaseManager';
 import SectionedMultiSelect from 'react-native-sectioned-multi-select';
 import { CATEGORIES } from '../constants/categories';
@@ -38,23 +36,50 @@ export default class OtherProfileScreen extends Component<Props>
             description : user.description ? user.description : "",
             interest : user.interest ? user.interest : []
         })
-    }
+	}
+	
+	/**
+	 * Function that returns interests if selected, otherwise it'll give a string that shows that it is empty
+	 */
+	getInterests() {
+		if (this.state.interest.length == 0) {
+			//Return text saying interests is empty 
+			console.log("Entered?")
+			return (
+				<Text style={{textAlign: 'center'}}>
+					No interests yet!
+				</Text>
+			)
+		} else {
+			//Return multisectioned list for interests
+			return(
+				<SectionedMultiSelect
+						items={CATEGORIES}
+						uniqueKey="id"
+						subKey="children"
+						readOnlyHeadings={true}
+						expandDropDowns={true}
+						onSelectedItemsChange={this.onSelect}
+						selectedItems={this.state.interests}
+						selectText="Interests"
+						alwaysShowSelectText={true}
+						hideSelect={true}
+					/>
+			)
+		}
+	}
 
     render() {
+		var profileTitle = this.state.name + '\'s Profile'
+		var interests = this.getInterests(); 
         return (
 			<ScrollView style={styles.container}>
-				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{this.state.name}'s Profile</Text>
-				</View>
-				<View>
-					<Text style={styles.contentHeader}>Description:</Text>
-				</View>
-				<ScrollView style={styles.descriptionBox}>
-					<Text style={styles.content}> {this.state.description}</Text>
-				</ScrollView>
-				<View>
-					<Text style={styles.contentHeader}>Interests:</Text>
-				</View>
+				<Card title = {profileTitle}>
+					<Text>{this.state.description}</Text>
+				</Card>
+				<Card title = "Interests">
+					{interests}
+				</Card>
             </ScrollView>
         )
     }

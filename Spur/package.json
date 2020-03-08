@@ -21,6 +21,7 @@
     "@react-navigation/native": "^5.0.0",
     "@react-navigation/stack": "^5.0.0",
     "@react-navigation/web": "~1.0.0-alpha.9",
+    "@types/react-native-svg-charts": "^5.0.3",
     "expo": "~36.0.0",
     "expo-asset": "~8.0.0",
     "expo-constants": "~8.0.0",
@@ -35,6 +36,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
     "react-native-date-picker": "^2.7.7",
     "react-native-datepicker": "^1.7.2",
+    "react-native-chart-kit": "^5.1.1",
     "react-native-elements": "^1.2.7",
     "react-native-geo-fence": "^1.0.5",
     "react-native-geocoder": "^0.5.0",
@@ -48,6 +50,8 @@
     "react-native-screens": "2.0.0-alpha.12",
     "react-native-sectioned-multi-select": "^0.7.6",
     "react-native-simple-native-geofencing": "^0.8.5",
+    "react-native-svg": "9.13.3",
+    "react-native-svg-charts": "^5.3.0",
     "react-native-web": "~0.11.7"
   },
   "devDependencies": {

@@ -2,11 +2,8 @@ import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TabBarIcon from '../components/TabBarIcon';
 import { createStackNavigator } from '@react-navigation/stack'; 
-import {Icon} from 'react-native-elements'; 
 import {DrawerActions} from '@react-navigation/drawer'
 
-// Import Screens
-import CreateScreen from '../screens/CreateScreen';
 import LinksScreen from '../screens/LinksScreen';
 import UserLoginScreen from '../screens/UserLoginScreen';
 import BrowseScreen from '../screens/BrowseScreen';
@@ -147,36 +144,6 @@ export default function DrawerNavigator({ navigation, route }) {
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-add" />,
         }}
       />
-      <Drawer.Screen
-        name="Edit_Profile"
-        component={EditProfileScreen}
-        options={{
-          title: 'EditProfile',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
-        }}
-      />
-	  <Drawer.Screen
-        name="ChatNavigator"
-        component={ChatNavigator}
-        options={{
-          title: 'Chat',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
-        }}
-      />
-
     </Drawer.Navigator>
   );
 }
-
-/*
-
-      <Drawer.Screen
-        name="ViewEvent"
-        component={ViewEventScreen}
-        options={{
-          title: 'View Event',
-          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-code-working" />,
-        }}
-      />
-
-      */
