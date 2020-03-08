@@ -291,7 +291,14 @@ export default class CreateScreen extends Component<Props> {
 				chat: '',
 				checked_in: [],
 				details: this.state
-			  });
+			});
+
+			// Add to host's upcoming
+			upcoming = this.state.upcoming ? this.state.upcoming : [];
+			upcoming.push(eventId);
+			this.state.upcoming = [];
+
+			this.databaseManager.updateUser(this.state.hostId, {upcoming: upcoming});
 			  
 			// Now it should navigate to the corresponding ViewEvent screen
 			this.props.navigation.navigate("ViewEvent", { screen: "ViewEvent",
@@ -311,7 +318,8 @@ export default class CreateScreen extends Component<Props> {
 
 		this.setState({
 			hostId: uid,
-			hostName: user.name
+			hostName: user.name,
+			hostUpcoming: user.upcoming
         })
 	}
 	
