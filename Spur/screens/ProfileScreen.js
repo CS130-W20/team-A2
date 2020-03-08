@@ -5,7 +5,6 @@ import {
 	View,
 	ScrollView,
 	Button,
-	Alert,
 	Dimensions } from 'react-native';
 import {
 	Card, 
@@ -174,21 +173,6 @@ export default class ProfileScreen extends Component<Props>
 	}
 
 	/**
-	 * CheckForEdits() - Checks if the profile has been edited and updates data 
-	 */
-	async checkForEdits() {
-		//Add a user 
-		var uid = this.databaseManager.getCurrentUser().uid; 
-		var snapshot = await this.databaseManager.getUser(uid).once('value');
-		const user = snapshot.val();
-		this.setState({
-			name: user.name,
-			description: user.description ? user.description : "",
-			interests: user.interests ? user.interests : [],
-		})
-	}
-
-	/**
 	 * Function that updates the state based on the selected/unselected items 
 	 * @param {Array[Categories]} - Array of selected categories
 	 */
@@ -203,6 +187,11 @@ export default class ProfileScreen extends Component<Props>
 		this.props.navigation.navigate("ViewEvent", {eventId: eventId}); 
 	}
 
+	/**
+	 * Function to create a list item for upcoming/past events 
+	 * @param {String} eventId - EventId to get the event
+	 * @param {Int} index - Key for the list item 
+	 */
 	createListItem(eventId, index) {
 		var str = eventId.toString() 
 		var event = this.state.events[str]
@@ -394,75 +383,3 @@ const styles = StyleSheet.create({
 		height: 50
 	}
   });
-/*
-				<View style={styles.bottom}>
-					<View style={styles.btnBox}>
-						<View style={styles.btn}>
-							<Button
-								title="Edit profile"
-								onPress={() => this.props.navigation.navigate("EditProfile")}
-							/>
-						</View>
-					</View>
-				</View>
-				*/
-  /*
-return (
-			<ScrollView style={styles.container}>
-				<View style={styles.titleContainer}>
-					<Text style={styles.title}>{this.state.name}'s Profile</Text>
-				</View>
-				<View>
-					<Text style={styles.contentHeader}>Description:</Text>
-				</View>
-				<ScrollView style={styles.descriptionBox}>
-					<Text style={styles.content}> {this.state.description}</Text>
-				</ScrollView>
-				<View>
-					<Text style={styles.contentHeader}>Interests:</Text>
-				</View>
-				<ScrollView style={styles.contentContainer}>
-					<SectionedMultiSelect
-						items={CATEGORIES}
-						uniqueKey="id"
-						subKey="children"
-						readOnlyHeadings={true}
-						expandDropDowns={true}
-						onSelectedItemsChange={this.onSelect}
-						selectedItems={this.state.interests}
-						selectText="Categories"
-						alwaysShowSelectText={true}
-					/>
-				</ScrollView>
-				<View>
-					<Text style={styles.contentHeader}>Upcoming:</Text>
-				</View>
-				<ScrollView style={styles.descriptionBox}>
-					{this.state.upcoming.map(eventId => (
-						<Button
-							title = {"Event Page"}
-							onPress={() => this.viewEvent(eventId)}
-						>
-						</Button>
-					))}
-				</ScrollView>
-				<View>
-					<Text style={styles.contentHeader}>History:</Text>
-				</View>
-				<ScrollView style={styles.descriptionBox}>
-					{this.state.history.map(event => (
-						<Button
-							title = {event.details.title}
-							onPress={() => Alert.alert('Will direct to event page later!')}
-						>
-						</Button>
-					))}
-				</ScrollView>
-				<Button
-					title="Edit profile"
-					onPress={() => this.props.navigation.navigate("EditProfile")}
-				/>
-			</ScrollView>
-		);
-
-		*/
