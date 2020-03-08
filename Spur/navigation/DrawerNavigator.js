@@ -2,6 +2,8 @@ import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import TabBarIcon from '../components/TabBarIcon';
 import { createStackNavigator } from '@react-navigation/stack'; 
+import {Icon} from 'react-native-elements'; 
+import {DrawerActions} from '@react-navigation/drawer'
 
 // Import Screens
 import CreateScreen from '../screens/CreateScreen';
@@ -82,7 +84,8 @@ function BrowseEventStack() {
   return (
     <StackBrowse.Navigator
       screenOptions={{
-        headerShown: false
+        headerShown: false	
+	
       }}
     >
       <StackBrowse.Screen name = "BrowseEvent" component={BrowseScreen} />
@@ -95,7 +98,7 @@ export default function DrawerNavigator({ navigation, route }) {
   // Set the header title on the parent stack navigator depending on the
   // currently active tab. Learn more in the documentation:
   // https://reactnavigation.org/docs/en/screen-options-resolution.html
-  //navigation.setOptions({ headerTitle: getHeaderTitle(route) });
+  //const Drawer.DrawerActions = DrawerActions;
   navigation.setOptions({ headerTitle: 'SPUR', 
 			  headerStyle: {
 				backgroundColor: '#96ca92',
@@ -106,7 +109,8 @@ export default function DrawerNavigator({ navigation, route }) {
 				fontSize: 40,
 		  	   },
 			   headerTitleAlign: 'center',
-			});
+			   headerLeft:() => {console.log(navigation); return (<Icon name="menu" color="#fff" size={40} onPress={()=>navigation.dispatch(DrawerActions.toggleDrawer())} title="Menu"/>)},
+			}, [navigation, DrawerActions]);
 
   return (
     <Drawer.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
