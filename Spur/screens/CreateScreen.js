@@ -47,6 +47,7 @@ export default class CreateScreen extends Component<Props> {
 			descriptionEmpty: false,
 			partySizeInvalid: false,
 			costInvalid: false,
+			hostUpcoming: [],
 		};
 		this.databaseManager = new DatabaseManager();
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -279,11 +280,17 @@ export default class CreateScreen extends Component<Props> {
 			Alert.alert('Please update invalid information');
 		} else {
 
+			// Add to host's upcoming
+			var upcoming = this.state.hostUpcoming ? this.state.hostUpcoming : [];
+			
+			
+
 			// Clear out the state related to validation so it's not passed int o Firebase
 			this.state.nameEmpty = [];
 			this.state.descriptionEmpty = [];
 			this.state.partySizeInvalid = [];
-			this.state.costInvalid = [];
+			this.state.costInvalid = [];	
+			this.state.hostUpcoming = [];
 
 			const eventId = this.databaseManager.addEvent({
 				attendees: [this.state.hostId],
@@ -293,12 +300,9 @@ export default class CreateScreen extends Component<Props> {
 				details: this.state
 			});
 
-			// Add to host's upcoming
-			upcoming = this.state.upcoming ? this.state.upcoming : [];
 			upcoming.push(eventId);
-			this.state.upcoming = [];
-
 			this.databaseManager.updateUser(this.state.hostId, {upcoming: upcoming});
+
 			  
 			// Now it should navigate to the corresponding ViewEvent screen
 			this.props.navigation.navigate("ViewEvent", { screen: "ViewEvent",
@@ -319,7 +323,7 @@ export default class CreateScreen extends Component<Props> {
 		this.setState({
 			hostId: uid,
 			hostName: user.name,
-			hostUpcoming: user.upcoming
+			hostUpcoming: user.upcoming ? user.upcoming : []
         })
 	}
 	
