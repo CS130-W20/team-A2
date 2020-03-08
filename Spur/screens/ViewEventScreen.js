@@ -340,7 +340,9 @@ export default class ViewEventScreen extends Component<Props>
                     isCheckedIn={isCheckedIn}
                     eventId= {this.state.eventId} 
                     event={this.state.event} 
-                    uid={uid}/>
+                    uid={uid}
+                    userName={this.state.userName}
+                    />
 
                 </Card>
                 

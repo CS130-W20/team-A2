@@ -28,6 +28,7 @@ export default class JoinButton extends Component<Props>
         const eventId = this.props.eventId;
         const event = this.state.event;
         const uid = this.props.uid;
+        const userName = this.props.userName;
         const upcoming = this.props.upcoming;
 
         // If not an attendee, display a join button
@@ -39,6 +40,7 @@ export default class JoinButton extends Component<Props>
                         
                         if (event.attendees.indexOf(uid) < 0) {
                             event.attendees.push(uid);
+                            event.attendeeNames.push(userName);
 
                             if (upcoming.indexOf(eventId) < 0) {
                                 upcoming.push(eventId);
