@@ -45,6 +45,13 @@ export default class BrowseScreen extends Component<Props> {
   }
 
   /**
+   * Refines search after state is initialized and component is loaded
+   */
+  componentDidMount() {
+    this.refineSearch();
+  }
+
+  /**
    * Updates partySize state variable when input change detected
    * @param {event} e - Event containing input change
    */
@@ -84,6 +91,10 @@ export default class BrowseScreen extends Component<Props> {
     });
   }
 
+  /**
+   * Updates the sort state variable when changing the sort strategy
+   * @param {number} e - Index of the sort strategy chosen
+   */
   handleSortChange = e => {
     this.setState({
       sortType: e+1,
