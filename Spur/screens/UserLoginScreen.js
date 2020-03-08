@@ -4,7 +4,8 @@ import { Image,
          StyleSheet,
          TouchableOpacity,
          Modal,
-         View } from 'react-native';
+         View ,
+         YellowBox } from 'react-native';
 
 import {Text, Input} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -53,6 +54,8 @@ export default class UserLoginScreen extends Component<Props> {
         super(props);
 
         this.databaseManager = new DatabaseManager();
+
+        YellowBox.ignoreWarnings(['Setting a timer']);
 
         //remove default header bar for login
         this.props.navigation.setOptions({ headerTitle: 'SPUR', 
