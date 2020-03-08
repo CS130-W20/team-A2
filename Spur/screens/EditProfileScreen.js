@@ -44,8 +44,6 @@ export default class EditProfileScreen extends Component<Props> {
 			description: user.description ? user.description : "", 
 			interests: user.interests ? user.interests : []
 		})
-		console.log(user.interests)
-		console.log(user.description)
 	}
 	
 	/**
@@ -70,7 +68,6 @@ export default class EditProfileScreen extends Component<Props> {
 	 * @param {Array[Categories]} - Array of selected categories
 	 */
 	onSelect = selection => {
-		console.log(selection);
 		this.setState({
 			interests: selection
 		});

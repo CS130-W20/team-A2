@@ -27,7 +27,6 @@ export default class ProfileScreen extends Component<Props>
 		super(props); 
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
-		this.databaseManager.login("dummy_user_uml@gmail.com", "UML123");
 		this.eventTitles = new Map() 
 		this.historyTitles = new Map() 
 		this.state = {
@@ -42,16 +41,6 @@ export default class ProfileScreen extends Component<Props>
 		}
 		this.getUserInfo();
 		this.checkForEdits(); 
-	}
-
-	/**
-	 * Function to log information
-	 * @param {*} - Item to be logged 
-	 */
-	log (message) {
-		console.log("Start log"); 
-		console.log(message); 
-		console.log("End log"); 
 	}
 
 	/**
@@ -89,7 +78,6 @@ export default class ProfileScreen extends Component<Props>
 		})
 
 		const eventList = user.history.map(id => {
-			console.log(id)
 			if(allEvents[id]) {
 				return allEvents[id]
 			}
@@ -145,7 +133,6 @@ export default class ProfileScreen extends Component<Props>
 			var name = catMap.get(key)
 			var color = randomColor()
 			var percentage = Math.round(value/totalCount * 100) + '%'
-			console.log(percentage)
 			data.push({
 				name: name,
 				count: value,
@@ -217,7 +204,6 @@ export default class ProfileScreen extends Component<Props>
 	}
 
 	createListItem(eventId, index) {
-		console.log(eventId)
 		var str = eventId.toString() 
 		var event = this.state.events[str]
 		var name = event.details.title
@@ -225,13 +211,6 @@ export default class ProfileScreen extends Component<Props>
 		var dateStr = "Date: " + date.year + '-' + date.month + '-' + date.day
 		var time = event.details.startTime
 		var timeStr = "Time: " + time.hours + ":" + time.minutes + " - " + (time.hours + 1) + ":" + (time.minutes)
-		/*
-			<View>
-						<Text style={{textAlign: 'left'}}>{event.details.date.year}-{event.details.date.month}-{event.details.date.day}</Text>
-						<Text style={{textAlign: 'left'}}>{event.details.startTime.hours}:{event.details.startTime.minutes} - {event.details.startTime.hours + 1}:{event.details.startTime.minutes}</Text>
-					</View>
-		*/
-		//console.log(tar)
 		return (
 			<ListItem
 				key={index}
@@ -284,10 +263,6 @@ export default class ProfileScreen extends Component<Props>
 		currMon = currMon.legnth < 10 ? currMon : '0' + currMon
 		var currYear = new Date().getFullYear();
 		var endDate = currYear + '-' +  currMon + '-' + currDay
-		console.log(endDate)
-		console.log("Contribution data") 
-		console.log(this.state.dates)
-		console.log(new Date())
 		return (
 			<View style={{flex: 1, flexDirection: 'column'}}>
 				<ScrollView contentContainerStyle={{flexGrow: 0}}>
