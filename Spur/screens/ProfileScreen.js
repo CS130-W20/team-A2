@@ -23,14 +23,18 @@ export default class ProfileScreen extends Component<Props>
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.databaseManager.login("dummy_user_uml@gmail.com", "UML123");
+		this.eventTitles = new Map() 
+		this.historyTitles = new Map() 
 		this.state = {
 			name: "", 
 			description: "",
 			interests: [],
 			history: [],
 			upcoming: [],
-			hasChanged: false
+			events: {}
 		}
+		this.getUserInfo();
+		this.checkForEdits(); 
 	}
 
 	/**
@@ -51,12 +55,55 @@ export default class ProfileScreen extends Component<Props>
 		var uid = this.databaseManager.getCurrentUser().uid; 
 		var snapshot = await this.databaseManager.getUser(uid).once('value');
 		const user = snapshot.val();
+		var history = user.history ? user.history : [];
+		var upcoming = user.upcoming ? user.upcoming : []; 
+		var events = new Object(); 
+
+		//Get all events and filter for upcoming  
+		var snapshot = await this.databaseManager.events().once('value');
+		const allEvents = snapshot.val();
+		
+		//Get events of upcoming  
+		upcoming.forEach((id) => {
+			if (allEvents[id]) {
+				var tar = allEvents[id]
+				events[id.toString()] = tar 
+				//events.id = tar 
+			}
+		})
+
+		//Get events of history
+		history.forEach((id) => {
+			if (allEvents[id]) {
+				var tar = allEvents[id]
+				events[id.toString()] = tar
+				//events.id = tar 
+			}
+		})
+
+		//Finally set state 
 		this.setState({
 			name: user.name,
 			description: user.description ? user.description : "",
 			interests: user.interests ? user.interests : [],
 			history: user.history ? user.history : [],
-			upcoming: user.upcoming ? user.upcoming : []
+			upcoming: user.upcoming ? user.upcoming : [],
+			events: events
+		})
+	}
+
+	/**
+	 * CheckForEdits() - Checks if the profile has been edited and updates data 
+	 */
+	async checkForEdits() {
+		//Add a user 
+		var uid = this.databaseManager.getCurrentUser().uid; 
+		var snapshot = await this.databaseManager.getUser(uid).once('value');
+		const user = snapshot.val();
+		this.setState({
+			name: user.name,
+			description: user.description ? user.description : "",
+			interests: user.interests ? user.interests : [],
 		})
 	}
 
@@ -75,66 +122,87 @@ export default class ProfileScreen extends Component<Props>
 		this.props.navigation.navigate("ViewEvent", {eventId: eventId}); 
 	}
 
+	createListItem(eventId, index) {
+		console.log(eventId)
+		var str = eventId.toString() 
+		var tar = this.state.events[str]
+		var name = tar.details.title
+		console.log(tar)
+		return (
+			<ListItem
+				key={index}
+				title={name}
+				chevron
+				bottomDivider
+				onPress={() => this.props.navigation.navigate("ViewEvent", {eventId: eventId})}
+			/>
+		)
+	}
+
     render() {
 		var profileTitle = this.state.name + '\'s Profile'
 		/*
 		this.setState({
 			hasChanged: this.props.params.hasChanged
 		})*/
-		this.getUserInfo()
+		//this.checkForEdits()
+		console.log("Printing state maps")
+		console.log(this.state.events) 
+		console.log("test")
 		return (
 			<View style={{flex: 1, flexDirection: 'column'}}>
-				<Card title = {profileTitle}>
-					<Text>{this.state.description}</Text>
-				</Card>
-				<Card title = "Interests">
-				<SectionedMultiSelect
-						items={CATEGORIES}
-						uniqueKey="id"
-						subKey="children"
-						readOnlyHeadings={true}
-						expandDropDowns={true}
-						onSelectedItemsChange={this.onSelect}
-						selectedItems={this.state.interests}
-						selectText="Interests"
-						alwaysShowSelectText={true}
-						hideSelect={true}
-					/>
-				</Card>
-				<Card title = "Upcoming Events">
-					<ScrollView>
-						{this.state.upcoming.map((eventId, index) => (
-							<ListItem
-								key={index}
-								title={eventId.}
-							/*
-							<Button
-								title = {"Event Page"}
-								onPress={() => this.viewEvent(eventId)}
-							>
-							</Button>*/
-						))}
+				<ScrollView contentContainerStyle={{flexGrow: 0}}>
+					<Card title = {profileTitle}>
+						<Text>{this.state.description}</Text>
+					</Card>
+					<Card title = "Interests">
+					<SectionedMultiSelect
+							items={CATEGORIES}
+							uniqueKey="id"
+							subKey="children"
+							readOnlyHeadings={true}
+							expandDropDowns={true}
+							onSelectedItemsChange={this.onSelect}
+							selectedItems={this.state.interests}
+							selectText="Interests"
+							alwaysShowSelectText={true}
+							hideSelect={true}
+						/>
+					</Card>
+					<Card title = "Upcoming Events">
+						<ScrollView>
+							{this.state.upcoming.map((eventId, index) => (
+								this.createListItem(eventId, index)
+							))}
+						</ScrollView>
+					</Card>
+					<Card title = "Past Events">
+						<ScrollView>
+							{this.state.history.map((eventId, index) => (
+								this.createListItem(eventId, index)
+							))}
+						</ScrollView>
+					</Card>
+					<ScrollView style={styles.contentContainer}>
 					</ScrollView>
-				</Card>
-				<ScrollView style={styles.contentContainer}>
 				</ScrollView>
 				<View style={styles.bottom}>
-					<View style={styles.btnBox}>
-						<View style={styles.btn}>
-							<Button
-								title="View History"
-								onPress={() => Alert.alert("Will navigate to history!")}
-								/*onPress={() => this.props.navigation.navigate("History")}*/
-							/>
-						</View>
-						<View style={styles.btn}>
-							<Button
-								title="Edit Profile"
-								onPress={() => this.props.navigation.navigate("EditProfile")}
-							/>
+						<View style={styles.btnBox}>
+							<View style={styles.btn}>
+								<Button
+									title="View History"
+									onPress={() => Alert.alert("Will navigate to history!")}
+									/*onPress={() => this.props.navigation.navigate("History")}*/
+								/>
+							</View>
+							<View style={styles.btn}>
+								<Button
+									title="Edit Profile"
+									onPress={() => this.props.navigation.navigate("EditProfile")}
+								/>
+							</View>
 						</View>
 					</View>
-				</View>
 			</View>
 		);
     }
