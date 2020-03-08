@@ -303,6 +303,7 @@ export default class CreateScreen extends Component<Props> {
 			upcoming.push(eventId);
 			this.databaseManager.updateUser(this.state.hostId, {upcoming: upcoming});
 
+			  
 			// Now it should navigate to the corresponding ViewEvent screen
 			this.props.navigation.navigate("ViewEvent", { screen: "ViewEvent",
 				params: {eventId: eventId}
