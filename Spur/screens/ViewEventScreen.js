@@ -6,6 +6,7 @@ import {
      ScrollView,
      Dimensions,
      PermissionsAndroid,
+     YellowBox,
      Alert } from 'react-native';
      
      
@@ -30,7 +31,10 @@ export default class ViewEventScreen extends Component<Props>
 {
 	constructor(props) {
 
-		super(props); 
+        super(props); 
+        
+        YellowBox.ignoreWarnings(['Unhandled Promise Rejection']);
+
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.state = {
@@ -253,7 +257,7 @@ export default class ViewEventScreen extends Component<Props>
                             }
                         />
 
-                        <Circle 
+                        {/*<Circle 
                             center={
                                 {
                                     latitude: this.state.region.lat,
@@ -262,7 +266,7 @@ export default class ViewEventScreen extends Component<Props>
                             }
                             radius={this.state.radius}
                             strokeColor="#00eef2"
-                        />
+                        />*/}
 		            
                     </MapView>
                 </View>

@@ -34,7 +34,7 @@ export default class OtherProfileScreen extends Component<Props>
         this.setState({
             name : user.name,
             description : user.description ? user.description : "No description yet!",
-            interest : user.interest ? user.interest : []
+            interest : user.interests ? user.interests : []
         })
 	}
 	
@@ -58,8 +58,8 @@ export default class OtherProfileScreen extends Component<Props>
 						subKey="children"
 						readOnlyHeadings={true}
 						expandDropDowns={true}
-						onSelectedItemsChange={this.onSelect}
-						selectedItems={this.state.interests}
+						onSelectedItemsChange={()=>{}}
+						selectedItems={this.state.interest}
 						selectText="Interests"
 						alwaysShowSelectText={true}
 						hideSelect={true}

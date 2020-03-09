@@ -4,6 +4,7 @@ import {
 	Text,
 	View,
 	ScrollView,
+	YellowBox,
 	Button,
 	Dimensions } from 'react-native';
 import {
@@ -24,6 +25,7 @@ export default class ProfileScreen extends Component<Props>
 {
 	constructor(props) {
 		super(props); 
+		YellowBox.ignoreWarnings(['componentWillReceiveProps']);
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.eventTitles = new Map() 
@@ -229,7 +231,7 @@ export default class ProfileScreen extends Component<Props>
 			backgroundGradientFromOpacity: 0,
 			backgroundGradientTo: "#08130D",
 			backgroundGradientToOpacity: 0.5,
-			color: (opacity = 1) => `rgba(63, 70, 191, ${opacity})`,
+			color: (opacity = 1) => {return 'rgba(63, 70, 191, ' + (opacity ? opacity : 0.8) +')'},
 			strokeWidth: 2, // optional, default 3
 			barPercentage: 0.5
 		};
@@ -309,7 +311,7 @@ export default class ProfileScreen extends Component<Props>
 							<ContributionGraph
 								values={this.state.dates}
 								width = {screenWidth}
-								endDate = {"2020-11-25"}
+								endDate = {"2020-03-01"}
 								numDays={100}
 								height={220}
 								chartConfig={chartConfig}
