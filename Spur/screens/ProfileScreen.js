@@ -148,7 +148,7 @@ export default class ProfileScreen extends Component<Props>
 				count: value
 			})
 		})
-		if (dates.length > 1) {
+		if (dates.length >= 1) {
 			var date = eventList[0].details.date;
 			var month = date.month < 10 ? '0' + date.month : date.month
 			var day = date.day < 10 ? '0' + (date.day + 1): date.day + 1
