@@ -18,7 +18,7 @@ export default class OtherProfileScreen extends Component<Props>
         this.state = {
             name : "", 
             description : "", 
-            interest : []
+            interests : []
         }
         this.getOtherInfo(); 
     }
@@ -34,7 +34,7 @@ export default class OtherProfileScreen extends Component<Props>
         this.setState({
             name : user.name,
             description : user.description ? user.description : "No description yet!",
-            interest : user.interest ? user.interest : []
+            interests : user.interests ? user.interests : []
         })
 	}
 	
@@ -42,7 +42,7 @@ export default class OtherProfileScreen extends Component<Props>
 	 * Function that returns interests if selected, otherwise it'll give a string that shows that it is empty
 	 */
 	getInterests() {
-		if (this.state.interest.length == 0) {
+		if (this.state.interests.length == 0) {
 			//Return text saying interests is empty 
 			return (
 				<Text style={{textAlign: 'center'}}>
@@ -58,7 +58,7 @@ export default class OtherProfileScreen extends Component<Props>
 						subKey="children"
 						readOnlyHeadings={true}
 						expandDropDowns={true}
-						onSelectedItemsChange={this.onSelect}
+						onSelectedItemsChange={() => {}}
 						selectedItems={this.state.interests}
 						selectText="Interests"
 						alwaysShowSelectText={true}
