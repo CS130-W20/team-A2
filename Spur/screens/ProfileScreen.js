@@ -148,7 +148,7 @@ export default class ProfileScreen extends Component<Props>
 				count: value
 			})
 		})
-		if (dates.length == 1) {
+		if (dates.length > 1) {
 			var date = eventList[0].details.date;
 			var month = date.month < 10 ? '0' + date.month : date.month
 			var day = date.day < 10 ? '0' + (date.day + 1): date.day + 1
@@ -246,6 +246,7 @@ export default class ProfileScreen extends Component<Props>
 			}
 		})
 
+
 		//Date stuff 
 		var currDay = new Date().getDate()
 		currDay = currDay.length < 10 ? currDay : '0' + currDay
@@ -276,6 +277,13 @@ export default class ProfileScreen extends Component<Props>
 				))}
 			</ScrollView>
 		}
+		console.log(this.state.dates)
+		const testData = [
+			{date: '2020-02-28', count: 5},
+			{date: '2020-01-25', count: 3},
+			{date: '2020-03-03', count: 3},
+			{date: '2020-02-21', count: 3}
+		]
 		return (
 			<View style={{flex: 1, flexDirection: 'column'}}>
 				<ScrollView contentContainerStyle={{flexGrow: 0}}>
@@ -308,7 +316,7 @@ export default class ProfileScreen extends Component<Props>
 							<ContributionGraph
 								values={this.state.dates}
 								width = {screenWidth}
-								endDate = {"2020-11-25"}
+								endDate = {new Date("2020-04-01")}
 								numDays={100}
 								height={220}
 								chartConfig={chartConfig}
