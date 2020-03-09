@@ -4,6 +4,7 @@ import {
 	 Text,
 	 View,
      ScrollView,
+     YellowBox,
      Dimensions,
      PermissionsAndroid,
      Alert } from 'react-native';
@@ -29,7 +30,10 @@ import * as TaskManager from 'expo-task-manager';
 export default class ViewEventScreen extends Component<Props>
 {
 	constructor(props) {
-		super(props); 
+
+        super(props); 
+        YellowBox.ignoreWarnings(['Possible Unhandled Promise Rejection']);
+
 		//Setup firebase via a databaseManager
 		this.databaseManager = new DatabaseManager();
 		this.state = {
@@ -251,7 +255,7 @@ export default class ViewEventScreen extends Component<Props>
                                 }
                             }
                         />
-
+                        {/*
                         <Circle 
                             center={
                                 {
@@ -261,7 +265,7 @@ export default class ViewEventScreen extends Component<Props>
                             }
                             radius={this.state.radius}
                             strokeColor="#00eef2"
-                        />
+                        />*/}
 		            
                     </MapView>
                 </View>
