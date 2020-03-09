@@ -39,7 +39,6 @@ export default class ProfileScreen extends Component<Props>
 			dates: []
 		}
 		this.getUserInfo();
-		this.checkForEdits(); 
 	}
 
 	/**
@@ -76,7 +75,8 @@ export default class ProfileScreen extends Component<Props>
 			}
 		})
 
-		const eventList = user.history.map(id => {
+	
+		var eventList = history.map(id => {
 			if(allEvents[id]) {
 				return allEvents[id]
 			}
@@ -148,7 +148,7 @@ export default class ProfileScreen extends Component<Props>
 				count: value
 			})
 		})
-		if (dates.length < 2) {
+		if (dates.length == 1) {
 			var date = eventList[0].details.date;
 			var month = date.month < 10 ? '0' + date.month : date.month
 			var day = date.day < 10 ? '0' + (date.day + 1): date.day + 1
@@ -162,7 +162,7 @@ export default class ProfileScreen extends Component<Props>
 		//Finally set state 
 		this.setState({
 			name: user.name,
-			description: user.description ? user.description : "",
+			description: user.description ? user.description : "No description yet!",
 			interests: user.interests ? user.interests : [],
 			history: user.history ? user.history : [],
 			upcoming: user.upcoming ? user.upcoming : [],
@@ -218,6 +218,8 @@ export default class ProfileScreen extends Component<Props>
 		)
 	}
 
+
+
     render() {
 		var profileTitle = this.state.name + '\'s Profile'
 		const screenWidth = Dimensions.get("window").width + 20; 
@@ -252,6 +254,29 @@ export default class ProfileScreen extends Component<Props>
 		currMon = currMon.legnth < 10 ? currMon : '0' + currMon
 		var currYear = new Date().getFullYear();
 		var endDate = currYear + '-' +  currMon + '-' + currDay
+		let pie; 
+		if (this.state.data.length == 0) {
+			pie = <Text>
+				No past events yet!
+			</Text>
+		} else {
+			pie = <PieChart
+				data={pieData}
+				style={{height: 150}}
+			/>
+		}
+		let pastEvents 
+		if (this.state.history.length == 0) {
+			pastEvents = <Text>
+				No past events yet!
+			</Text>
+		} else {
+			pastEvents = <ScrollView>
+				{this.state.history.map((eventId, index) => (
+					this.createListItem(eventId, index)
+				))}
+			</ScrollView>
+		}
 		return (
 			<View style={{flex: 1, flexDirection: 'column'}}>
 				<ScrollView contentContainerStyle={{flexGrow: 0}}>
@@ -292,12 +317,9 @@ export default class ProfileScreen extends Component<Props>
 						</ScrollView>
 					</Card>
 					<Card title="Category BreakDown">
-						<PieChart
-							data={pieData}
-							style={{height: 150}}
-						/>
+						{ pie }
 					</Card>
-					<Card>
+					{this.state.data.length != 0 && <Card>
 						{this.state.data.map((item, i) => (
 							<ListItem
 								key={i}
@@ -311,13 +333,9 @@ export default class ProfileScreen extends Component<Props>
 								}
 							/>
 						))}
-					</Card>
+					</Card>}
 					<Card title = "Past Events">
-						<ScrollView>
-							{this.state.history.map((eventId, index) => (
-								this.createListItem(eventId, index)
-							))}
-						</ScrollView>
+						{pastEvents}
 					</Card>
 					<ScrollView style={styles.contentContainer}>
 					</ScrollView>

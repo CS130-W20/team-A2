@@ -33,7 +33,7 @@ export default class OtherProfileScreen extends Component<Props>
         const user = snapshot.val(); 
         this.setState({
             name : user.name,
-            description : user.description ? user.description : "",
+            description : user.description ? user.description : "No description yet!",
             interest : user.interest ? user.interest : []
         })
 	}
@@ -44,7 +44,6 @@ export default class OtherProfileScreen extends Component<Props>
 	getInterests() {
 		if (this.state.interest.length == 0) {
 			//Return text saying interests is empty 
-			console.log("Entered?")
 			return (
 				<Text style={{textAlign: 'center'}}>
 					No interests yet!
