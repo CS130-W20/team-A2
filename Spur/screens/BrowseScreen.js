@@ -197,7 +197,7 @@ export default class BrowseScreen extends Component<Props> {
               rightTitle={
                 <View>
                   <Text style={{textAlign: 'center'}}>{event.details.date.year}-{event.details.date.month}-{event.details.date.day}</Text>
-                  <Text style={{textAlign: 'center'}}>{event.details.startTime.hours}:{event.details.startTime.minutes} - {event.details.startTime.hours + 1}:{event.details.startTime.minutes}</Text>
+                  <Text style={{textAlign: 'center'}}>{String(event.details.startTime.hours).padStart(2, '0')}:{String(event.details.startTime.minutes).padStart(2, '0')} - {String(event.details.startTime.hours + 1).padStart(2, '0')}:{String(event.details.startTime.minutes).padStart(2, '0')}</Text>
                 </View>
               }
               subtitle= {

@@ -18,7 +18,7 @@ import ViewEventScreen from '../screens/ViewEventScreen';
 import ChatroomScreen from '../screens/ChatroomScreen';
 
 const Drawer = createDrawerNavigator();
-const INITIAL_ROUTE_NAME = 'Browse';
+const INITIAL_ROUTE_NAME = 'Create Event';
 const StackProfile = createStackNavigator(); 
 const StackEvent = createStackNavigator(); 
 const StackCreate = createStackNavigator(); 

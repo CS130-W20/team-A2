@@ -316,7 +316,7 @@ export default class ProfileScreen extends Component<Props>
 							/>
 						</ScrollView>
 					</Card>
-					<Card title="Category BreakDown">
+					<Card title="Category Breakdown">
 						{ pie }
 					</Card>
 					{this.state.data.length != 0 && <Card>
