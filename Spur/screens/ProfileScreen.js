@@ -213,11 +213,10 @@ export default class ProfileScreen extends Component<Props>
 				}
 				chevron
 				bottomDivider
-				onPress={() => this.props.navigation.navigate("ViewEvent", {eventId: eventId})}
+				onPress={() => this.props.navigation.navigate("ViewEvent", {screen: "ViewEvent", params: {eventId: eventId}})}
 			/>
 		)
 	}
-
 
 
     render() {
