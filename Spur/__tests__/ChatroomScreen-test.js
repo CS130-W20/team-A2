@@ -22,8 +22,8 @@ describe(`Chatroom Tester`, () => {
             push: jest.fn()
         }
 
-        const chatroom = renderer.create(<ChatroomScreen route={route} chatRef={chatRef} />);
-        const instance = chatroom.getInstance();
+        const profileScreen = renderer.create(<ChatroomScreen route={route} chatRef={chatRef} />);
+        const instance = profileScreen.getInstance();
 
        
         instance.componentDidMount();

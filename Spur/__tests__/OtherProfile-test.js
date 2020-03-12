@@ -7,8 +7,8 @@ describe(`Other Profile Tester`, () => {
 
         const interests = [0]
 
-        const profileScreen = renderer.create(<OtherProfileScreen interests={interests}/>).toJSON();
-        expect(profileScreen).toMatchSnapshot();
+        const profileScreen = renderer.create(<OtherProfileScreen interests={interests}/>);
+        const instance = profileScreen.getInstance();
 
 
     });
@@ -18,7 +18,7 @@ describe(`Other Profile Tester`, () => {
         const interests = []
 
         const profileScreen = renderer.create(<OtherProfileScreen interests={interests}/>);
-        expect(profileScreen).toMatchSnapshot();
+        const instance = profileScreen.getInstance();
 
 
     });

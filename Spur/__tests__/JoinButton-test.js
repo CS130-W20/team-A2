@@ -14,7 +14,7 @@ describe(`Join Button Tester`, () => {
         const userName = 'Greg';
         const upcoming = ['1234'];
 
-        const joinButton = renderer.create(<JoinButton 
+        const profileScreen = renderer.create(<JoinButton 
             event={event} 
             isAttendee={isAttendee} 
             isCheckedIn={isCheckedIn} 
@@ -24,7 +24,7 @@ describe(`Join Button Tester`, () => {
             upcoming={upcoming}
             
             />);
-        const instance = joinButton.getInstance();
+        const instance = profileScreen.getInstance();
 
     });
 
@@ -39,7 +39,7 @@ describe(`Join Button Tester`, () => {
         const userName = 'Greg';
         const upcoming = ['1234'];
 
-        const joinButton = renderer.create(<JoinButton 
+        const profileScreen = renderer.create(<JoinButton 
             event={event} 
             isAttendee={isAttendee} 
             isCheckedIn={isCheckedIn} 
@@ -49,7 +49,7 @@ describe(`Join Button Tester`, () => {
             upcoming={upcoming}
             
             />);
-        const instance = joinButton.getInstance();
+        const instance = profileScreen.getInstance();
 
     });
 
@@ -68,7 +68,7 @@ describe(`Join Button Tester`, () => {
             minutes: 60
         }
 
-        const joinButton = renderer.create(<JoinButton 
+        const profileScreen = renderer.create(<JoinButton 
             event={event} 
             isAttendee={isAttendee} 
             isCheckedIn={isCheckedIn} 
@@ -79,7 +79,7 @@ describe(`Join Button Tester`, () => {
             startTime={startTime}
             
             />);
-        const instance = joinButton.getInstance();
+        const instance = profileScreen.getInstance();
 
     });
 
@@ -94,7 +94,7 @@ describe(`Join Button Tester`, () => {
         const userName = 'Greg';
         const upcoming = ['1234'];
 
-        const joinButton = renderer.create(<JoinButton 
+        const profileScreen = renderer.create(<JoinButton 
             event={event} 
             isAttendee={isAttendee} 
             isCheckedIn={isCheckedIn} 
@@ -104,7 +104,7 @@ describe(`Join Button Tester`, () => {
             upcoming={upcoming}
             
             />);
-        const instance = joinButton.getInstance();
+        const instance = profileScreen.getInstance();
 
     });
 

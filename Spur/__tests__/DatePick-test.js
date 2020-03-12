@@ -12,8 +12,8 @@ describe(`Date Pick Tester`, () => {
             minutes: 30
         }
 
-        const datepick = renderer.create(<DatePick type='date' time={time} />);
-        const instance = datepick.getInstance();
+        const profileScreen = renderer.create(<DatePick type='date' time={time} />);
+        const instance = profileScreen.getInstance();
 
 
 
@@ -28,8 +28,8 @@ describe(`Date Pick Tester`, () => {
             minutes: 30
         }
 
-        const datepick = renderer.create(<DatePick type='time' time={time} />);
-        const instance = datepick.getInstance();
+        const profileScreen = renderer.create(<DatePick type='time' time={time} />);
+        const instance = profileScreen.getInstance();
 
 
     });
