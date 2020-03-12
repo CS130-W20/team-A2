@@ -1,9 +1,10 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
 import ViewEventScreen from '../screens/ViewEventScreen';
+import { clearUpdateCacheExperimentalAsync } from 'expo/build/Updates/Updates';
 
 describe(`Renders Correctly Tester`, () => {
-    test('Renders Correctly', () => {
+    test('Navigation works correctly', () => {
 
         const navigation = {
             navigate: jest.fn()
@@ -15,7 +16,19 @@ describe(`Renders Correctly Tester`, () => {
         instance.onPressHost();
         instance.onPressAttendees();
         instance.onPressChat();
+
+        console.log(navigation.navigate.mock.calls)
         
+        const oracle = 
+        [
+            [ 'OtherProfile', { userId: '' } ],
+            [
+              'Chatroom',
+              { id: '-M1rGGXEmvqiZxyEUR3o', title: '', userID: '', userName: '' }
+            ]
+        ]
+
+        expect(navigation.navigate.mock.calls).toEqual(oracle);
 
     });
   });

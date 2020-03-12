@@ -82,13 +82,13 @@ export default class EditProfileScreen extends Component<Props> {
 					<View style={styles.btn}>
 						<Button
 						title="Cancel changes"
-						onPress={() => this.onCancelChanges()}
+						onPress={this.onCancelChanges}
 						/>
 					</View>
 					<View style={styles.btn}>
 						<Button
 						title="Confirm changes"
-						onPress={() => this.onConfirmChanges()}
+						onPress={this.onConfirmChanges}
 						/>
 					</View>
 				  </View>
