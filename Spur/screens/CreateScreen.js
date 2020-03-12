@@ -1,6 +1,13 @@
 import React, {Component} from 'react';
-import { Image,
-	 Platform,
+import {Keyboard} from 'react-native';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import { Input, Button, Text } from 'react-native-elements';
+import DatePick from '../components/DatePick';
+import Geocoder from 'react-native-geocoding';
+import SectionedMultiSelect from 'react-native-sectioned-multi-select';
+import { CATEGORIES } from '../constants/categories';
+
+import { 
 	 StyleSheet,
 	 Text,
 	 TextInput,
@@ -231,8 +238,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
 	margin: 5,
   },
-  contentContainer: {
-    paddingTop: 30,
+  inputContainer: {
+	borderWidth: 1,
+	borderColor: 'lightgrey',
+    height: 50,
   },
   descriptionText: {
 	height: 100,
@@ -247,4 +256,17 @@ const styles = StyleSheet.create({
 	flexDirection: 'row',
 	padding: 5,
   },
+  btnBox: {
+	    flex: 1, 
+		flexDirection: 'row',
+	    marginBottom: 36,
+	},
+	bottom: {
+		flexDirection: 'column-reverse'
+		
+	},
+	btn: {
+		flex:1, 
+		height: 50
+	}
 });
