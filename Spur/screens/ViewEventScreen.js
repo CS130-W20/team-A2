@@ -59,7 +59,7 @@ export default class ViewEventScreen extends Component<Props>
             isVisible: false,
             attendeeNames: [],
             numAttendees: 0,
-            radius: 30,
+            radius: 20,
 
 		}
         this.getEventDetails();
@@ -115,10 +115,12 @@ export default class ViewEventScreen extends Component<Props>
         }]
 
         Location.startGeofencingAsync('check in', regions);
+        
+        
 
-		this.setState({
+        this.setState({
             event: event,
-			title: event.details.title,
+            title: event.details.title,
             description: event.details.description,
             startTime: event.details.startTime,
             endTime: event.details.endTime,
@@ -142,6 +144,9 @@ export default class ViewEventScreen extends Component<Props>
 
 
         })
+
+        
+		
 
 
 
@@ -334,14 +339,17 @@ export default class ViewEventScreen extends Component<Props>
                 <Card containerStyle={{borderWidth: 0}}>
                 
                     <JoinButton 
-                    color="#f194ff"
-                    upcoming={this.state.upcoming}
-                    isAttendee={isAttendee}
-                    isCheckedIn={isCheckedIn}
-                    eventId= {this.state.eventId} 
-                    event={this.state.event} 
-                    uid={uid}
-                    userName={this.state.userName}
+                        color="#f194ff"
+                        upcoming={this.state.upcoming}
+                        isAttendee={isAttendee}
+                        isCheckedIn={isCheckedIn}
+                        eventId= {this.state.eventId} 
+                        event={this.state.event} 
+                        uid={uid}
+                        userName={this.state.userName}
+                        startTime={this.state.startTime}
+                        region={this.state.region}
+                        radius={this.state.radius}
                     />
 
                 </Card>
