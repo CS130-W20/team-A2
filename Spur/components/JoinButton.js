@@ -14,7 +14,7 @@ export default class JoinButton extends Component<Props>
     constructor(props) {
 		super(props); 
 		//Setup firebase via a databaseManager
-		this.databaseManager = new DatabaseManager();
+		//this.databaseManager = new DatabaseManager();
 		this.state = {
             event: this.props.event,
             isAttendee: this.props.isAttendee,
@@ -26,7 +26,7 @@ export default class JoinButton extends Component<Props>
     /** React render function **/
     render() {
         
-        this.databaseManager = new DatabaseManager();
+        //this.databaseManager = new DatabaseManager();
         this.searchManager = new SearchManager();
         const eventId = this.props.eventId;
         const event = this.state.event;
@@ -93,13 +93,12 @@ export default class JoinButton extends Component<Props>
                                                                
                                     if ((this.searchManager.distance(currLoc, this.props.region)) * 1000 > this.props.radius) {
                                         Alert.alert("You can only check in when inside of the geofence");
-                                    } else {
-                                        if (checkedIn.indexOf(uid) < 0) {
-                                            checkedIn.push(uid);
-                                            this.databaseManager.updateEvent(eventId, {checked_in: checkedIn});
-                                            this.setState({isAttendee: true, isCheckedIn: true});
-                                        }
-                                    }
+                                    } 
+                                    checkedIn.push(uid);
+                                    this.databaseManager.updateEvent(eventId, {checked_in: checkedIn});
+                                    this.setState({isAttendee: true, isCheckedIn: true});
+                                    
+                                    
 
                                 //})
                                 

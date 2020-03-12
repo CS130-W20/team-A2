@@ -64,7 +64,7 @@ export default class ChatScreen extends React.Component {
   */
   renderBubble(props) { 
     return ( 
-	  <Bubble {...props} 
+    <Bubble {...props}
         wrapperStyle={{
           left: {
             backgroundColor: 'white',

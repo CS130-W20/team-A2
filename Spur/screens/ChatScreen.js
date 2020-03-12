@@ -17,14 +17,14 @@ export default class ChatScreen extends React.Component {
   constructor(props) {
 	super(props);
     
-	this.databaseManager = new DatabaseManager();
-	this.eventsRef = this.databaseManager.db.ref('/events');
-	this.userRef = this.databaseManager.db.ref('/users/' + this.databaseManager.getCurrentUser().uid);
-	this.joinedEventsRef = this.databaseManager.db.ref('/users/' + this.databaseManager.getCurrentUser().uid + '/upcoming');
+	//this.databaseManager = new DatabaseManager();
+	this.eventsRef = props.eventsRef;
+	this.userRef = props.userRef;
+	this.joinedEventsRef = props.joinedEventsRef;
 	
 	this.state = {
 		events: [],
-		userID: this.databaseManager.getCurrentUser().uid,
+		userID: '12345', //this.databaseManager.getCurrentUser().uid,
 		userName: '',
 		joined: [],
 	};

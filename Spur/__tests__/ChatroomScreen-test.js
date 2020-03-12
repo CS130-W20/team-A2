@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 import ChatroomScreen from '../screens/ChatroomScreen';
 
 describe(`Chatroom Tester`, () => {
-    test('Navigation works correctly', () => {
+    test('Messages send correctly', () => {
 
         const params = {
             id: '12345',
@@ -25,8 +25,9 @@ describe(`Chatroom Tester`, () => {
         const profileScreen = renderer.create(<ChatroomScreen route={route} chatRef={chatRef} />);
         const instance = profileScreen.getInstance();
 
-        instance.onSend(['Hello world']);
+       
         instance.componentDidMount();
+        instance.onSend(['Hello world']);
         instance.renderBubble();
         instance.componentWillUnmount();
         
