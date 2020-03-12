@@ -10,6 +10,7 @@ import {
      Text,
      TextInput,
      TouchableOpacity,
+     YellowBox,
      View } from 'react-native';
 import { ButtonGroup, Input, ListItem } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -28,7 +29,7 @@ import * as TaskManager from 'expo-task-manager';
 export default class BrowseScreen extends Component<Props> {
   constructor(props) {
     super(props);
-
+    YellowBox.ignoreWarnings(["Possible Unhandled Promise"]);
     this.searchManager = new SearchManager();
 
     Location.requestPermissionsAsync();
