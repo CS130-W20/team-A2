@@ -21,39 +21,19 @@ export default class EditProfileScreen extends Component<Props> {
     constructor(props) {
 		super(props); 
 		//Setup firebase via a databaseManager
-		this.databaseManager = new DatabaseManager();
+		//this.databaseManager = new DatabaseManager();
 		this.state = {
 			userId: "", 
 			description: "",
 			interests: [],
 			hasChanged: false,
         }
-		this.getUserInfo(); 
     }
 
-    /**
-	 * GetUserInfo() - Sets the state of this component with the user informatio from databaseManager
-	 */
-	async getUserInfo() {
-		//Add a user 
-		var uid = this.databaseManager.getCurrentUser().uid; 
-		var snapshot = await this.databaseManager.getUser(uid).once('value');
-		const user = snapshot.val();
-		this.setState({
-			userId: uid, 
-			description: user.description ? user.description : "", 
-			interests: user.interests ? user.interests : []
-		})
-	}
-	
 	/**
 	 * Function that sets the edited fields to firebase and navigates back to profile
 	 */
 	onConfirmChanges() {
-		this.databaseManager.updateUser(this.state.userId, {
-			description: this.state.description,
-			interests: this.state.interests ? this.state.interests : []
-		});
 		this.props.navigation.push("Profile")
 	}
 
@@ -62,15 +42,6 @@ export default class EditProfileScreen extends Component<Props> {
 	 */
 	onCancelChanges(){
 		this.props.navigation.push("Profile")
-	}
-	/**
-	 * Function that updates the state based on the selected/unselected items 
-	 * @param {Array[Categories]} - Array of selected categories
-	 */
-	onSelect = selection => {
-		this.setState({
-			interests: selection
-		});
 	}
     
     render() {

@@ -9,13 +9,11 @@ import { CATEGORIES } from '../constants/categories';
 
 import { 
 	 StyleSheet,
-	 Text,
 	 TextInput,
 	 TouchableOpacity,
 	 View,
      ScrollView,
 	 SafeAreaView,
-	 Button,
 	 Alert
 	} from 'react-native';
 

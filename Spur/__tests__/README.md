@@ -1,4 +1,4 @@
-The files in the __tests__ folder (and their testing suites) are
+The files in the /Spur/__tests__ folder (and their testing suites) are
 
 BrowseScreen-test.js
 |__ State Change Tester

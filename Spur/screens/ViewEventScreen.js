@@ -32,12 +32,12 @@ export default class ViewEventScreen extends Component<Props>
 
 		super(props); 
 		//Setup firebase via a databaseManager
-		this.databaseManager = new DatabaseManager();
+		//this.databaseManager = new DatabaseManager();
 		this.state = {
             uid: '',
             userName: '',
-            //eventId: '-M1rGGXEmvqiZxyEUR3o', //Change this
-            eventId: props.route.params.eventId,
+            eventId: '-M1rGGXEmvqiZxyEUR3o', //Change this
+            //eventId: props.route.params.eventId ? props.route.params.eventId : props.eventId ,
             event: '',
 
 			title: '',
@@ -57,15 +57,14 @@ export default class ViewEventScreen extends Component<Props>
             checkedIn: [],
 
             isVisible: false,
-            attendeeNames: [],
+            attendeeNames: ['greg'],
             numAttendees: 0,
             radius: 20,
 
 		}
-        this.getEventDetails();
+        
         this.setUpLocation();
-        
-        
+                
 
     }
     
@@ -77,81 +76,6 @@ export default class ViewEventScreen extends Component<Props>
     }
 
 
-	/**
-	 * getEventDetails() - Sets the state of this component with the event details from databaseManager
-	 */
-	async getEventDetails() {
-
-        //Get the current user's id
-		var uid = this.databaseManager.getCurrentUser().uid; 
-        //var uid = 'zeHE8IVhlmbDeavl83TKtsZRGuI3';
-        var userSnapshot = await this.databaseManager.getUser(uid).once('value');
-		const user = userSnapshot.val();
-
-		//Get the event from the databasemanager
-		var eventSnapshot = await this.databaseManager.getEvent(this.state.eventId).once('value');
-        const event = eventSnapshot.val();
-        
-        //Get the name of the host from this host's id
-        var id = event.details.hostId;
-        var hostSnapshot = await this.databaseManager.getUser(id).once('value');
-        const host = hostSnapshot.val();
-
-        var attendeeNames = []
-        var i;
-        for (i = 0; i < event.attendeeNames.length; i++) {
-            attendeeNames.push({
-                name: event.attendeeNames[i],
-                id: event.attendees[i]
-            });
-        }
-
-        // Set up geofencing
-        const regions = [{
-            identifier: event.details.title,
-            latitude: event.details.region.lat,
-            longitude: event.details.region.lng, 
-            radius: this.state.radius,
-        }]
-
-        Location.startGeofencingAsync('check in', regions);
-        
-        
-
-        this.setState({
-            event: event,
-            title: event.details.title,
-            description: event.details.description,
-            startTime: event.details.startTime,
-            endTime: event.details.endTime,
-            hostId: event.details.hostId,
-            location: event.details.location,
-            region: event.details.region,
-            cost: event.details.cost,
-            partySize: event.details.partySize,
-            categories: event.details.categories,
-
-            attendees: event.attendees ? event.attendees : [],
-            attendeeNames: attendeeNames,
-            numAttendees: event.attendees.length,
-            chatId: event.chat, 
-            checkedIn: event.checked_in ? event.checked_in : [],
-
-            uid: uid,
-            userName: user.name,
-            host: host.name,
-            upcoming: host.upcoming ? host.upcoming : [],
-
-
-        })
-
-        
-		
-
-
-
-
-    }
     
 
     /**
@@ -241,7 +165,7 @@ export default class ViewEventScreen extends Component<Props>
 
                 <View style={styles.container}>
                     <MapView style={styles.map}
-                        showsUserLocation={true}
+                        showsUserLocation={false}
                         initialRegion={{
                             latitude: lat,
                             longitude: long,
@@ -362,15 +286,6 @@ export default class ViewEventScreen extends Component<Props>
     }
 }
 
-TaskManager.defineTask('check in', ({ data: { eventType, region }, error }) => {
-    if (error) {
-      return;
-    }
-    if (eventType === Location.GeofencingEventType.Enter) {
-        Alert.alert("You've entered the area of this event! Check in!");
-    }
-  }
-);
 
 const styles = StyleSheet.create({
 	container: {

@@ -4,7 +4,7 @@ import DatabaseManager from '../classes/DatabaseManager';
 import { Alert } from 'react-native';
 import {Button} from 'react-native-elements';
 import SearchManager from '../classes/SearchManager';
-import * as Location from 'expo-location';
+//import * as Location from 'expo-location';
 
 /**
  * Join Button - Displays an button which allows users to join or check into events
@@ -84,13 +84,10 @@ export default class JoinButton extends Component<Props>
                                 
                                 //console.log(this.props)
 
-                                Location.getLastKnownPositionAsync().then(loc => {
+                                //Location.getLastKnownPositionAsync().then(loc => {
 
                                     
-                                    const currLoc = {
-                                        lat: loc.coords.latitude,
-                                        lng: loc.coords.longitude
-                                    }
+                                    const currLoc = this.props.region
                                 
 
                                                                
@@ -104,7 +101,7 @@ export default class JoinButton extends Component<Props>
                                         }
                                     }
 
-                                })
+                                //})
                                 
                             }
                            

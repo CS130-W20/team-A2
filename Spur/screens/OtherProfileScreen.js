@@ -14,30 +14,14 @@ export default class OtherProfileScreen extends Component<Props>
     constructor(props) {
         super(props);
         //Setup firebase via a databaseManager
-        this.databaseManager = new DatabaseManager();
+        //this.databaseManager = new DatabaseManager();
         this.state = {
-            name : "", 
-            description : "", 
-            interests : []
+            name : 'Greg', 
+            description : 'my descript', 
+            interests : props.interests
         }
-        this.getOtherInfo(); 
     }
 
-    /**
-     * Function to get the information to build another user's profile 
-     * Other user's id is obtained via route.params
-     */
-    async getOtherInfo() {
-        var uid = this.props.route.params.userId; 
-        var snapshot = await this.databaseManager.getUser(uid).once('value'); 
-        const user = snapshot.val(); 
-        this.setState({
-            name : user.name,
-            description : user.description ? user.description : "No description yet!",
-            interests : user.interests ? user.interests : []
-        })
-	}
-	
 	/**
 	 * Function that returns interests if selected, otherwise it'll give a string that shows that it is empty
 	 */

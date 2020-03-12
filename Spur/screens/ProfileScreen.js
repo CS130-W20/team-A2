@@ -25,18 +25,18 @@ export default class ProfileScreen extends Component<Props>
 	constructor(props) {
 		super(props); 
 		//Setup firebase via a databaseManager
-		this.databaseManager = new DatabaseManager();
+		//this.databaseManager = new DatabaseManager();
 		this.eventTitles = new Map() 
 		this.historyTitles = new Map() 
 		this.state = {
 			name: "", 
 			description: "",
-			interests: [],
-			history: [],
-			upcoming: [],
+			interests: [0],
+			history: ['his1'],
+			upcoming: ['-M1wWhNYzeP2eh0CJoWk'],
 			events: {},
-			data: [], 
-			dates: []
+			data: ['data1'], 
+			dates: ['100']
 		}
 		this.getUserInfo();
 	}
@@ -46,24 +46,30 @@ export default class ProfileScreen extends Component<Props>
 	 */
 	async getUserInfo() {
 		//Add a user 
-		var uid = this.databaseManager.getCurrentUser().uid; 
-		var snapshot = await this.databaseManager.getUser(uid).once('value');
-		const user = snapshot.val();
-		var history = user.history ? user.history : [];
-		var upcoming = user.upcoming ? user.upcoming : []; 
-		var events = new Object(); 
+		//var uid = this.databaseManager.getCurrentUser().uid; 
+		var uid = 'w2xhAiyIdgSnI2JyHm0EVTuevLA3';
+		//var snapshot = await this.databaseManager.getUser(uid).once('value');
+		//const user = snapshot.val();
 
-		//Get all events and filter for upcoming  
-		var snapshot = await this.databaseManager.events().once('value');
-		const allEvents = snapshot.val();
+		const user = {
+			name: 'Greg',
+			upcoming: ["-M1wWhNYzeP2eh0CJoWk"],
+			interest: [2002],
+			history: ["-M1wWhNYzeP2eh0CJoWk"],
+			description: 'Greg'
+		};
+		var history = user.history ? user.history : ['greg'];
+		var upcoming = user.upcoming ? user.upcoming : ['event1']; 
+		var events = new Object(); 
 		
+		const allEvents = ['event1'];
+
 		//Get events of upcoming  
 		upcoming.forEach((id) => {
-			if (allEvents[id]) {
-				var tar = allEvents[id]
-				events[id.toString()] = tar 
-				//events.id = tar 
-			}
+			
+			var tar = 'event2'
+			events[id.toString()] = tar 
+			
 		})
 
 		//Get events of history
@@ -115,61 +121,10 @@ export default class ProfileScreen extends Component<Props>
 				//Check if category exists in map
 				var currVal = catCount.get(catId) 
 				totalCount++
-				if (currVal == undefined) {
-					//If it doesn't, set it
-					catCount.set(catId, 1)
-				} else {
-					//If it does, increment count by one
-					catCount.set(catId, currVal + 1)
-				}
+				
 			})
 		})
-
-		//Convert hashmap into data for pie chart 
-		const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
-		var data = []
-		catCount.forEach(function(value, key) {
-			var name = catMap.get(key)
-			var color = randomColor()
-			var percentage = Math.round(value/totalCount * 100) + '%'
-			data.push({
-				name: name,
-				count: value,
-				color: color,
-				percent: percentage
-			})
-		})
-
-		//Convert hashmap into data for activity chart
-		var dates = []
-		dateCount.forEach(function(value, key) {
-			dates.push({
-				date: key, 
-				count: value
-			})
-		})
-		if (dates.length == 1) {
-			var date = eventList[0].details.date;
-			var month = date.month < 10 ? '0' + date.month : date.month
-			var day = date.day < 10 ? '0' + (date.day + 1): date.day + 1
-			var dateString = date.year + '-' + month + '-' + day
-			dates.push({
-				date: dateString,
-				count: 0 
-			})	
-		}
-
-		//Finally set state 
-		this.setState({
-			name: user.name,
-			description: user.description ? user.description : "No description yet!",
-			interests: user.interests ? user.interests : [],
-			history: user.history ? user.history : [],
-			upcoming: user.upcoming ? user.upcoming : [],
-			events: events,
-			data: data,
-			dates: dates
-		})
+		
 	}
 
 	/**
@@ -194,12 +149,13 @@ export default class ProfileScreen extends Component<Props>
 	 */
 	createListItem(eventId, index) {
 		var str = eventId.toString() 
-		var event = this.state.events[str]
-		var name = event.details.title
-		var date = event.details.date
-		var dateStr = "Date: " + date.year + '-' + date.month + '-' + date.day
-		var time = event.details.startTime
-		var timeStr = "Time: " + time.hours + ":" + time.minutes + " - " + (time.hours + 1) + ":" + (time.minutes)
+		//var event = this.state.events[str]
+
+		var name = 'party'
+		//var date = event.details.date
+		var dateStr = 'august 18th'
+		//var time = event.details.startTime
+		var timeStr = "4pm"
 		return (
 			<ListItem
 				key={index}
@@ -213,7 +169,7 @@ export default class ProfileScreen extends Component<Props>
 				}
 				chevron
 				bottomDivider
-				onPress={() => this.props.navigation.navigate("ViewEvent", {screen: "ViewEvent", params: {eventId: eventId}})}
+				//onPress={() => this.props.navigation.navigate("ViewEvent", {screen: "ViewEvent", params: {eventId: eventId}})}
 			/>
 		)
 	}
@@ -240,7 +196,6 @@ export default class ProfileScreen extends Component<Props>
 				value: value,
 				svg: {
 					fill: color,
-					onPress: () => console.log('press', index),
 				}, 
 				key: `pie-${index}`,
 			}
@@ -254,22 +209,14 @@ export default class ProfileScreen extends Component<Props>
 		var currYear = new Date().getFullYear();
 		var endDate = currYear + '-' +  currMon + '-' + currDay
 		let pie; 
-		if (this.state.data.length == 0) {
-			pie = <Text>
-				No past events yet!
-			</Text>
-		} else {
+		{
 			pie = <PieChart
 				data={pieData}
 				style={{height: 150}}
 			/>
 		}
 		let pastEvents 
-		if (this.state.history.length == 0) {
-			pastEvents = <Text>
-				No past events yet!
-			</Text>
-		} else {
+		{
 			pastEvents = <ScrollView>
 				{this.state.history.map((eventId, index) => (
 					this.createListItem(eventId, index)
