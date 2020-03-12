@@ -19,9 +19,9 @@ export default class ChatScreen extends React.Component {
 		userName: this.props.route.params.userName,
 	};
     
-	this.databaseManager = new DatabaseManager();
-	this.chatRef = this.databaseManager.db.ref('/chat/' + this.props.route.params.id);
-	this.onSend = this.onSend.bind(this);
+	//this.databaseManager = new DatabaseManager();
+	this.chatRef = props.chatRef;
+	//this.onSend = this.onSend.bind(this);
   }
   /** Called then component is mounted, attaches database listeners.
   */

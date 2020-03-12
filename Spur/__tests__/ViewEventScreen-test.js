@@ -1,7 +1,6 @@
 import * as React from 'react';
 import renderer from 'react-test-renderer';
 import ViewEventScreen from '../screens/ViewEventScreen';
-import { clearUpdateCacheExperimentalAsync } from 'expo/build/Updates/Updates';
 
 describe(`View Event Tester`, () => {
     test('Navigation works correctly', () => {
