@@ -23,28 +23,28 @@ You will also need to setup the database and APIs, which is detailed in the next
 Spur runs on Firebase Real-time Database. 
 To run a local copy of Spur, create a new real-time database, then rename `FirebaseConfigExample.js` to `FirebaseConfig.js` inside Spur/constants and fill in the values in the config to the values provided by Google.<br/>
 
-Inside Spur/app.json, fill in your Google Maps API key requested from Google.
+Inside Spur/app.json, fill in your Google Maps API key requested from Google.<br/>
+
+The Google Maps API key also needs to be placed inside Spur/screens/CreateScreen.js, on line 66, specifically in the function call
+`Geocoder.init("API KEY HERE");`.
 
 ## Tests
 Tests can be found in the tests branch, located within the branch at Spur/\_\_tests\_\_<br/>
 The specific tests are:<br/>
 BrowseScreen-test.js<br/>
-|__ State Change Tester<br/>
-|__ Refine Search Tester<br/>
-<br/>
 Constants-test.js<br/>
-|__ Constants Tester<br/>
-<br/>
 CreateScreen-test.js<br/>
-|__ State Change Tester<br/>
-|__ Event Validation Tester<br/>
-<br/>
 StyledText-test.js<br/>
-|__ Renders Correctly Tester<br/>
-<br/>
 UserLoginScreen-test.js<br/>
-|__ State Change Tester<br/>
-<br/>
+ProfileScreen-test.js<br/>
+EditProfile-test.js<br/>
+OtherProfileScreen-test.js<br/>
+ViewEvent-test.js<br/>
+ChatroomScreen-test.js<br/>
+ChatScreen-test.js<br/>
+DatePick-test.js<br/>
+JoinButton-test.js<br/>
+
 
 
 ## Relevant Links 
