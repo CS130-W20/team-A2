@@ -29,7 +29,8 @@ The Google Maps API key also needs to be placed inside Spur/screens/CreateScreen
 `Geocoder.init("API KEY HERE");`.
 
 ## Tests
-Tests can be found in the tests branch, located within the branch at Spur/\_\_tests\_\_<br/>
+Testing was done with Jest and can be run with the command `npm test`. Tests can be found in the tests branch, located within the branch at Spur/\_\_tests\_\_<br/>
+
 The specific tests are:<br/>
 BrowseScreen-test.js<br/>
 Constants-test.js<br/>
