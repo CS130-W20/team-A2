@@ -17,14 +17,12 @@ describe(`Chat Screen Tester`, () => {
             off: jest.fn()
         }
 
-        const profileScreen = renderer.create(<ChatScreen eventsRef={eventsRef} userRef={userRef} joinedEventsRef={joinedEventsRef} />);
-        const instance = profileScreen.getInstance();
+        const chatScreen = renderer.create(<ChatScreen eventsRef={eventsRef} userRef={userRef} joinedEventsRef={joinedEventsRef} />);
+        const instance = chatScreen.getInstance();
 
         instance.componentDidMount();
         instance.componentWillUnmount();
         
-
-
 
     });
   });
