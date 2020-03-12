@@ -6,7 +6,7 @@ describe(`Renders Correctly Tester`, () => {
     test('Renders Correctly', () => {
 
         const navigation = {
-            navigate: jest.fn()
+            navigate: jest.fn(),
             push: jest.fn()
         }
 
