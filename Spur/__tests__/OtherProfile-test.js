@@ -2,7 +2,7 @@ import * as React from 'react';
 import renderer from 'react-test-renderer';
 import OtherProfileScreen from '../screens/OtherProfileScreen';
 
-describe(`Renders Correctly Tester`, () => {
+describe(`Other Profile Tester`, () => {
     test('Nonempty interests', () => {
 
         const interests = [0]

@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 import ViewEventScreen from '../screens/ViewEventScreen';
 import { clearUpdateCacheExperimentalAsync } from 'expo/build/Updates/Updates';
 
-describe(`Renders Correctly Tester`, () => {
+describe(`View Event Tester`, () => {
     test('Navigation works correctly', () => {
 
         const navigation = {
@@ -17,8 +17,6 @@ describe(`Renders Correctly Tester`, () => {
         instance.onPressAttendees();
         instance.onPressChat();
 
-        console.log(navigation.navigate.mock.calls)
-        
         const oracle = 
         [
             [ 'OtherProfile', { userId: '' } ],

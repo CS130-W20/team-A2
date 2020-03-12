@@ -2,11 +2,10 @@ import * as React from 'react';
 import renderer from 'react-test-renderer';
 import EditProfileScreen from '../screens/EditProfileScreen';
 
-describe(`Renders Correctly Tester`, () => {
-    test('Renders Correctly', () => {
+describe(`Edit Profile Tester`, () => {
+    test('Handles confirm and cancel changes', () => {
 
         const navigation = {
-            navigate: jest.fn(),
             push: jest.fn()
         }
 
@@ -15,6 +14,10 @@ describe(`Renders Correctly Tester`, () => {
 
         instance.onConfirmChanges();
         instance.onCancelChanges();
+
+        const oracle = [ [ 'Profile' ], [ 'Profile' ] ];
+
+        expect(navigation.push.mock.calls).toEqual(oracle);
         
 
     });

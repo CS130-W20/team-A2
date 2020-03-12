@@ -43,6 +43,10 @@ export default class EditProfileScreen extends Component<Props> {
 	onCancelChanges(){
 		this.props.navigation.push("Profile")
 	}
+
+	onSelect() {
+		
+	}
     
     render() {
 		return (
