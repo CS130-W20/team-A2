@@ -31,7 +31,8 @@ describe(`Chatroom Tester`, () => {
         instance.renderBubble();
         instance.componentWillUnmount();
         
-
+        const snapshot = profileScreen.toJSON(); 
+        expect(snapshot).toMatchSnapshot();
 
 
     });

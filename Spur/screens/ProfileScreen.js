@@ -5,6 +5,7 @@ import {
 	View,
 	ScrollView,
 	Button,
+	YellowBox,
 	Dimensions } from 'react-native';
 import {
 	Card, 
@@ -26,6 +27,7 @@ export default class ProfileScreen extends Component<Props>
 		super(props); 
 		//Setup firebase via a databaseManager
 		//this.databaseManager = new DatabaseManager();
+		YellowBox.ignoreWarnings(['componentWillReceiveProps has been renamed']);
 		this.eventTitles = new Map() 
 		this.historyTitles = new Map() 
 		this.state = {

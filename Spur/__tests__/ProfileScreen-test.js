@@ -2,8 +2,8 @@ import * as React from 'react';
 import renderer from 'react-test-renderer';
 import ProfileScreen from '../screens/ProfileScreen';
 
-describe(`Renders Correctly Tester`, () => {
-    test('Renders Correctly', () => {
+describe(`Profile Screen Tester`, () => {
+    test('Renders List Correctly', () => {
 
         const navigation = {
             navigate: jest.fn()
@@ -20,7 +20,9 @@ describe(`Renders Correctly Tester`, () => {
         instance.viewEvent('e');
         instance.onSelect();
 
-        
+        const oracle = [ [ 'ViewEvent', { eventId: 'e' } ] ]
+
+        expect(navigation.navigate.mock.calls).toEqual(oracle);
 
     });
   });

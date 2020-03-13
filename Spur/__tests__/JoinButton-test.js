@@ -14,7 +14,7 @@ describe(`Join Button Tester`, () => {
         const userName = 'Greg';
         const upcoming = ['1234'];
 
-        const profileScreen = renderer.create(<JoinButton 
+        const button = renderer.create(<JoinButton 
             event={event} 
             isAttendee={isAttendee} 
             isCheckedIn={isCheckedIn} 
@@ -23,8 +23,8 @@ describe(`Join Button Tester`, () => {
             userName={userName}
             upcoming={upcoming}
             
-            />);
-        const instance = profileScreen.getInstance();
+            />).toJSON();
+        expect(button).toMatchSnapshot();
 
     });
 
@@ -39,7 +39,7 @@ describe(`Join Button Tester`, () => {
         const userName = 'Greg';
         const upcoming = ['1234'];
 
-        const profileScreen = renderer.create(<JoinButton 
+        const button = renderer.create(<JoinButton 
             event={event} 
             isAttendee={isAttendee} 
             isCheckedIn={isCheckedIn} 
@@ -48,8 +48,8 @@ describe(`Join Button Tester`, () => {
             userName={userName}
             upcoming={upcoming}
             
-            />);
-        const instance = profileScreen.getInstance();
+            />).toJSON();
+        expect(button).toMatchSnapshot();
 
     });
 
@@ -68,7 +68,7 @@ describe(`Join Button Tester`, () => {
             minutes: 60
         }
 
-        const profileScreen = renderer.create(<JoinButton 
+        const button = renderer.create(<JoinButton 
             event={event} 
             isAttendee={isAttendee} 
             isCheckedIn={isCheckedIn} 
@@ -76,10 +76,9 @@ describe(`Join Button Tester`, () => {
             uid={uid}
             userName={userName}
             upcoming={upcoming}
-            startTime={startTime}
             
-            />);
-        const instance = profileScreen.getInstance();
+            />).toJSON();
+        expect(button).toMatchSnapshot();
 
     });
 
@@ -94,7 +93,7 @@ describe(`Join Button Tester`, () => {
         const userName = 'Greg';
         const upcoming = ['1234'];
 
-        const profileScreen = renderer.create(<JoinButton 
+        const button = renderer.create(<JoinButton 
             event={event} 
             isAttendee={isAttendee} 
             isCheckedIn={isCheckedIn} 
@@ -103,8 +102,8 @@ describe(`Join Button Tester`, () => {
             userName={userName}
             upcoming={upcoming}
             
-            />);
-        const instance = profileScreen.getInstance();
+            />).toJSON();
+        expect(button).toMatchSnapshot();
 
     });
 

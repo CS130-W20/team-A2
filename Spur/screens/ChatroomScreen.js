@@ -65,6 +65,10 @@ export default class ChatScreen extends React.Component {
   renderBubble(props) { 
     return ( 
     <Bubble {...props}
+        user={{
+          _id: this.state.userID,
+          name: this.state.userName,
+        }}
         wrapperStyle={{
           left: {
             backgroundColor: 'white',
@@ -84,7 +88,7 @@ export default class ChatScreen extends React.Component {
         onSend={this.onSend}
         user={{
           _id: this.state.userID,
-		  name: this.state.userName,
+		      name: this.state.userName,
         }}
 		renderUsernameOnMessage={true}
 		renderBubble={this.renderBubble}

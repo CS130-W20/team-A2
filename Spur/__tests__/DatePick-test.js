@@ -12,8 +12,8 @@ describe(`Date Pick Tester`, () => {
             minutes: 30
         }
 
-        const profileScreen = renderer.create(<DatePick type='date' time={time} />);
-        const instance = profileScreen.getInstance();
+        const date = renderer.create(<DatePick type='date' time={time} />).toJSON();
+        expect(date).toMatchSnapshot();
 
 
 
@@ -28,8 +28,8 @@ describe(`Date Pick Tester`, () => {
             minutes: 30
         }
 
-        const profileScreen = renderer.create(<DatePick type='time' time={time} />);
-        const instance = profileScreen.getInstance();
+        const timepick = renderer.create(<DatePick type='time' time={time} />).toJSON();
+        expect(timepick).toMatchSnapshot();
 
 
     });

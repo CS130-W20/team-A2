@@ -1,0 +1,222 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Join Button Tester Checked In Test 1`] = `
+<View
+  style={
+    Object {
+      "borderRadius": 3,
+    }
+  }
+>
+  <View
+    accessible={true}
+    isTVSelectable={true}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#2089dc",
+          "borderColor": "#2089dc",
+          "borderRadius": 3,
+          "borderWidth": 0,
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "padding": 8,
+        }
+      }
+    >
+      <Text />
+      <Text
+        style={
+          Object {
+            "color": "white",
+            "fontSize": 18,
+            "paddingBottom": 1,
+            "paddingTop": 2,
+            "textAlign": "center",
+          }
+        }
+      >
+        You're checked in!
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`Join Button Tester Checkin Button test 1`] = `
+<View
+  style={
+    Object {
+      "borderRadius": 3,
+    }
+  }
+>
+  <View
+    accessible={true}
+    isTVSelectable={true}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#2089dc",
+          "borderColor": "#2089dc",
+          "borderRadius": 3,
+          "borderWidth": 0,
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "padding": 8,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "white",
+            "fontSize": 18,
+            "paddingBottom": 1,
+            "paddingTop": 2,
+            "textAlign": "center",
+          }
+        }
+      >
+        Check into Event!
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`Join Button Tester Checkin Time Invalid test 1`] = `
+<View
+  style={
+    Object {
+      "borderRadius": 3,
+    }
+  }
+>
+  <View
+    accessible={true}
+    isTVSelectable={true}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#2089dc",
+          "borderColor": "#2089dc",
+          "borderRadius": 3,
+          "borderWidth": 0,
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "padding": 8,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "white",
+            "fontSize": 18,
+            "paddingBottom": 1,
+            "paddingTop": 2,
+            "textAlign": "center",
+          }
+        }
+      >
+        Check into Event!
+      </Text>
+    </View>
+  </View>
+</View>
+`;
+
+exports[`Join Button Tester Join Button test 1`] = `
+<View
+  style={
+    Object {
+      "borderRadius": 3,
+    }
+  }
+>
+  <View
+    accessible={true}
+    isTVSelectable={true}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "#2089dc",
+          "borderColor": "#2089dc",
+          "borderRadius": 3,
+          "borderWidth": 0,
+          "flexDirection": "row",
+          "justifyContent": "center",
+          "padding": 8,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "white",
+            "fontSize": 18,
+            "paddingBottom": 1,
+            "paddingTop": 2,
+            "textAlign": "center",
+          }
+        }
+      >
+        Join Event!
+      </Text>
+    </View>
+  </View>
+</View>
+`;
