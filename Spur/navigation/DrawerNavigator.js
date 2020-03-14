@@ -110,7 +110,7 @@ export default function DrawerNavigator({ navigation, route }) {
 				fontSize: 40,
 		  	   },
 			   headerTitleAlign: 'center',
-			   headerLeft:() => {console.log(navigation); return (<Icon name="menu" color="#fff" size={40} onPress={()=>navigation.dispatch(DrawerActions.toggleDrawer())} title="Menu"/>)},
+			   //headerLeft:() => {console.log(navigation); return (<Icon name="menu" color="#fff" size={40} onPress={()=>console.log("Clicked")} title="Menu"/>)},
 			}, [navigation, DrawerActions]);
 
   return (
